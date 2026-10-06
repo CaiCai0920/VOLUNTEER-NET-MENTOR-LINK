@@ -1,0 +1,68 @@
+<view class="sp" bindtap="onSkip">
+  <!-- 顶部字标：SZU（深圳大学元素，海报式字母标 + 建校年份坐标） -->
+  <view class="sp-head">
+    <view class="sp-logo">
+      <view class="sp-logo-sq"></view>
+      <text class="sp-logo-tx">SZU</text>
+    </view>
+    <view class="sp-head-meta">1983 — 2026</view>
+  </view>
+
+  <!-- 纯几何构成：全部收束于右上，圆 + 四分圆 + 点 + 细线 -->
+  <view class="sp-geo">
+    <view class="sp-g-red"></view>
+    <view class="sp-g-quarter"></view>
+    <view class="sp-g-dot"></view>
+    <view class="sp-g-line"></view>
+    <view class="sp-g-bar"></view>
+  </view>
+
+  <!-- 文字排版区 -->
+  <view class="sp-body">
+    <view class="sp-kicker">
+      <view class="sp-kicker-sq"></view>
+      <text>深圳大学 · 志愿人脉</text>
+    </view>
+    <view class="sp-title">志愿人脉</view>
+    <view class="sp-rule">
+      <view class="r1"></view>
+      <view class="r2"></view>
+      <view class="r3"></view>
+    </view>
+    <view class="sp-motto">自立 · 自律 · 自强</view>
+
+    <view class="sp-index">
+      <view class="sp-row">
+        <view class="sp-row-sq sq-red"></view>
+        <text class="sp-no">01</text>
+        <text class="sp-tx">答疑大厅 · 新生实名提问</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-blue"></view>
+        <text class="sp-no">02</text>
+        <text class="sp-tx">在线答疑 · 对口学长认领</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-orange"></view>
+        <text class="sp-no">03</text>
+        <text class="sp-tx">逐条已读回执 · 双端身份切换</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部主色横带：SZU 字标 + 加载 -->
+  <view class="sp-navy">
+    <view class="sp-navy-mark">
+      <text class="sp-navy-szu">SZU</text>
+      <view class="sp-navy-meta">
+        <text class="sp-navy-tx">深圳大学 · 校园志愿答疑</text>
+        <text class="sp-navy-sub">VOLUNTEER MENTOR</text>
+      </view>
+    </view>
+    <view class="sp-load">
+      <view class="sp-load-fill"></view>
+    </view>
+    <view class="sp-load-tip">正在进入{{targetName}}</view>
+  </view>
+</view>
+

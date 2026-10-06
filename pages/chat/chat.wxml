@@ -1,0 +1,72 @@
+<view class="chat-page {{themeClass}}">
+  <view class="chat-head">
+    <view class="avatar small {{isAsker ? 'warm' : ''}}">{{otherInitial}}</view>
+    <view class="chat-head-main">
+      <view class="chat-head-name">{{otherName}}</view>
+      <view class="chat-head-sub">{{thread.major}} · {{statusText}}</view>
+      <view class="peer-read" wx:if="{{peerReadText}}">
+        <view class="peer-read-dot {{isAsker ? '' : 'warm'}}"></view>
+        <text>{{peerReadText}}</text>
+      </view>
+    </view>
+    <view class="btn-mini plain" wx:if="{{canClaim}}" catchtap="onClaim">认领</view>
+    <view class="btn-mini plain" wx:elif="{{canClose}}" catchtap="onClose">标记解决</view>
+    <view class="btn-mini plain head-help" catchtap="goHelp">常见问题</view>
+  </view>
+
+  <view class="chat-question" wx:if="{{thread.question}}">
+    <text class="q-label">{{isAsker ? '我的提问' : '来自 ' + thread.askerName + ' 的提问'}}</text>
+    <text class="q-text">{{thread.question}}</text>
+  </view>
+
+  <scroll-view
+    class="chat-body"
+    scroll-y
+    scroll-into-view="{{intoView}}"
+    scroll-with-animation
+  >
+    <view class="chat-empty" wx:if="{{!messages.length}}">
+      <view class="empty-text">还没有消息，先说点什么吧</view>
+    </view>
+
+    <block wx:for="{{messages}}" wx:key="id">
+      <view class="time-divider" wx:if="{{item.showTime}}">{{item.timeText}}</view>
+      <view class="msg-row {{item.mine ? 'mine' : ''}}" id="msg-{{item.id}}">
+        <view class="avatar small {{item.mine ? '' : 'warm'}}">{{item.initial}}</view>
+        <view class="msg-col">
+          <view class="msg-name" wx:if="{{!item.mine}}">{{item.senderName}}</view>
+          <view class="bubble">{{item.body}}</view>
+          <!-- 逐条已读回执：已读=双勾，未读=红点块（颜色随双端主题翻转） -->
+          <view
+            class="read-receipt {{item.read ? 'is-read' : 'is-unread'}}"
+            wx:if="{{item.mine && item.readText}}"
+          >
+            <view class="rc-tick" wx:if="{{item.read}}">
+              <view class="rc-t1"></view>
+              <view class="rc-t2"></view>
+            </view>
+            <text>{{item.read ? '已读' : '未读'}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="chat-bottom-space" id="chat-bottom"></view>
+  </scroll-view>
+
+  <view class="chat-input-bar">
+    <input
+      class="chat-input"
+      value="{{draft}}"
+      placeholder="说点什么…"
+      placeholder-class="ph"
+      confirm-type="send"
+      maxlength="500"
+      bindinput="onDraftInput"
+      bindconfirm="onSend"
+    />
+    <view class="send-btn {{draft ? 'on' : ''}}" bindtap="onSend">发送</view>
+  </view>
+
+  <view class="chat-disclaimer">内容为学长学姐个人经验分享，不代表学校官方意见</view>
+</view>

@@ -1,0 +1,93 @@
+<view class="page-wrap">
+  <view class="hero">
+    <view class="hero-grid"></view>
+    <view class="hero-deco">
+      <view class="hd-bar"></view>
+      <view class="hd-circle"></view>
+      <view class="hd-square"></view>
+      <view class="hd-semi"></view>
+      <view class="hd-dots"></view>
+      <view class="hd-arc"></view>
+      <view class="hd-sky"></view>
+      <view class="hd-no">SZU·2026</view>
+    </view>
+    <view class="hero-kicker">发布提问</view>
+    <view class="hero-title">提个问题</view>
+    <view class="hero-rule">
+      <view class="rule-a"></view>
+      <view class="rule-b"></view>
+      <view class="rule-c"></view>
+    </view>
+    <view class="hero-desc">选对方向 + 把问题写清楚，学长回复得更快</view>
+  </view>
+
+  <view class="card">
+    <view class="field">
+      <view class="field-label">问题属于哪个方向</view>
+      <picker mode="selector" range="{{majors}}" value="{{majorIndex}}" bindchange="onMajorChange">
+        <view class="field-picker">
+          <text class="picker-value">{{major}}</text>
+          <text class="picker-arrow">选择</text>
+        </view>
+      </picker>
+      <view class="field-tip">按全校学院 / 学部（招生大类）选，不涉及细分小专业</view>
+      <input
+        class="field-input custom-input"
+        wx:if="{{isCustom}}"
+        placeholder="手动填写你的学院 / 学部，如：计算机与软件学院"
+        placeholder-class="ph"
+        value="{{customMajor}}"
+        maxlength="24"
+        bindinput="onCustomMajorInput"
+      />
+    </view>
+
+    <view class="field">
+      <view class="field-label">问题描述</view>
+      <textarea
+        class="field-textarea"
+        placeholder="例如：计算机类大一想转软件工程，需要提前补哪些课？"
+        placeholder-class="ph"
+        maxlength="300"
+        value="{{question}}"
+        bindinput="onQuestionInput"
+      ></textarea>
+      <view class="counter">{{question.length}}/300</view>
+    </view>
+  </view>
+
+  <view class="sec-title">找谁答疑 <text class="sec-sub">不选就是公开求助</text></view>
+
+  <view class="mentor-list">
+    <view class="mentor-item {{selectedId === '' ? 'active' : ''}}" data-id="" bindtap="onSelect">
+      <view class="avatar small">公</view>
+      <view class="mentor-main">
+        <view class="list-name">公开求助</view>
+        <view class="mentor-sub">挂在大厅里，对口学长随时认领</view>
+      </view>
+      <view class="radio {{selectedId === '' ? 'on' : ''}}"></view>
+    </view>
+
+    <view
+      class="mentor-item {{selectedId === item.id ? 'active' : ''}}"
+      wx:for="{{mentors}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onSelect"
+    >
+      <view class="avatar small warm">{{item.initial}}</view>
+      <view class="mentor-main">
+        <view class="list-name">{{item.name}}<text class="mentor-grade">{{item.grade}}</text><text class="mentor-online" wx:if="{{item.online}}">在线</text></view>
+        <view class="mentor-sub">{{item.major}}</view>
+        <view class="mentor-topics" wx:if="{{item.topics}}">擅长：{{item.topics}}</view>
+      </view>
+      <view class="radio {{selectedId === item.id ? 'on' : ''}}"></view>
+    </view>
+  </view>
+
+  <view class="notice">
+    本平台内容为学长学姐个人经验分享，不代表学校官方意见。请勿在提问里写手机号、身份证号等敏感信息。
+  </view>
+
+  <button class="btn-primary" bindtap="onSubmit">提交并进入聊天</button>
+</view>

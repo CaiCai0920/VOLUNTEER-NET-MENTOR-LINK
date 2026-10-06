@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/splash/splash",
+    "pages/index/index",
+    "pages/ask/ask",
+    "pages/chat/chat",
+    "pages/mine/mine",
+    "pages/login/login",
+    "pages/help/help",
+    "pages/review/review"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#28314E",
+    "navigationBarTitleText": "志愿人脉",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F1E6D8"
+  },
+  "tabBar": {
+    "color": "#9AA0B4",
+    "selectedColor": "#28314E",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "答疑大厅"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

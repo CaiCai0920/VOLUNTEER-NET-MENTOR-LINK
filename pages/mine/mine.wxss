@@ -1,0 +1,118 @@
+/* ---------------- 顶部个人信息（居中式几何构成） ---------------- */
+.profile-hero {
+  padding-top: 52rpx;
+  padding-bottom: 90rpx;
+  text-align: center;
+}
+
+/* 头像为方形块面，与列表圆形头像形成几何对比 */
+.avatar.big {
+  width: 132rpx;
+  height: 132rpx;
+  margin: 0 auto;
+  border-radius: 0;
+  font-size: 52rpx;
+  font-weight: 800;
+  background: rgba(241, 230, 216, 0.18);
+  color: #FFFFFF;
+}
+
+.profile-name {
+  position: relative;
+  z-index: 2;
+  margin-top: 24rpx;
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 2rpx;
+}
+
+.profile-sub {
+  position: relative;
+  z-index: 2;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---------------- 数据块面（白块，无线条） ---------------- */
+.stat-row {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  margin: -52rpx 24rpx 0;
+  padding: 34rpx 0;
+  background: var(--paper);
+  border-radius: var(--r-block);
+}
+
+.stat-card {
+  position: relative;
+  flex: 1;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 42rpx;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #8A8494;
+  letter-spacing: 1rpx;
+}
+
+/* ---------------- 操作列表（点标记 + 留白分隔） ---------------- */
+.action-card {
+  padding: 10rpx 28rpx;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  height: 110rpx;
+}
+
+/* 每项前的几何色点：橙 - 主色 - 主色（第四色点睛在首项） */
+.action-item::before {
+  content: '';
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 20rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.action-item:nth-child(1)::before {
+  background: var(--accent3);
+}
+
+.action-text {
+  flex: 1;
+  font-size: 29rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.action-arrow {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+/* 审核台入口角标：待审核人数 */
+.review-badge {
+  display: inline-block;
+  margin-left: 12rpx;
+  padding: 2rpx 12rpx;
+  background: var(--accent2);
+  color: #F1E6D8;
+  font-size: 19rpx;
+  font-weight: 800;
+}

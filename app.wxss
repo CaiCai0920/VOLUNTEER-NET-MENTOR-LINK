@@ -1,0 +1,711 @@
+/* ============================================================
+ * 志愿人脉 · 全局设计系统
+ * 视觉语言：经典包豪斯海报式（Bauhaus Poster）
+ *   —— 几何色块拼接 · 无描边无线条 · 大留白 · 点线面 0.3 : 0.5 : 9.2
+ * 配色（主：辅1：辅2 = 6：3：1，第四色橙仅作点睛，面积小于三主色）
+ *   新生端：主色 藏蓝 #28314E（60%）
+ *           辅色1 米白 #F1E6D8（30%）
+ *           辅色2 红   #AA283A（10%）
+ *   老生端：蓝红对调 —— 主色 红 #AA283A，辅色2 藏蓝 #28314E
+ *   第四色：橙 #F29344（点睛，kicker / 局部几何 / 快捷操作）
+ * 科技感：深色块面上保留「透视六边形渐变纹路」（.hero-grid）
+ * ============================================================ */
+
+page {
+  /* ---- 主色（新生端：藏蓝）---- */
+  --primary: #28314E;
+  --primary-deep: #171D2E;
+  --primary-soft: #3D4A70;
+  --primary-rgb: 40, 49, 78;
+  --primary-tint: #E2E6F0;
+
+  /* ---- 辅色1：米白（30% 面积，页面底）---- */
+  --accent1: #F1E6D8;
+  --accent1-soft: #F7EFE3;
+
+  /* ---- 辅色2：红（10% 强调）---- */
+  --accent2: #AA283A;
+  --accent2-rgb: 170, 40, 58;
+  --accent2-tint: #F3E3E6;
+  --accent2-soft: #C23A4E;
+  --accent2-deep: #8E1F30;
+
+  /* ---- 第四色：橙（点睛，面积小于任一主色）---- */
+  --accent3: #F29344;
+  --accent3-tint: #FBE9D8;
+
+  /* ---- 中性 ---- */
+  --ink: #14171F;
+  --paper: #FFFFFF;
+  --r-block: 0rpx;              /* 包豪斯：纯直角块面 */
+
+  /* 页面底：纯净米白，不加底纹 */
+  background: var(--accent1);
+  color: var(--ink);
+  font-size: 28rpx;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.55;
+}
+
+/* ---- 老生端：蓝红对调（主色红，辅色2藏蓝），辅色1不变 ---- */
+.theme-mentor {
+  --primary: #AA283A;
+  --primary-deep: #6E1723;
+  --primary-soft: #C24856;
+  --primary-rgb: 170, 40, 58;
+  --primary-tint: #F2DFE2;
+
+  --accent2: #28314E;
+  --accent2-rgb: 40, 49, 78;
+  --accent2-tint: #E2E6F0;
+  --accent2-soft: #4A5678;
+  --accent2-deep: #171D2E;
+}
+
+view,
+text,
+input,
+textarea,
+button {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+ * 一、几何元件（包豪斯海报构成：圆 / 半圆 / 方 / 条 / 点阵）
+ *    构成原则：全部元件收束为右上角一个紧凑组合体，
+ *    相互咬合重叠、共用轴对齐、粗条向右出血被裁切，
+ *    杜绝元件各自游离散布。
+ * ============================================================ */
+
+/* 透视六边形渐变纹路：叠于深色块面之上，营造科技风 */
+.hero-grid {
+  position: absolute;
+  top: -70rpx;
+  right: -110rpx;
+  width: 520rpx;
+  height: 380rpx;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSI0OSIgdmlld0JveD0iMCAwIDI4IDQ5Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjI4IiB5Mj0iNDkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGMUU2RDgiIHN0b3Atb3BhY2l0eT0iMSIvPjxzdG9wIG9mZnNldD0iMC40NSIgc3RvcC1jb2xvcj0iI0YxRTZEOCIgc3RvcC1vcGFjaXR5PSIwLjQyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjFFNkQ4IiBzdG9wLW9wYWNpdHk9IjAuMDYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cGF0aCBmaWxsPSJ1cmwoI2cpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy45OSA5LjI1bDEzIDcuNXYxNWwtMTMgNy41TDEgMzEuNzV2LTE1bDEyLjk5LTcuNXpNMyAxNy45djEyLjdsMTAuOTkgNi4zNCAxMS02LjM1VjE3LjlsLTExLTYuMzRMMyAxNy45ek0wIDE1bDEyLjk4LTcuNVYwaC0ydjYuMzVMMCAxMi42OXYyLjN6bTAgMTguNUwxMi45OCA0MXY4aC0ydi02Ljg1TDAgMzUuODF2LTIuM3pNMTUgMHY3LjVMMjcuOTkgMTVIMjh2LTIuMzFoLS4wMUwxNyA2LjM1VjBoLTJ6bTAgNDl2LThsMTIuOTktNy41SDI4djIuMzFoLS4wMUwxNyA0Mi4xNVY0OWgtMnoiLz48L3N2Zz4=");
+  background-size: 96rpx 168rpx;
+  transform: perspective(620rpx) rotateX(58deg) rotateZ(-16deg);
+  transform-origin: 100% 0%;
+  opacity: 0.34;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(102deg, rgba(0, 0, 0, 0) 10%, #000 66%);
+  mask-image: linear-gradient(102deg, rgba(0, 0, 0, 0) 10%, #000 66%);
+}
+
+/* 几何装饰层容器 */
+.hero-deco {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/*
+ * 右上角几何组合体（自后向前叠放，坐标互为咬合基准）：
+ *   粗条（右出血）→ 米白方块 → 大红圆（压住条与方块角）
+ *   → 橙半圆（咬合圆左下沿）→ 点阵（贴圆右下、与圆左缘对齐）
+ * 五件元件共用右上象限，最大跨度约 300rpx，构成一个整体。
+ */
+
+/* 粗色条：自右缘向左插入组合体，右端出血被 hero 裁切 */
+.hd-bar {
+  position: absolute;
+  right: 0;
+  top: 118rpx;
+  width: 250rpx;
+  height: 12rpx;
+  background: rgba(241, 230, 216, 0.92);
+}
+
+/* 实心方块（米白）：被大圆压住右下角，仅露左上部分 */
+.hd-square {
+  position: absolute;
+  right: 168rpx;
+  top: 42rpx;
+  width: 52rpx;
+  height: 52rpx;
+  background: rgba(241, 230, 216, 0.85);
+}
+
+/* 大实心圆（红）：组合体主体，压住条与方块 */
+.hd-circle {
+  position: absolute;
+  right: 52rpx;
+  top: 62rpx;
+  width: 156rpx;
+  height: 156rpx;
+  border-radius: 50%;
+  background: var(--accent2);
+}
+
+/* 半圆（橙，点睛）：拱形贴靠大圆左下沿，圆心与圆重叠咬合 */
+.hd-semi {
+  position: absolute;
+  right: 138rpx;
+  top: 186rpx;
+  width: 96rpx;
+  height: 48rpx;
+  border-radius: 96rpx 96rpx 0 0;
+  background: var(--accent3);
+}
+
+/* 点阵（3×3 圆点）：紧贴大圆右下方，与圆底缘对齐收束 */
+.hd-dots {
+  position: absolute;
+  right: 48rpx;
+  top: 234rpx;
+  width: 86rpx;
+  height: 60rpx;
+  background-image: radial-gradient(rgba(241, 230, 216, 0.85) 4rpx, transparent 5rpx);
+  background-size: 30rpx 30rpx;
+}
+
+/* 细环：上缘越出 hero 顶边被裁切，形成「图形突破块面边界」的张力 */
+.hd-arc {
+  position: absolute;
+  right: 196rpx;
+  top: -38rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(241, 230, 216, 0.55);
+  background: transparent;
+}
+
+/* 阶梯天际线：深圳大学图书馆 / 科技楼的阶梯体量抽象，三级退台向右升起 */
+.hd-sky {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 320rpx;
+  height: 60rpx;
+  background-image:
+    linear-gradient(rgba(241, 230, 216, 0.16), rgba(241, 230, 216, 0.16)),
+    linear-gradient(rgba(241, 230, 216, 0.28), rgba(241, 230, 216, 0.28)),
+    linear-gradient(rgba(241, 230, 216, 0.44), rgba(241, 230, 216, 0.44));
+  background-size: 320rpx 20rpx, 220rpx 38rpx, 128rpx 60rpx;
+  background-position: right bottom, right bottom, right bottom;
+  background-repeat: no-repeat;
+}
+
+/* 小型编号系统：天际线脚下的坐标标注 */
+.hd-no {
+  position: absolute;
+  right: 26rpx;
+  bottom: 14rpx;
+  font-size: 18rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  color: rgba(241, 230, 216, 0.78);
+}
+
+/* ============================================================
+ * 二、布局容器
+ * ============================================================ */
+.page-wrap {
+  padding-bottom: 60rpx;
+}
+
+/* ---------------- 顶部横幅（色块拼接构图） ---------------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 46rpx 36rpx 60rpx;
+  background: linear-gradient(118deg, var(--primary-soft) 0%, var(--primary) 46%, var(--primary-deep) 100%);
+}
+
+/* hero 内的文字层级需压住装饰层 */
+.hero-title,
+.hero-desc,
+.hero-chip,
+.hero-kicker,
+.hero-rule {
+  position: relative;
+  z-index: 2;
+}
+
+/* 包豪斯式栏目标记：橙色实块（第四色点睛） */
+.hero-kicker {
+  display: inline-block;
+  margin-bottom: 18rpx;
+  padding: 7rpx 18rpx;
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 1rpx;
+  line-height: 1.2;
+}
+
+/* 标题下短条组：橙条 + 米白条 + 红点 */
+.hero-rule {
+  display: flex;
+  align-items: center;
+  margin-top: 22rpx;
+}
+
+.hero-rule .rule-a {
+  width: 78rpx;
+  height: 12rpx;
+  background: var(--accent3);
+}
+
+.hero-rule .rule-b {
+  width: 30rpx;
+  height: 12rpx;
+  margin-left: 10rpx;
+  background: rgba(241, 230, 216, 0.65);
+}
+
+.hero-rule .rule-c {
+  width: 14rpx;
+  height: 14rpx;
+  margin-left: 10rpx;
+  border-radius: 50%;
+  background: var(--accent2);
+}
+
+.hero-desc {
+  margin-top: 18rpx;
+  font-size: 25rpx;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.5rpx;
+}
+
+.hero-chip {
+  display: inline-block;
+  margin-top: 26rpx;
+  margin-right: 14rpx;
+  padding: 10rpx 22rpx;
+  background: rgba(241, 230, 216, 0.16);
+  font-size: 23rpx;
+  color: #F1E6D8;
+  letter-spacing: 1rpx;
+}
+
+/* ============================================================
+ * 三、块面组件（无描边、无投影，纯色块 + 留白）
+ * ============================================================ */
+.card {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--r-block);
+  padding: 32rpx 30rpx;
+  margin: 24rpx;
+}
+
+/* 区块标题：小方块引导（点元素） */
+.sec-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 42rpx 26rpx 10rpx;
+  font-size: 31rpx;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+
+.sec-title::before {
+  content: '';
+  width: 16rpx;
+  height: 16rpx;
+  margin-right: 14rpx;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.sec-title .sec-sub {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #97919A;
+  letter-spacing: 0;
+}
+
+/* ============================================================
+ * 四、按钮（实色块，无描边无投影）
+ * ============================================================ */
+.btn-primary {
+  margin: 36rpx 26rpx 0;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: var(--r-block);
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 31rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-primary:active {
+  background: var(--primary-deep);
+}
+
+.btn-primary[disabled] {
+  background: var(--primary-tint);
+  color: #9AA0B4;
+}
+
+.btn-ghost {
+  margin: 22rpx 26rpx 0;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: var(--r-block);
+  background: var(--paper);
+  color: var(--primary);
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.btn-ghost::after {
+  border: none;
+}
+
+.btn-mini {
+  display: inline-block;
+  padding: 0 26rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  border-radius: var(--r-block);
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.btn-mini::after {
+  border: none;
+}
+
+.btn-mini.plain {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+/* ============================================================
+ * 五、标签（实色小块）/ 头像（实色圆）
+ * ============================================================ */
+.tag {
+  display: inline-block;
+  padding: 5rpx 16rpx;
+  margin-right: 12rpx;
+  border-radius: var(--r-block);
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 600;
+}
+
+.tag.warm {
+  background: var(--accent2);
+  color: #FFFFFF;
+}
+
+/* 「已解决」保留独立语义色，面积极小，不占用配色配比 */
+.tag.green {
+  background: #DFF1E8;
+  color: #1E7A54;
+}
+
+.tag.grey {
+  background: #ECEDEF;
+  color: #7A8095;
+}
+
+/* 橙色标签：第四色点睛（用于快捷 / 高亮场景） */
+.tag.orange {
+  background: var(--accent3);
+  color: #FFFFFF;
+}
+
+.avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 34rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar.small {
+  width: 66rpx;
+  height: 66rpx;
+  font-size: 26rpx;
+}
+
+/* 对方头像用辅色2，与自己的主色头像形成区分 */
+.avatar.warm {
+  background: var(--accent2);
+}
+
+/* ============================================================
+ * 六、列表项（纯白块面，靠留白分隔，无线条）
+ * ============================================================ */
+.list-item {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--r-block);
+  padding: 28rpx;
+  margin: 18rpx 24rpx;
+}
+
+.list-head {
+  display: flex;
+  align-items: center;
+}
+
+.list-head .head-main {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.list-name {
+  display: flex;
+  align-items: center;
+  font-size: 29rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.list-time {
+  font-size: 22rpx;
+  color: #97919A;
+}
+
+.list-body {
+  margin-top: 18rpx;
+  font-size: 27rpx;
+  color: #3A4152;
+  word-break: break-all;
+}
+
+.list-foot {
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action-arrow {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+/* ============================================================
+ * 七、空状态（几何色块构成：圆 + 三角 + 方）
+ * ============================================================ */
+.empty {
+  margin: 56rpx 48rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  position: relative;
+  width: 140rpx;
+  height: 140rpx;
+  margin: 0 auto 26rpx;
+  border-radius: 50%;
+  background: var(--primary-tint);
+}
+
+.empty-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 48rpx;
+  height: 48rpx;
+  margin: -24rpx 0 0 -24rpx;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.empty-icon::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 18rpx;
+  width: 0;
+  height: 0;
+  margin-left: -15rpx;
+  border-left: 15rpx solid transparent;
+  border-right: 15rpx solid transparent;
+  border-bottom: 26rpx solid var(--accent3);
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #8A8494;
+  letter-spacing: 0.5rpx;
+}
+
+/* ============================================================
+ * 八、提示条 / 页脚
+ * ============================================================ */
+.notice {
+  position: relative;
+  margin: 26rpx 24rpx 0;
+  padding: 24rpx 26rpx 24rpx 30rpx;
+  border-left: 10rpx solid var(--accent3);
+  background: var(--accent3-tint);
+  font-size: 23rpx;
+  color: #B05F14;
+  line-height: 1.7;
+}
+
+.footer-tip {
+  margin: 42rpx 40rpx 0;
+  text-align: center;
+  font-size: 21rpx;
+  color: #97919A;
+  line-height: 1.7;
+  letter-spacing: 0.5rpx;
+}
+
+/* ============================================================
+ * 九、未读角标 / 自有标识
+ * ============================================================ */
+.unread-badge {
+  min-width: 34rpx;
+  height: 34rpx;
+  padding: 0 9rpx;
+  margin-left: 12rpx;
+  border-radius: var(--r-block);
+  background: var(--accent2);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 700;
+  line-height: 34rpx;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.own-ask-tag {
+  margin-left: 10rpx;
+  padding: 3rpx 12rpx;
+  border-radius: var(--r-block);
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 19rpx;
+  line-height: 30rpx;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+ * 十、在线咨询入口（白色块面 + 几何徽标，无描边）
+ * ============================================================ */
+.help-entry {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 24rpx;
+  padding: 28rpx;
+  background: var(--paper);
+  border-radius: var(--r-block);
+  overflow: hidden;
+}
+
+.help-entry:active {
+  background: var(--accent1-soft);
+}
+
+/* 左侧几何徽标：主色方块 + 橙圆 + 米白三角（第四色点睛） */
+.help-badge {
+  position: relative;
+  width: 84rpx;
+  height: 84rpx;
+  flex-shrink: 0;
+  background: var(--primary);
+}
+
+.help-badge::before {
+  content: '';
+  position: absolute;
+  left: 16rpx;
+  top: 16rpx;
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+.help-badge::after {
+  content: '';
+  position: absolute;
+  right: 14rpx;
+  bottom: 14rpx;
+  width: 0;
+  height: 0;
+  border-left: 12rpx solid transparent;
+  border-right: 12rpx solid transparent;
+  border-bottom: 20rpx solid rgba(241, 230, 216, 0.9);
+}
+
+.help-entry-main {
+  flex: 1;
+  margin-left: 22rpx;
+  min-width: 0;
+}
+
+.help-entry-title {
+  font-size: 31rpx;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+
+.help-entry-sub {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #8A8494;
+}
+
+/* 入口右侧几何色块组（点元素） */
+.help-entry-strip {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.help-entry-strip .st-a,
+.help-entry-strip .st-b,
+.help-entry-strip .st-c {
+  width: 14rpx;
+  height: 14rpx;
+  margin-left: 8rpx;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.help-entry-strip .st-b {
+  background: var(--accent3);
+}
+
+.help-entry-strip .st-c {
+  background: var(--accent2);
+}

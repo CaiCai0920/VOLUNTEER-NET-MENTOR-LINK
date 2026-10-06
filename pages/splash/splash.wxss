@@ -1,0 +1,283 @@
+/* ============================================================
+ * 开屏缓冲页 · 重做版
+ * 参考：包豪斯海报式排版 —— 大字标题 + 纯几何组合 + 主色横带
+ * 原则：几何纯粹抽象（圆 / 四分圆 / 点 / 线），深大元素仅保留
+ *       「深圳大学」一处文字；四色 6 : 3 : 1，橙作点睛。
+ * ============================================================ */
+page {
+  height: 100%;
+  background: #F1E6D8;
+}
+
+.sp {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #F1E6D8;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------- 右上几何组合体 ---------------- */
+.sp-geo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 560rpx;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 大红圆：右缘出血被裁切，构成主体 */
+.sp-g-red {
+  position: absolute;
+  right: -96rpx;
+  top: 96rpx;
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 50%;
+  background: var(--accent2);
+}
+
+/* 蓝色四分圆：圆角朝左下，咬合红圆左下方 */
+.sp-g-quarter {
+  position: absolute;
+  right: 220rpx;
+  top: 300rpx;
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 0 0 0 180rpx;
+  background: var(--primary);
+}
+
+/* 橙色小圆：点睛，置于红圆左上肩位 */
+.sp-g-dot {
+  position: absolute;
+  right: 348rpx;
+  top: 132rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+/* 细横线：自左缘引出，止于文字区右侧（线元素） */
+.sp-g-line {
+  position: absolute;
+  left: 56rpx;
+  top: 208rpx;
+  width: 300rpx;
+  height: 4rpx;
+  background: rgba(20, 23, 31, 0.28);
+}
+
+/* 米白短条：压在红圆上，圆与条的叠印关系 */
+.sp-g-bar {
+  position: absolute;
+  right: 0;
+  top: 262rpx;
+  width: 210rpx;
+  height: 12rpx;
+  background: rgba(241, 230, 216, 0.92);
+}
+
+/* ---------------- 顶部 SZU 字标（深大元素 · 海报字母标） ---------------- */
+.sp-head {
+  position: absolute;
+  z-index: 3;
+  left: 56rpx;
+  top: calc(env(safe-area-inset-top) + 44rpx);
+  right: 56rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.sp-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* 主色方块 + 大字距字母标，构成包豪斯式字母标记 */
+.sp-logo-sq {
+  width: 20rpx;
+  height: 48rpx;
+  margin-right: 16rpx;
+  background: var(--accent2);
+}
+
+.sp-logo-tx {
+  font-size: 46rpx;
+  font-weight: 900;
+  letter-spacing: 8rpx;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.sp-head-meta {
+  font-size: 18rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+  color: rgba(20, 23, 31, 0.45);
+}
+
+/* ---------------- 文字排版区 ---------------- */
+.sp-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  padding: calc(env(safe-area-inset-top) + 150rpx) 56rpx 0;
+}
+
+.sp-kicker {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  font-weight: 600;
+  letter-spacing: 4rpx;
+  color: rgba(20, 23, 31, 0.6);
+}
+
+.sp-kicker-sq {
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 14rpx;
+  background: var(--accent3);
+}
+
+.sp-title {
+  margin-top: 22rpx;
+  font-size: 92rpx;
+  line-height: 1.12;
+  font-weight: 900;
+  letter-spacing: 6rpx;
+  color: var(--ink);
+}
+
+.sp-rule {
+  display: flex;
+  margin-top: 26rpx;
+}
+
+.sp-rule .r1 { width: 76rpx; height: 10rpx; background: var(--primary); }
+.sp-rule .r2 { width: 32rpx; height: 10rpx; background: var(--accent3); margin-left: 10rpx; }
+.sp-rule .r3 { width: 14rpx; height: 10rpx; background: var(--accent2); margin-left: 10rpx; }
+
+.sp-motto {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  letter-spacing: 7rpx;
+  color: rgba(20, 23, 31, 0.52);
+}
+
+/* 编号索引：色块方点 + 序号 + 文字（对应海报三行目录） */
+.sp-index {
+  margin-top: 84rpx;
+}
+
+.sp-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid rgba(20, 23, 31, 0.1);
+}
+
+.sp-row-sq {
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.sq-red { background: var(--accent2); }
+.sq-blue { background: var(--primary); }
+.sq-orange { background: var(--accent3); }
+
+.sp-no {
+  width: 66rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 2rpx;
+}
+
+.sp-tx {
+  font-size: 25rpx;
+  color: rgba(20, 23, 31, 0.78);
+  letter-spacing: 1rpx;
+}
+
+/* ---------------- 底部主色横带 ---------------- */
+.sp-navy {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  padding: 36rpx 56rpx calc(env(safe-area-inset-bottom) + 44rpx);
+  background: var(--primary);
+}
+
+/* 底部 SZU 字标：反白大字母 + 双行说明，呼应海报落款 */
+.sp-navy-mark {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.sp-navy-szu {
+  font-size: 60rpx;
+  font-weight: 900;
+  letter-spacing: 10rpx;
+  color: #F1E6D8;
+  line-height: 1;
+}
+
+.sp-navy-meta {
+  margin-left: 24rpx;
+  padding-left: 24rpx;
+  border-left: 4rpx solid rgba(241, 230, 216, 0.35);
+}
+
+.sp-navy-tx {
+  display: block;
+  font-size: 23rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  color: rgba(241, 230, 216, 0.92);
+}
+
+.sp-navy-sub {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 17rpx;
+  letter-spacing: 4rpx;
+  color: rgba(241, 230, 216, 0.55);
+}
+
+.sp-load {
+  height: 12rpx;
+  background: rgba(241, 230, 216, 0.18);
+  overflow: hidden;
+}
+
+/* 三色加载条：米白 6 : 橙 3 : 红 1（底带为主色蓝） */
+.sp-load-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #F1E6D8 0%, #F1E6D8 60%, #F29344 60%, #F29344 90%, #AA283A 90%, #AA283A 100%);
+  animation: sp-grow 2.4s linear forwards;
+}
+
+@keyframes sp-grow {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.sp-load-tip {
+  margin-top: 18rpx;
+  font-size: 20rpx;
+  letter-spacing: 3rpx;
+  color: rgba(241, 230, 216, 0.62);
+}

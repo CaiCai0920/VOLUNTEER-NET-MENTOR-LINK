@@ -1,0 +1,66 @@
+<view class="page-wrap {{themeClass}}">
+  <view class="hero profile-hero">
+    <view class="hero-grid"></view>
+    <view class="hero-deco">
+      <view class="hd-bar"></view>
+      <view class="hd-circle"></view>
+      <view class="hd-square"></view>
+      <view class="hd-semi"></view>
+      <view class="hd-dots"></view>
+      <view class="hd-arc"></view>
+      <view class="hd-sky"></view>
+      <view class="hd-no">SZU·2026</view>
+    </view>
+    <view class="avatar big">{{meInitial}}</view>
+    <view class="profile-name">{{me.name}}</view>
+    <view class="profile-sub">{{roleText}} · {{me.major}}</view>
+    <view class="hero-chip" wx:if="{{me.verifyStatus === 'approved'}}">身份核验已通过 · {{me.realName}}</view>
+    <view class="hero-chip" wx:elif="{{me.verifyStatus === 'pending'}}">身份核验审核中</view>
+    <view class="hero-chip" wx:elif="{{me.verifyStatus === 'rejected'}}">核验未通过 · 请重新提交</view>
+    <view class="hero-chip" wx:if="{{me.topics}}">擅长：{{me.topics}}</view>
+  </view>
+
+  <view class="stat-row">
+    <view class="stat-card">
+      <view class="stat-num">{{stats.askCount}}</view>
+      <view class="stat-label">我的提问</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{stats.answerThreads}}</view>
+      <view class="stat-label">我接的答疑</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{stats.messageCount}}</view>
+      <view class="stat-label">发出的消息</view>
+    </view>
+  </view>
+
+  <view class="card action-card">
+    <view class="action-item" bindtap="goHelp">
+      <text class="action-text">常见问题</text>
+      <text class="action-arrow">›</text>
+    </view>
+    <view class="action-item" bindtap="goEdit">
+      <text class="action-text">修改我的资料</text>
+      <text class="action-arrow">›</text>
+    </view>
+    <view class="action-item" wx:if="{{isReviewer}}" bindtap="goReview">
+      <text class="action-text">身份核验审核台<text class="review-badge" wx:if="{{pendingCount}}">{{pendingCount}}</text></text>
+      <text class="action-arrow">›</text>
+    </view>
+    <view class="action-item" bindtap="onSwitch">
+      <text class="action-text">切换身份（演示用）</text>
+      <text class="action-arrow">›</text>
+    </view>
+    <view class="action-item" bindtap="onReset">
+      <text class="action-text">清空演示数据</text>
+      <text class="action-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="notice">
+    本平台内容为学长学姐个人经验分享，不代表学校官方意见。你填写的昵称、专业和问题仅用于匹配答疑，不会被公开。
+  </view>
+
+  <view class="footer-tip">志愿人脉 · 新生提问与对口学长答疑</view>
+</view>
