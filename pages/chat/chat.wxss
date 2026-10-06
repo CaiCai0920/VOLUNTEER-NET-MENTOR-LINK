@@ -1,0 +1,269 @@
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--accent1);
+}
+
+/* ---------------- 顶部对方信息（底部三色块条） ---------------- */
+.chat-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 22rpx 28rpx 28rpx;
+  background: var(--paper);
+}
+
+/* 三色拼接条：主色 + 橙（第四色点睛）+ 红 */
+.chat-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10rpx;
+  background: linear-gradient(90deg, var(--primary) 0 58%, var(--accent3) 58% 82%, var(--accent2) 82% 100%);
+}
+
+.chat-head-main {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.chat-head-name {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+
+.chat-head-sub {
+  margin-top: 2rpx;
+  font-size: 22rpx;
+  color: #97919A;
+}
+
+/* ---------------- 提问原文（红色块面提示条） ---------------- */
+.chat-question {
+  margin: 20rpx 24rpx 0;
+  padding: 22rpx 26rpx;
+  border-left: 10rpx solid var(--accent2);
+  background: var(--accent2-tint);
+}
+
+.q-label {
+  display: block;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  color: var(--accent2);
+  margin-bottom: 8rpx;
+}
+
+.q-text {
+  font-size: 26rpx;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ---------------- 消息区 ---------------- */
+.chat-body {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 24rpx;
+}
+
+.chat-empty {
+  padding: 120rpx 0;
+  text-align: center;
+}
+
+.time-divider {
+  margin: 26rpx 0 18rpx;
+  text-align: center;
+  font-size: 21rpx;
+  color: #97919A;
+  letter-spacing: 1rpx;
+}
+
+.msg-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 26rpx;
+}
+
+.msg-row.mine {
+  flex-direction: row-reverse;
+}
+
+.msg-col {
+  max-width: 72%;
+  margin: 0 18rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-row.mine .msg-col {
+  align-items: flex-end;
+}
+
+.msg-name {
+  font-size: 21rpx;
+  color: #97919A;
+  margin-bottom: 8rpx;
+}
+
+/* 气泡：纯色块，无描边 */
+.bubble {
+  padding: 20rpx 26rpx;
+  border-radius: var(--r-block);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 28rpx;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* 自己的消息：主色实底，永远在右侧 */
+.msg-row.mine .bubble {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+.chat-bottom-space {
+  height: 24rpx;
+}
+
+/* ---------------- 底部输入条 ---------------- */
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 24rpx;
+  background: var(--paper);
+}
+
+.chat-input {
+  flex: 1;
+  height: 86rpx;
+  padding: 0 26rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.ph {
+  color: #B4AC9C;
+}
+
+.send-btn {
+  margin-left: 16rpx;
+  padding: 0 34rpx;
+  height: 86rpx;
+  line-height: 86rpx;
+  border-radius: var(--r-block);
+  background: var(--primary-tint);
+  color: #9AA0B4;
+  font-size: 27rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
+/* 输入内容后变橙色（第四色点睛，提示可发送） */
+.send-btn.on {
+  background: var(--accent3);
+  color: #FFFFFF;
+}
+
+/* ---------------- 已读 / 未读回执（逐条显示，状态一眼可分） ---------------- */
+.read-receipt {
+  display: flex;
+  align-items: center;
+  margin-top: 8rpx;
+  padding: 4rpx 14rpx;
+  border-radius: var(--r-block);
+  font-size: 19rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+/* 已读：主色浅块 + 勾（低沉、安静） */
+.read-receipt.is-read {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+/* 未读：辅色2 实块反白（最醒目，一眼看到还没被读） */
+.read-receipt.is-unread {
+  background: var(--accent2);
+  color: #FFFFFF;
+}
+
+/* 勾：两根短棒拼成的对勾 */
+.rc-tick {
+  position: relative;
+  width: 22rpx;
+  height: 18rpx;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.rc-t1,
+.rc-t2 {
+  position: absolute;
+  height: 4rpx;
+  background: currentColor;
+}
+
+.rc-t1 {
+  left: 0;
+  bottom: 4rpx;
+  width: 10rpx;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.rc-t2 {
+  left: 6rpx;
+  bottom: 1rpx;
+  width: 16rpx;
+  transform: rotate(-45deg);
+  transform-origin: left center;
+}
+
+/* ---------------- 顶部对方阅读进度 ---------------- */
+.peer-read {
+  display: flex;
+  align-items: center;
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  letter-spacing: 0.5rpx;
+  color: #8A8494;
+}
+
+.peer-read-dot {
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 10rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.peer-read-dot.warm {
+  background: var(--accent2);
+}
+
+/* ---------------- 头部按钮间距 ---------------- */
+.head-help {
+  margin-left: 12rpx;
+}
+
+.chat-disclaimer {
+  padding: 12rpx 24rpx calc(14rpx + env(safe-area-inset-bottom));
+  background: var(--paper);
+  text-align: center;
+  font-size: 19rpx;
+  color: #97919A;
+}

@@ -1,0 +1,64 @@
+<view class="page-wrap theme-asker">
+  <view class="hero">
+    <view class="hero-grid"></view>
+    <view class="hero-deco">
+      <view class="hd-bar"></view>
+      <view class="hd-circle"></view>
+      <view class="hd-square"></view>
+      <view class="hd-semi"></view>
+      <view class="hd-dots"></view>
+      <view class="hd-arc"></view>
+      <view class="hd-sky"></view>
+      <view class="hd-no">SZU·2026</view>
+    </view>
+    <view class="hero-kicker">审核台</view>
+    <view class="hero-title">身份核验</view>
+    <view class="hero-desc">比对姓名学号与学生证照片后给出结论</view>
+  </view>
+
+  <view class="empty" wx:if="{{needSession}}">
+    <view class="empty-text">这个页面需要登录态才能查看学生证照片：请先用「手机号 + 验证码」完成一次身份核验登记，再回到这里。</view>
+  </view>
+
+  <block wx:else>
+    <view class="sec-title">待审核 <text class="sec-sub">{{items.length}} 人</text></view>
+
+    <view class="loading" wx:if="{{loading}}">加载中…</view>
+
+    <block wx:if="{{items.length}}">
+      <view class="card review-card" wx:for="{{items}}" wx:key="id">
+        <view class="review-head">
+          <view class="review-name">{{item.name}}<text class="review-role">{{item.roleText}}</text></view>
+          <view class="review-time">{{item.submittedAt}} 提交</view>
+        </view>
+        <view class="review-facts">
+          <view class="fact"><text class="fact-k">真实姓名</text><text class="fact-v">{{item.realName}}</text></view>
+          <view class="fact"><text class="fact-k">学号</text><text class="fact-v">{{item.studentId}}</text></view>
+          <view class="fact"><text class="fact-k">学院</text><text class="fact-v">{{item.major}}</text></view>
+          <view class="fact"><text class="fact-k">手机号</text><text class="fact-v">{{item.phone}}</text></view>
+        </view>
+        <view class="review-photo-wrap">
+          <view class="review-photo-label">学生证正面照</view>
+          <image
+            wx:if="{{item.photoUrl}}"
+            class="review-photo"
+            src="{{item.photoUrl}}"
+            mode="aspectFit"
+            bindtap="onPreview"
+            data-url="{{item.photoUrl}}"
+          ></image>
+          <view wx:else class="review-photo-missing">照片加载失败，可驳回后让对方重传</view>
+        </view>
+        <view class="review-actions">
+          <view class="review-btn no" data-id="{{item.id}}" data-status="rejected" bindtap="decide">驳回</view>
+          <view class="review-btn yes" data-id="{{item.id}}" data-status="approved" bindtap="decide">通过核验</view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty" wx:elif="{{!loading}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">暂时没有待审核的申请</view>
+    </view>
+  </block>
+</view>

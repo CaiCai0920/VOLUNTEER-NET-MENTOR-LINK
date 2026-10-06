@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/splash/splash",
+    "pages/index/index",
+    "pages/community/community",
+    "pages/messages/messages",
+    "pages/mine/mine",
+    "pages/post/post",
+    "pages/ask/ask",
+    "pages/chat/chat",
+    "pages/login/login",
+    "pages/help/help",
+    "pages/review/review",
+    "pages/post-detail/post-detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#28314E",
+    "navigationBarTitleText": "志愿人脉",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F1E6D8"
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

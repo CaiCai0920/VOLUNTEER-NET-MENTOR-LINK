@@ -1,0 +1,397 @@
+/* 首页局部微调（通用样式见 app.wxss） */
+.list-name {
+  flex-wrap: wrap;
+}
+
+/* ============ 身份切换控件：选中即整块换色 ============ */
+.id-bar {
+  display: flex;
+  margin: 28rpx 36rpx 0;
+}
+
+.id-opt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 22rpx 20rpx;
+  background: #FFFFFF;
+  border: 1rpx solid rgba(40, 49, 78, 0.24);
+  transition: background 0.16s, color 0.16s;
+}
+
+.id-opt:first-child {
+  margin-right: 8rpx;
+}
+
+/* 选中：新生 → 藏蓝，学长 → 荔园红（与全局主题同源）；加投影与米白底拉开层次 */
+.id-opt.on-asker {
+  background: #28314E;
+  border-color: #28314E;
+  box-shadow: 0 8rpx 20rpx rgba(20, 23, 31, 0.28);
+}
+
+.id-opt.on-mentor {
+  background: #AA283A;
+  border-color: #AA283A;
+  box-shadow: 0 8rpx 20rpx rgba(20, 23, 31, 0.28);
+}
+
+/* 前置标示框：白色细框（非色块、非实心），选中时描边转米白 */
+.id-swatch {
+  width: 30rpx;
+  height: 46rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+  background: transparent;
+  border: 2rpx solid rgba(40, 49, 78, 0.45);
+  box-sizing: border-box;
+}
+
+.sw-asker {
+  border-color: rgba(40, 49, 78, 0.32);
+}
+
+.sw-mentor {
+  border-color: rgba(170, 40, 58, 0.38);
+}
+
+.id-opt.on-asker .sw-asker,
+.id-opt.on-mentor .sw-mentor {
+  background: transparent;
+  border-color: #F1E6D8;
+}
+
+.id-txt {
+  min-width: 0;
+}
+
+.id-name {
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  color: #14171F;
+}
+
+.id-sub {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(20, 23, 31, 0.66);
+}
+
+/* 选中态文字：纯白 + 副标提亮（双选择器 + !important 保险，防止被覆盖回黑字） */
+.id-opt.on .id-name,
+.id-opt.on-asker .id-name,
+.id-opt.on-mentor .id-name {
+  color: #FFFFFF !important;
+}
+
+.id-opt.on .id-sub,
+.id-opt.on-asker .id-sub,
+.id-opt.on-mentor .id-sub {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.id-hint {
+  margin: 14rpx 36rpx 0;
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(20, 23, 31, 0.42);
+}
+
+/* ============================================================
+ * 在线答疑：当前在线的学长学姐（白色块面横滑卡片）
+ * 几何语言沿用全局：直角块面、无描边、顶部三色拼接条、方角标签
+ * ============================================================ */
+.online-strip {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.online-track {
+  display: inline-flex;
+  align-items: stretch;
+  padding: 6rpx 24rpx 4rpx;
+}
+
+.online-card {
+  position: relative;
+  width: 320rpx;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  padding: 30rpx 24rpx 24rpx;
+  background: var(--paper);
+  white-space: normal;
+  overflow: hidden;
+}
+
+/* 顶部拼接条：主色 62% + 橙 22% + 辅色2 16%（呼应全局 6:3:1 语言） */
+.online-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8rpx;
+  background: linear-gradient(
+    90deg,
+    var(--primary) 0 62%,
+    var(--accent3) 62% 84%,
+    var(--accent2) 84% 100%
+  );
+}
+
+.online-card:active {
+  background: var(--accent1-soft);
+}
+
+.online-top {
+  display: flex;
+  align-items: center;
+}
+
+.online-flag {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.online-dot {
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 8rpx;
+  border-radius: 50%;
+  background: #1E7A54;
+}
+
+.online-flag-tx {
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+  color: #1E7A54;
+}
+
+.online-name {
+  margin-top: 16rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  color: var(--ink);
+}
+
+.online-grade {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  line-height: 1.5;
+  color: #8A8494;
+}
+
+.online-topics {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14rpx;
+}
+
+.online-topic {
+  margin: 0 8rpx 8rpx 0;
+  padding: 4rpx 12rpx;
+  background: var(--accent1);
+  color: #6B625A;
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+}
+
+.online-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+}
+
+.online-seen {
+  font-size: 19rpx;
+  color: #97919A;
+}
+
+.online-btn {
+  padding: 9rpx 22rpx;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.online-card:active .online-btn {
+  background: var(--primary-deep);
+}
+
+.online-empty {
+  width: 600rpx;
+  padding: 40rpx 0;
+  white-space: normal;
+}
+
+/* ============================================================
+ * 列表底部：我发的最后一条的已读 / 未读标记
+ * ============================================================ */
+.foot-right {
+  display: flex;
+  align-items: center;
+}
+
+.read-chip {
+  margin-right: 14rpx;
+  padding: 3rpx 12rpx;
+  font-size: 19rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.read-chip.ok {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+.read-chip.no {
+  background: var(--accent2);
+  color: #FFFFFF;
+}
+
+/* ============================================================
+ * 头顶拼贴：头像标志（V 形标）+ SZU 字标
+ * 手法：米白方块 + 出血色块 + 单点，与右侧几何元件咬合，形成拼贴层次
+ * ============================================================ */
+.hall-mark {
+  position: absolute;
+  right: 30rpx;
+  bottom: 152rpx;
+  width: 128rpx;
+  height: 128rpx;
+  background: var(--accent1);
+  overflow: hidden;
+}
+
+.hall-mark-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 单点：唯一第四色出现处，只做点睛，缀在标志块左上角 */
+.hall-dot {
+  position: absolute;
+  right: 166rpx;
+  bottom: 262rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+/* SZU 大字标：与标志块同组，压着红圆下缘形成拼贴咬合 */
+.hall-szu {
+  position: absolute;
+  right: 172rpx;
+  bottom: 196rpx;
+  font-size: 44rpx;
+  font-weight: 900;
+  letter-spacing: 6rpx;
+  line-height: 1;
+  color: rgba(241, 230, 216, 0.95);
+}
+
+/* 「深圳大学」小字：缀在标志块正下方，像拼贴的标签 */
+.hall-cn {
+  position: absolute;
+  right: 36rpx;
+  bottom: 122rpx;
+  font-size: 22rpx;
+  letter-spacing: 6rpx;
+  line-height: 1;
+  color: rgba(241, 230, 216, 0.68);
+}
+
+/* ============================================================
+ * v10：单一连续背景画布 —— 一张图贯穿 hero 与下方延续区，
+ * 无接缝、无重复裁切、无负 margin 补丁；纱渐变完成深→浅过渡
+ * ============================================================ */
+.canvas-zone {
+  position: relative;
+}
+
+.bg-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1160rpx;
+  overflow: hidden;
+}
+
+.bg-canvas-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 左侧压暗保证标题可读 + 顶部微暗；底部不收色，交给纱渐变 */
+.bg-canvas-shade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(23, 29, 46, 0.78) 0%, rgba(23, 29, 46, 0.36) 42%, rgba(23, 29, 46, 0) 66%),
+    linear-gradient(180deg, rgba(23, 29, 46, 0.22) 0%, rgba(23, 29, 46, 0) 26%);
+}
+
+.theme-mentor .bg-canvas-shade {
+  background:
+    linear-gradient(90deg, rgba(61, 8, 17, 0.75) 0%, rgba(61, 8, 17, 0.32) 42%, rgba(61, 8, 17, 0) 66%),
+    linear-gradient(180deg, rgba(61, 8, 17, 0.2) 0%, rgba(61, 8, 17, 0) 26%);
+}
+
+/* 米白纱：hero 段全透，向下长距离缓降收进浅色页面 */
+.bg-canvas-veil {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(241, 230, 216, 0) 0%,
+    rgba(241, 230, 216, 0) 40%,
+    rgba(241, 230, 216, 0.2) 52%,
+    rgba(241, 230, 216, 0.52) 65%,
+    rgba(241, 230, 216, 0.82) 79%,
+    rgba(241, 230, 216, 0.97) 92%,
+    #F1E6D8 100%
+  );
+}
+
+/* 全部内容浮于画布之上 */
+.canvas-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* hero 自身变透明，让画布透出（保留扫描线等装饰） */
+.hero-clear {
+  background: transparent;
+}
+
+/* hero 段仍处深色图上：注释与准星保持浅色 */
+.hero .hd-no {
+  color: rgba(241, 230, 216, 0.6);
+}
+
+.hero .hud-label {
+  color: rgba(241, 230, 216, 0.6);
+}
+
+.hero .hud-cross::before,
+.hero .hud-cross::after {
+  background: rgba(241, 230, 216, 0.55);
+}

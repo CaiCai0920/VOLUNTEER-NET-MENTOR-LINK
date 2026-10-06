@@ -1,0 +1,118 @@
+/* ============================================================
+ * 发布页：文字输入 + 媒体九宫格 + 话题分区色块
+ * ============================================================ */
+
+.compose-card {
+  margin-top: 26rpx;
+}
+
+.compose-input {
+  width: 100%;
+  min-height: 220rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.compose-ph {
+  color: #B4B0BC;
+}
+
+.compose-count {
+  margin-top: 14rpx;
+  text-align: right;
+  font-size: 21rpx;
+  color: #97919A;
+}
+
+/* ---- 媒体九宫格 ---- */
+.media-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10rpx 24rpx 0;
+}
+
+.media-cell {
+  position: relative;
+  width: 208rpx;
+  height: 208rpx;
+  margin: 0 12rpx 12rpx 0;
+  background: var(--primary-tint);
+  overflow: hidden;
+}
+
+.media-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 视频角标：左下橙色小块 */
+.media-tag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 4rpx 12rpx;
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 19rpx;
+  font-weight: 700;
+}
+
+/* 删除按钮：右上主色小方块 */
+.media-del {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 44rpx;
+  height: 44rpx;
+  background: rgba(20, 23, 31, 0.62);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  line-height: 42rpx;
+  text-align: center;
+}
+
+/* 添加格：虚位以待的空白块面 */
+.media-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent1-soft);
+}
+
+.media-add-plus {
+  font-size: 56rpx;
+  font-weight: 300;
+  color: #B4B0BC;
+  line-height: 1;
+}
+
+.media-add-txt {
+  margin-top: 8rpx;
+  font-size: 21rpx;
+  color: #8A8494;
+}
+
+/* ---- 话题分区 ---- */
+.topic-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16rpx 24rpx 0;
+}
+
+.topic-chip {
+  padding: 12rpx 28rpx;
+  margin: 0 14rpx 14rpx 0;
+  background: var(--paper);
+  color: #7A8095;
+  font-size: 25rpx;
+  letter-spacing: 1rpx;
+}
+
+.topic-chip.on {
+  background: var(--primary);
+  color: #FFFFFF;
+  font-weight: 700;
+}

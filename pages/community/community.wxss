@@ -1,0 +1,288 @@
+/* ============================================================
+ * 社区页：微博式分区条 + 小红书式双列瀑布流 + 悬浮发布按钮
+ * ============================================================ */
+
+.page-wrap {
+  padding-bottom: 140rpx;
+}
+
+/* ---- 双列瀑布流 ---- */
+.feed {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 20rpx 0;
+}
+
+.feed-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-col:first-child {
+  margin-right: 20rpx;
+}
+
+/* ---- 帖子卡（纯白块面，无描边无投影）---- */
+.post-card {
+  position: relative;
+  background: var(--paper);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.post-cover {
+  display: block;
+  width: 100%;
+  height: 320rpx;
+  background: var(--primary-tint);
+}
+
+.post-body {
+  padding: 20rpx 22rpx 24rpx;
+}
+
+/* 话题行：橙色小方块引导 + 主色话题字 */
+.post-topic {
+  display: flex;
+  align-items: center;
+  font-size: 23rpx;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.5rpx;
+}
+
+.post-topic::before {
+  content: '';
+  width: 10rpx;
+  height: 10rpx;
+  margin-right: 10rpx;
+  background: var(--accent3);
+  flex-shrink: 0;
+}
+
+.post-text {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: var(--ink);
+  line-height: 1.55;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+.post-foot {
+  display: flex;
+  align-items: center;
+  margin-top: 18rpx;
+}
+
+.post-foot .avatar.small {
+  width: 44rpx;
+  height: 44rpx;
+  font-size: 20rpx;
+}
+
+.post-name {
+  flex: 1;
+  min-width: 0;
+  margin-left: 12rpx;
+  font-size: 23rpx;
+  color: #3A4152;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-time {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #97919A;
+}
+
+/* ============================================================
+ * v12：发布入口改为封面右上角「符号型按键」
+ * （虚线圆轨慢旋 + 朱红加号 + 橙点 + 等宽注释，不再用实块 FAB）
+ * ============================================================ */
+
+.cover-add {
+  position: absolute;
+  right: 28rpx;
+  top: 24rpx;
+  width: 104rpx;
+  height: 104rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.cover-add:active {
+  opacity: 0.6;
+}
+
+/* 慢旋虚线外轨：与首页 hud-arc 同语言 */
+.cover-add-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  border: 2rpx dashed rgba(40, 49, 78, 0.55);
+  animation: cover-add-spin 26s linear infinite;
+}
+
+@keyframes cover-add-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 朱红加号本体：符号即按键 */
+.cover-add-plus {
+  font-size: 60rpx;
+  font-weight: 300;
+  line-height: 1;
+  margin-top: -8rpx;
+  color: #AA283A;
+  text-shadow: 0 2rpx 8rpx rgba(241, 230, 216, 0.65);
+}
+
+/* 橙点：右上角点睛，沿用旧 FAB 的橙点记忆 */
+.cover-add-dot {
+  position: absolute;
+  right: 14rpx;
+  top: 12rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+/* 等宽小注释：按键身份说明 */
+.cover-add-tx {
+  position: absolute;
+  left: 50%;
+  bottom: -22rpx;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.62);
+}
+
+/* ============================================================
+ * v10：朋友圈式封面横幅（小体量，不喧宾夺主）+ 答疑帖高亮 + 认领栏
+ * ============================================================ */
+
+/* 封面横幅：微信朋友圈式，全宽、固定小高度 */
+.cover {
+  position: relative;
+  height: 300rpx;
+  overflow: hidden;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 压暗纱：标题可读，同时不抢正文视觉 */
+.cover-veil {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(23, 29, 46, 0.42) 0%, rgba(23, 29, 46, 0.12) 55%, rgba(23, 29, 46, 0) 100%);
+}
+
+.cover-caption {
+  position: absolute;
+  left: 36rpx;
+  bottom: 24rpx;
+  color: #F1E6D8;
+}
+
+.cover-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+  line-height: 1.1;
+}
+
+.cover-sub {
+  margin-top: 8rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  opacity: 0.72;
+}
+
+.cover-no {
+  position: absolute;
+  right: 24rpx;
+  bottom: 20rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 17rpx;
+  letter-spacing: 2rpx;
+  color: rgba(241, 230, 216, 0.6);
+}
+
+/* 答疑帖高亮：朱红描边 + 左侧红条，和普通生活帖一眼区分 */
+.post-card.qa {
+  border: 3rpx solid rgba(170, 40, 58, 0.55);
+  box-shadow: 6rpx 6rpx 0 rgba(170, 40, 58, 0.14);
+}
+
+.post-card.qa::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8rpx;
+  background: #AA283A;
+}
+
+/* 话题标签：答疑 = 红实块白字，其余维持藏蓝描边 */
+.post-topic.qa {
+  background: #AA283A;
+  color: #FFFFFF;
+  padding: 4rpx 14rpx;
+  border: none;
+}
+
+/* 认领栏：米白底 + 发丝线，虚位以待 */
+.claim-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding: 12rpx 16rpx;
+  background: rgba(170, 40, 58, 0.06);
+  border: 2rpx solid rgba(170, 40, 58, 0.28);
+}
+
+.claim-tx {
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(170, 40, 58, 0.85);
+}
+
+.claim-btn {
+  padding: 8rpx 26rpx;
+  background: #AA283A;
+  color: #FFFFFF;
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+
+.claim-btn.done {
+  background: #FFFFFF;
+  color: rgba(40, 49, 78, 0.5);
+  border: 2rpx solid rgba(40, 49, 78, 0.25);
+}

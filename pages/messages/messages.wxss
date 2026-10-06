@@ -1,0 +1,56 @@
+/* ============================================================
+ * 消息页：微博式分区条 + 会话列表（最后一条消息 / 未读红块）
+ * ============================================================ */
+
+.page-wrap {
+  padding-bottom: 60rpx;
+}
+
+.msg-item {
+  display: flex;
+  align-items: center;
+  background: var(--paper);
+  padding: 26rpx 28rpx;
+  margin: 18rpx 24rpx 0;
+}
+
+.msg-item:active {
+  background: var(--accent1-soft);
+}
+
+.msg-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: 20rpx;
+}
+
+.msg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.msg-name {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msg-time {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  font-size: 21rpx;
+  color: #97919A;
+}
+
+.msg-preview {
+  margin-top: 8rpx;
+  font-size: 25rpx;
+  color: #7A8095;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

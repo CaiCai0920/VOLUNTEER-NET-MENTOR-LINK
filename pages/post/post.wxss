@@ -1,0 +1,221 @@
+/* ============================================================
+ * 发布页：文字输入 + 媒体九宫格 + 话题分区色块
+ * ============================================================ */
+
+.compose-card {
+  margin-top: 26rpx;
+}
+
+.compose-input {
+  width: 100%;
+  min-height: 220rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.compose-ph {
+  color: #B4B0BC;
+}
+
+.compose-count {
+  margin-top: 14rpx;
+  text-align: right;
+  font-size: 21rpx;
+  color: #97919A;
+}
+
+/* ---- 媒体九宫格 ---- */
+.media-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10rpx 24rpx 0;
+}
+
+.media-cell {
+  position: relative;
+  width: 208rpx;
+  height: 208rpx;
+  margin: 0 12rpx 12rpx 0;
+  background: var(--primary-tint);
+  overflow: hidden;
+}
+
+.media-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 视频角标：左下橙色小块 */
+.media-tag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 4rpx 12rpx;
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 19rpx;
+  font-weight: 700;
+}
+
+/* 删除按钮：右上主色小方块 */
+.media-del {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 44rpx;
+  height: 44rpx;
+  background: rgba(20, 23, 31, 0.62);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  line-height: 42rpx;
+  text-align: center;
+}
+
+/* 添加格：虚位以待的空白块面 */
+.media-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent1-soft);
+}
+
+.media-add-plus {
+  font-size: 56rpx;
+  font-weight: 300;
+  color: #B4B0BC;
+  line-height: 1;
+}
+
+.media-add-txt {
+  margin-top: 8rpx;
+  font-size: 21rpx;
+  color: #8A8494;
+}
+
+/* ---- 话题分区 ---- */
+.topic-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16rpx 24rpx 0;
+}
+
+.topic-chip {
+  padding: 12rpx 28rpx;
+  margin: 0 14rpx 14rpx 0;
+  background: var(--paper);
+  color: #7A8095;
+  font-size: 25rpx;
+  letter-spacing: 1rpx;
+}
+
+.topic-chip.on {
+  background: var(--primary);
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* 认领帖勾选时：预设色块整体降透明，提示已让位给「答疑」 */
+.topic-wrap.dim {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ---- 认领帖独立选项：勾选块 + 朱红描边反馈 ---- */
+.claim-opt {
+  display: flex;
+  align-items: center;
+  margin: 22rpx 24rpx 0;
+  padding: 20rpx 22rpx;
+  background: var(--paper);
+  border: 2rpx solid rgba(40, 49, 78, 0.22);
+}
+
+.claim-opt.on {
+  border-color: rgba(170, 40, 58, 0.6);
+  background: rgba(170, 40, 58, 0.05);
+  box-shadow: 4rpx 4rpx 0 rgba(170, 40, 58, 0.14);
+}
+
+/* 勾选框：空心方块，勾选后朱红实心白钩 */
+.claim-box {
+  flex-shrink: 0;
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 18rpx;
+  border: 3rpx solid rgba(40, 49, 78, 0.45);
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.claim-opt.on .claim-box {
+  background: #AA283A;
+  border-color: #AA283A;
+}
+
+.claim-opt-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.claim-opt-title {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+}
+
+.claim-opt-en {
+  margin-left: 10rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 17rpx;
+  font-weight: 400;
+  letter-spacing: 2rpx;
+  color: rgba(170, 40, 58, 0.75);
+}
+
+.claim-opt-sub {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  line-height: 1.5;
+  color: #8A8494;
+}
+
+/* ---- 自定义分区：# 前缀 + 输入行 ---- */
+.custom-topic {
+  display: flex;
+  align-items: center;
+  margin: 16rpx 24rpx 0;
+  padding: 0 22rpx;
+  height: 84rpx;
+  background: var(--accent1-soft);
+  border: 2rpx dashed rgba(40, 49, 78, 0.3);
+}
+
+.custom-topic-hash {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: var(--accent3);
+  margin-right: 14rpx;
+}
+
+.custom-topic-input {
+  flex: 1;
+  min-width: 0;
+  height: 84rpx;
+  font-size: 26rpx;
+  color: var(--ink);
+}
+
+.custom-topic-len {
+  flex-shrink: 0;
+  margin-left: 12rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 19rpx;
+  color: #97919A;
+}

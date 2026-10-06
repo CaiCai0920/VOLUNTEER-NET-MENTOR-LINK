@@ -1,0 +1,208 @@
+<view class="page-wrap {{themeClass}}">
+  <!-- 微博式顶部分区条：答疑 / 社区 / 消息 / 个人（并列分区，答疑为首页） -->
+  <view class="top-tabs">
+    <view class="top-tab on" data-tab="ask" bindtap="onTopTab">答疑</view>
+    <view class="top-tab" data-tab="community" bindtap="onTopTab">社区</view>
+    <view class="top-tab" data-tab="messages" bindtap="onTopTab">消息</view>
+    <view class="top-tab" data-tab="mine" bindtap="onTopTab">个人</view>
+  </view>
+
+  <view class="canvas-zone">
+    <!-- 单一连续背景画布：一张图贯穿 hero 与下方延续区，无接缝、无重复裁切 -->
+    <view class="bg-canvas">
+      <image class="bg-canvas-img" src="{{isAsker ? '/images/hero-collage-blue.jpg' : '/images/hero-collage-red.jpg'}}" mode="aspectFill"></image>
+      <view class="bg-canvas-shade"></view>
+      <view class="bg-canvas-veil"></view>
+    </view>
+
+    <view class="canvas-content">
+    <view class="hero hero-clear">
+    <view class="hero-deco">
+      <view class="hd-no">SZU-2026 // GRID.04</view>
+      <view class="hud-cross" style="position:absolute; left:36rpx; bottom:26rpx;"></view>
+      <view class="hud-label" style="position:absolute; left:78rpx; bottom:31rpx;">VOLUNTEER NET — MENTOR LINK</view>
+    </view>
+    <view class="hero-title">{{isAsker ? '答疑大厅' : '答疑工作台'}}</view>
+    <view class="hero-rule">
+      <view class="rule-a"></view>
+      <view class="rule-b"></view>
+      <view class="rule-c"></view>
+    </view>
+    <view class="hero-desc">{{me.name}} · {{roleText}} · {{me.major}}</view>
+    <view class="hero-chip" wx:if="{{isAsker}}">我的提问 {{myThreads.length}} 条</view>
+    <view class="hero-chip" wx:else>待认领 {{openThreads.length}} 条 · 我接了 {{mentorThreads.length}} 条</view>
+  </view>
+
+  <!-- 身份切换：点击即切换整页配色（新生=蓝 / 学长=红） -->
+  <view class="id-bar">
+    <view class="id-opt {{isAsker ? 'on on-asker' : ''}}" data-role="asker" bindtap="onSwitchRole">
+      <view class="id-swatch sw-asker"></view>
+      <view class="id-txt">
+        <view class="id-name">新生</view>
+        <view class="id-sub">提问方 · 蓝</view>
+      </view>
+    </view>
+    <view class="id-opt {{!isAsker ? 'on on-mentor' : ''}}" data-role="mentor" bindtap="onSwitchRole">
+      <view class="id-swatch sw-mentor"></view>
+      <view class="id-txt">
+        <view class="id-name">学长学姐</view>
+        <view class="id-sub">答疑方 · 红</view>
+      </view>
+    </view>
+  </view>
+  <view class="id-hint">点击身份切换配色 · 当前：{{roleText}}（{{isAsker ? '主色蓝' : '主色红'}}）</view>
+
+  <!-- ================= 在线答疑：当前在线的学长学姐（真人，非机器应答） ================= -->
+  <view class="sec-title">在线答疑 <text class="sec-sub">{{onlineMentors.length}} 位学长学姐在线</text></view>
+  <scroll-view class="online-strip" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="online-track">
+      <view
+        class="online-card"
+        wx:for="{{onlineMentors}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goAskMentor"
+      >
+        <view class="online-top">
+          <view class="avatar small warm">{{item.initial}}</view>
+          <view class="online-flag">
+            <view class="online-dot"></view>
+            <text class="online-flag-tx">在线</text>
+          </view>
+        </view>
+        <view class="online-name">{{item.name}}</view>
+        <view class="online-grade">{{item.grade}} · {{item.major}}</view>
+        <view class="online-topics" wx:if="{{item.topics.length}}">
+          <text class="online-topic" wx:for="{{item.topics}}" wx:for-item="tp" wx:key="*this">{{tp}}</text>
+        </view>
+        <view class="online-foot">
+          <text class="online-seen">{{item.lastSeen}}</text>
+          <view class="online-btn">请教 TA</view>
+        </view>
+      </view>
+
+      <view class="online-empty" wx:if="{{!onlineMentors.length}}">
+        <view class="empty-text">当前没有在线的学长学姐，可发布公开提问等人认领</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 常见问题（原在线咨询：常见疑问速查，非机器应答） -->
+  <view class="help-entry" bindtap="goHelp">
+    <view class="help-badge"></view>
+    <view class="help-entry-main">
+      <view class="help-entry-title">常见问题</view>
+      <view class="help-entry-sub">使用规则与常见疑问速查</view>
+    </view>
+    <view class="help-entry-strip">
+      <view class="st-a"></view>
+      <view class="st-b"></view>
+      <view class="st-c"></view>
+    </view>
+  </view>
+
+  <!-- ================= 新生视角 ================= -->
+  <block wx:if="{{isAsker}}">
+    <button class="btn-primary" bindtap="goAsk">我要提问</button>
+
+    <view class="sec-title">我的提问 <text class="sec-sub">{{myThreads.length}} 条</text></view>
+
+    <block wx:if="{{myThreads.length}}">
+      <view
+        class="list-item"
+        wx:for="{{myThreads}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goChat"
+      >
+        <view class="list-head">
+          <view class="avatar small">{{item.otherInitial}}</view>
+          <view class="head-main">
+            <view class="list-name">{{item.otherName}}<text class="unread-badge" wx:if="{{item.unread}}">{{item.unread}}</text></view>
+            <view class="list-time">{{item.timeText}}</view>
+          </view>
+          <view class="tag {{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        <view class="list-body">{{item.lastText}}</view>
+        <view class="list-foot">
+          <text class="tag">{{item.major}}</text>
+          <view class="foot-right">
+            <text class="read-chip {{item.lastRead ? 'ok' : 'no'}}" wx:if="{{item.lastMine}}">{{item.lastRead ? '已读' : '未读'}}</text>
+            <text class="list-time">{{item.count}} 条消息</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty" wx:else>
+      <view class="empty-icon"></view>
+      <view class="empty-text">还没有提问，点上面那个按钮开始吧</view>
+    </view>
+  </block>
+
+  <!-- ================= 学长学姐视角 ================= -->
+  <block wx:else>
+    <view class="sec-title">待认领 <text class="sec-sub">按对口方向来找</text></view>
+
+    <block wx:if="{{openThreads.length}}">
+      <view class="list-item" wx:for="{{openThreads}}" wx:key="id">
+        <view class="list-head">
+          <view class="avatar small warm">{{item.askerInitial}}</view>
+          <view class="head-main">
+            <view class="list-name">{{item.askerName}}<text class="unread-badge" wx:if="{{item.unread}}">{{item.unread}}</text><text class="own-ask-tag" wx:if="{{item.ownAsk}}">我发起的</text></view>
+            <view class="list-time">{{item.timeText}} · {{item.major}}</view>
+          </view>
+          <view class="tag warm">待认领</view>
+        </view>
+        <view class="list-body">{{item.question}}</view>
+        <view class="list-foot">
+          <text class="list-time">还没有人接</text>
+          <view class="btn-mini" data-id="{{item.id}}" catchtap="onClaim">我来答</view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty" wx:else>
+      <view class="empty-icon"></view>
+      <view class="empty-text">暂时没有待认领的提问</view>
+    </view>
+
+    <view class="sec-title">我接的答疑 <text class="sec-sub">{{mentorThreads.length}} 条</text></view>
+
+    <block wx:if="{{mentorThreads.length}}">
+      <view
+        class="list-item"
+        wx:for="{{mentorThreads}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goChat"
+      >
+        <view class="list-head">
+          <view class="avatar small warm">{{item.askerInitial}}</view>
+          <view class="head-main">
+            <view class="list-name">{{item.askerName}}<text class="unread-badge" wx:if="{{item.unread}}">{{item.unread}}</text></view>
+            <view class="list-time">{{item.timeText}}</view>
+          </view>
+          <view class="tag {{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        <view class="list-body">{{item.lastText}}</view>
+        <view class="list-foot">
+          <text class="tag">{{item.major}}</text>
+          <view class="foot-right">
+            <text class="read-chip {{item.lastRead ? 'ok' : 'no'}}" wx:if="{{item.lastMine}}">{{item.lastRead ? '已读' : '未读'}}</text>
+            <text class="list-time">{{item.count}} 条消息</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty" wx:else>
+      <view class="empty-icon"></view>
+      <view class="empty-text">还没接过答疑，去上面认领一条吧</view>
+    </view>
+  </block>
+
+  <view class="footer-tip">下拉可刷新列表</view>
+    </view>
+  </view>
+</view>

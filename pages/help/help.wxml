@@ -1,0 +1,97 @@
+<view class="page-wrap {{themeClass}}">
+  <!-- ============ 居中标题区（包豪斯几何构成） ============ -->
+  <view class="help-hero">
+    <view class="hero-grid"></view>
+    <view class="hero-deco">
+      <view class="hd-bar"></view>
+      <view class="hd-circle"></view>
+      <view class="hd-square"></view>
+      <view class="hd-semi"></view>
+      <view class="hd-dots"></view>
+      <view class="hd-arc"></view>
+      <view class="hd-sky"></view>
+      <view class="hd-no">SZU·2026</view>
+    </view>
+
+    <!-- 居中几何徽标：方中圆 + 三角 -->
+    <view class="hh-badge">
+      <view class="hh-badge-dot"></view>
+      <view class="hh-badge-tri"></view>
+    </view>
+
+    <view class="hh-kicker">FAQ · 使用帮助</view>
+    <view class="hh-title">常见问题</view>
+    <view class="hh-rule">
+      <view class="rule-a"></view>
+      <view class="rule-b"></view>
+      <view class="rule-c"></view>
+    </view>
+    <view class="hh-desc">使用规则与常见疑问速查 · 输入关键词直接定位</view>
+  </view>
+
+  <!-- ============ 关键词检索（代替原来的机器应答） ============ -->
+  <view class="faq-search">
+    <view class="fs-bar">
+      <view class="fs-mark"></view>
+      <input
+        class="fs-input"
+        value="{{query}}"
+        placeholder="输入关键词，如：已读、认证、认领"
+        placeholder-class="ph"
+        confirm-type="search"
+        maxlength="20"
+        bindinput="onQueryInput"
+        bindconfirm="onQueryInput"
+      />
+      <view class="fs-clear" wx:if="{{query}}" bindtap="onClear">清空</view>
+    </view>
+    <view class="fs-kw">
+      <view
+        class="kw {{query === item ? 'on' : ''}}"
+        wx:for="{{keywords}}"
+        wx:key="*this"
+        data-k="{{item}}"
+        bindtap="onKwTap"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- ============ 问题清单（四色编号块面） ============ -->
+  <view class="sec-title">
+    问题清单
+    <text class="sec-sub">{{faqs.length}} / {{total}} 条 · {{query ? '已按关键词筛选' : '点击展开'}}</text>
+  </view>
+
+  <view class="faq-list" wx:if="{{faqs.length}}">
+    <view
+      class="faq-item {{item.open ? 'open' : ''}}"
+      wx:for="{{faqs}}"
+      wx:key="no"
+      data-no="{{item.no}}"
+      bindtap="onFaqTap"
+    >
+      <view class="faq-q">
+        <view class="faq-no">{{item.no}}</view>
+        <text class="faq-q-text">{{item.q}}</text>
+        <view class="faq-sign">
+          <view class="sign-h"></view>
+          <view class="sign-v"></view>
+        </view>
+      </view>
+      <view class="faq-a" wx:if="{{item.open}}">{{item.a}}</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <view class="empty-icon"></view>
+    <view class="empty-text">没有匹配的问题，换个说法再试一次</view>
+  </view>
+
+  <view class="notice">
+    这里只收录平台的使用规则与常见疑问；涉及具体课程、专业与个人经历的问题，请回到「答疑大厅」向对口的学长学姐提问。
+  </view>
+
+  <view class="footer-tip">
+    本平台内容为学长学姐个人经验分享，不代表学校官方意见。
+  </view>
+</view>

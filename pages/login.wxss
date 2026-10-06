@@ -1,0 +1,575 @@
+/* ============ 表单字段（米白色块，无描边） ============ */
+.field {
+  margin-bottom: 34rpx;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+  margin-bottom: 16rpx;
+}
+
+.field-label::before {
+  content: '';
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 12rpx;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.field-input {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  font-size: 29rpx;
+  color: var(--ink);
+}
+
+.ph {
+  color: #B4AC9C;
+}
+
+.field-picker {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picker-value {
+  font-size: 29rpx;
+  color: var(--ink);
+}
+
+/* 选择动作块：橙色点睛（第四色） */
+.picker-arrow {
+  padding: 6rpx 16rpx;
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+/* ============ 身份选择（选中即整块换色：新生蓝 / 学长红） ============ */
+.role-row {
+  display: flex;
+}
+
+.role-card {
+  flex: 1;
+  padding: 24rpx 20rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  transition: background 0.16s;
+}
+
+.role-card:first-child {
+  margin-right: 18rpx;
+}
+
+.role-card.active {
+  background: var(--primary);
+}
+
+/* 身份色标：新生蓝 / 学长红，未选中时也能一眼分辨两端的代表色 */
+.role-swatch {
+  width: 22rpx;
+  height: 22rpx;
+  margin-bottom: 16rpx;
+}
+
+.sw-asker {
+  background: #28314E;
+}
+
+.sw-mentor {
+  background: #AA283A;
+}
+
+.role-card.active .role-swatch {
+  background: #F1E6D8;
+  opacity: 0.9;
+}
+
+.role-name {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.role-card.active .role-name {
+  color: #FFFFFF;
+}
+
+.role-desc {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: #8A8494;
+  line-height: 1.5;
+}
+
+.role-card.active .role-desc {
+  color: rgba(241, 230, 216, 0.9);
+}
+
+/* ============ 擅长话题多选 ============ */
+.chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 12rpx 24rpx;
+  margin: 0 14rpx 14rpx 0;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  font-size: 24rpx;
+  color: #5A5F70;
+}
+
+.chip.on {
+  background: var(--primary);
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* ============ 同意条款 ============ */
+.agree {
+  margin: 28rpx 30rpx 0;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 14rpx;
+  border-radius: var(--r-block);
+  background: #FFFFFF;
+  /* 勾选框必须有描边，否则米白底上完全看不见框在哪 */
+  border: 4rpx solid var(--primary);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.checkbox.checked {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 6rpx var(--accent1);
+}
+
+.agree-text {
+  font-size: 25rpx;
+  color: #5A5F70;
+}
+
+/* ============ 实名认证提示 ============ */
+.verify-tip {
+  margin-top: -12rpx;
+  padding: 18rpx 20rpx;
+  border-left: 8rpx solid var(--primary);
+  background: var(--primary-tint);
+  font-size: 22rpx;
+  color: var(--primary);
+  line-height: 1.6;
+}
+
+/* ============================================================
+ * 海报式顶部（独立版式：斜切块面 + 超大 SZU + 破界圆，不随其他页面的 hero 走）
+ * 主色随所选身份翻转：新生蓝 #28314E / 学长红 #AA283A
+ * ============================================================ */
+.lg-page {
+  min-height: 100vh;
+  background: #F1E6D8;
+}
+
+.lg-wrap {
+  position: relative;
+  padding-bottom: 0;
+}
+
+/* 状态栏：与海报同色，让海报满幅顶到屏幕边缘 */
+.lg-status {
+  height: calc(env(safe-area-inset-top) + 30rpx);
+  background: var(--primary);
+}
+
+.lg-poster {
+  position: relative;
+  height: 560rpx;
+  overflow: hidden;
+  background: linear-gradient(126deg, var(--primary-soft) 0%, var(--primary) 48%, var(--primary-deep) 100%);
+}
+
+/* 右侧红竖块：随主题对调（学长端变蓝），突破海报下缘 */
+.lg-band {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 116rpx;
+  height: 86%;
+  background: var(--accent2);
+}
+
+/* 超大 SZU：米白主体 + 墨色重影，反向旋转、被右缘与顶缘裁切 */
+.lg-mark {
+  position: absolute;
+  right: -30rpx;
+  top: -26rpx;
+  font-size: 300rpx;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -8rpx;
+  color: rgba(241, 230, 216, 0.92);
+  transform: rotate(-3deg);
+}
+
+.lg-mark-back {
+  position: absolute;
+  right: -48rpx;
+  top: -14rpx;
+  font-size: 300rpx;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -8rpx;
+  color: rgba(20, 23, 31, 0.55);
+  transform: rotate(9deg);
+}
+
+/* 米白斜切楔块：海报底部的非水平收口 */
+.lg-wedge {
+  position: absolute;
+  left: -60rpx;
+  right: -60rpx;
+  bottom: -132rpx;
+  height: 200rpx;
+  background: #F1E6D8;
+  transform: rotate(-6deg);
+}
+
+/* 阶梯天际线：海报左下，图书馆 / 科技楼体量抽象 */
+.lg-steps {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 260rpx;
+  height: 78rpx;
+  background-image:
+    linear-gradient(rgba(241, 230, 216, 0.14), rgba(241, 230, 216, 0.14)),
+    linear-gradient(rgba(241, 230, 216, 0.24), rgba(241, 230, 216, 0.24)),
+    linear-gradient(rgba(241, 230, 216, 0.38), rgba(241, 230, 216, 0.38));
+  background-size: 260rpx 26rpx, 172rpx 52rpx, 96rpx 78rpx;
+  background-position: left bottom, left bottom, left bottom;
+  background-repeat: no-repeat;
+}
+
+/* 橙字坐标：建校年份区间，置于 SZU 字脚右侧空白区 */
+.lg-colon {
+  position: absolute;
+  right: 150rpx;
+  top: 306rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  color: var(--accent3);
+}
+
+/* 焦点圆：随身份主题换色（新生端红 / 老生端蓝），骑压海报下边界 */
+.lg-circle {
+  position: absolute;
+  left: 92rpx;
+  top: 560rpx;
+  width: 176rpx;
+  height: 176rpx;
+  margin-top: -104rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--accent2-soft) 0%, var(--accent2) 62%, var(--accent2-deep) 100%);
+  overflow: hidden;
+}
+
+.lg-lychee {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(241, 230, 216, 0.3) 6rpx, transparent 7rpx);
+  background-size: 42rpx 42rpx;
+  background-position: 8rpx 10rpx;
+  opacity: 0.55;
+}
+
+/* 细环：套住焦点圆，越界处被画布自然裁切 */
+.lg-ring {
+  position: absolute;
+  left: 54rpx;
+  top: 560rpx;
+  width: 252rpx;
+  height: 252rpx;
+  margin-top: -142rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(20, 23, 31, 0.45);
+}
+
+/* 橙半圆：拱形骑在边界右侧，与焦点圆构成呼应 */
+.lg-semi {
+  position: absolute;
+  left: 300rpx;
+  top: 560rpx;
+  width: 104rpx;
+  height: 52rpx;
+  margin-top: -52rpx;
+  border-radius: 104rpx 104rpx 0 0;
+  background: var(--accent3);
+}
+
+/* 细坐标线 + 三圆点 + 箭头：坐标系统 */
+.lg-coord {
+  position: absolute;
+  left: 300rpx;
+  top: 560rpx;
+  width: 320rpx;
+  height: 2rpx;
+  margin-top: -148rpx;
+  background: rgba(241, 230, 216, 0.5);
+}
+
+.lg-dot {
+  position: absolute;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+.lg-dot.d1 { left: 312rpx; top: 560rpx; margin-top: -154rpx; }
+.lg-dot.d2 { left: 424rpx; top: 560rpx; margin-top: -182rpx; }
+.lg-dot.d3 { left: 540rpx; top: 560rpx; margin-top: -126rpx; }
+
+.lg-arrow {
+  position: absolute;
+  left: 620rpx;
+  top: 560rpx;
+  margin-top: -156rpx;
+  width: 0;
+  height: 0;
+  border-top: 8rpx solid transparent;
+  border-bottom: 8rpx solid transparent;
+  border-left: 18rpx solid rgba(241, 230, 216, 0.85);
+}
+
+/* 返回：仅当从「我的 → 修改资料」进入时出现 */
+.lg-back {
+  position: absolute;
+  left: 32rpx;
+  top: 0;
+  padding: 10rpx 22rpx 10rpx 14rpx;
+  background: rgba(241, 230, 216, 0.14);
+  font-size: 24rpx;
+  color: #F1E6D8;
+  letter-spacing: 1rpx;
+}
+
+/* 品牌落款：海报左下 */
+.lg-brand {
+  position: absolute;
+  left: 44rpx;
+  bottom: 150rpx;
+  display: flex;
+  align-items: center;
+}
+
+.lg-brand-sq {
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 12rpx;
+  background: var(--accent3);
+}
+
+.lg-brand-tx {
+  font-size: 26rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+  color: #F1E6D8;
+}
+
+.lg-brand-sub {
+  position: absolute;
+  left: 44rpx;
+  bottom: 112rpx;
+  font-size: 18rpx;
+  letter-spacing: 4rpx;
+  color: rgba(241, 230, 216, 0.6);
+}
+
+/* ---------------- 表单区（海报版式分节） ---------------- */
+.lg-sheet {
+  position: relative;
+  padding: 36rpx 30rpx 70rpx;
+  background: #F1E6D8;
+}
+
+.lg-chip {
+  display: inline-block;
+  margin-bottom: 26rpx;
+  padding: 10rpx 20rpx;
+  background: var(--primary-tint);
+  border-left: 8rpx solid var(--primary);
+  font-size: 23rpx;
+  color: var(--primary);
+}
+
+.lg-sec {
+  display: flex;
+  align-items: center;
+  margin: 26rpx 4rpx 24rpx;
+}
+
+.lg-sec-no {
+  padding: 6rpx 14rpx;
+  background: var(--primary);
+  font-size: 24rpx;
+  font-weight: 900;
+  letter-spacing: 2rpx;
+  color: #F1E6D8;
+}
+
+.lg-sec-tx {
+  margin-left: 16rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 3rpx;
+  color: var(--ink);
+}
+
+.lg-sec-line {
+  flex: 1;
+  height: 2rpx;
+  margin-left: 18rpx;
+  background: rgba(20, 23, 31, 0.14);
+}
+
+/* ============ 全校大类提示 + 自定义填写输入框 ============ */
+.field-tip {
+  margin-top: 12rpx;
+  font-size: 21rpx;
+  line-height: 1.6;
+  color: #97919A;
+  letter-spacing: 0.5rpx;
+}
+
+/* 自定义输入：左侧橙色实块，提示这是「自己填写」的字段（第四色点睛） */
+.custom-input {
+  margin-top: 16rpx;
+  border-left: 10rpx solid var(--accent3);
+}
+
+/* ============ 03 身份核验：手机验证码 + 学生证照片 ============ */
+.phone-row {
+  display: flex;
+  align-items: center;
+}
+
+.phone-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.code-btn {
+  margin-left: 16rpx;
+  padding: 16rpx 22rpx;
+  background: var(--primary);
+  color: #F1E6D8;
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.code-btn.off {
+  opacity: 0.45;
+}
+
+.photo-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.photo-box {
+  width: 200rpx;
+  height: 150rpx;
+  background: var(--primary-tint);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-empty {
+  text-align: center;
+  color: var(--primary);
+  opacity: 0.75;
+}
+
+.photo-empty-icon {
+  font-size: 44rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.photo-empty-tx {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+.photo-tip {
+  margin-left: 20rpx;
+  flex: 1;
+  min-width: 0;
+  font-size: 21rpx;
+  line-height: 1.7;
+  color: #8A8FA0;
+}
+
+.verify-status {
+  padding: 20rpx 22rpx;
+  background: var(--primary-tint);
+  border-left: 8rpx solid var(--primary);
+  font-size: 24rpx;
+  letter-spacing: 1rpx;
+  color: var(--primary);
+}
+
+.verify-status.wait {
+  border-left-color: var(--accent3);
+  color: #8A5A20;
+  background: var(--accent3-tint);
+}
+
+.verify-status.bad {
+  border-left-color: var(--accent2);
+  color: var(--accent2-deep);
+  background: var(--accent2-tint);
+}

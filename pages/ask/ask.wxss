@@ -1,0 +1,201 @@
+/* ============ 表单字段（米白色块，无描边） ============ */
+.field {
+  margin-bottom: 30rpx;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 1rpx;
+  margin-bottom: 16rpx;
+}
+
+.field-label::before {
+  content: '';
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 12rpx;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.field-picker {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picker-value {
+  font-size: 29rpx;
+  color: var(--ink);
+}
+
+.picker-arrow {
+  padding: 6rpx 16rpx;
+  background: var(--accent3);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.field-textarea {
+  width: 100%;
+  height: 230rpx;
+  padding: 22rpx 24rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.counter {
+  margin-top: 10rpx;
+  text-align: right;
+  font-size: 21rpx;
+  color: #97919A;
+  letter-spacing: 1rpx;
+}
+
+.ph {
+  color: #B4AC9C;
+}
+
+/* ============ 学长选择列表（选中即主色块面反白） ============ */
+.mentor-list {
+  margin: 0 24rpx;
+}
+
+.mentor-item {
+  display: flex;
+  align-items: center;
+  padding: 26rpx;
+  margin-bottom: 18rpx;
+  border-radius: var(--r-block);
+  background: var(--paper);
+}
+
+.mentor-item.active {
+  background: var(--primary);
+}
+
+.mentor-main {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.mentor-grade {
+  margin-left: 12rpx;
+  font-size: 21rpx;
+  color: #97919A;
+  font-weight: 400;
+}
+
+.mentor-sub {
+  margin-top: 4rpx;
+  font-size: 23rpx;
+  color: #8A8494;
+}
+
+.mentor-topics {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--primary);
+}
+
+/* 选中态下文字全部反白 */
+.mentor-item.active .list-name,
+.mentor-item.active .mentor-topics {
+  color: #FFFFFF;
+}
+
+.mentor-item.active .mentor-grade,
+.mentor-item.active .mentor-sub {
+  color: rgba(241, 230, 216, 0.75);
+}
+
+/* 选择标记：方形块面 */
+.radio {
+  position: relative;
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  flex-shrink: 0;
+}
+
+.radio.on {
+  background: var(--primary);
+}
+
+.radio.on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14rpx;
+  height: 14rpx;
+  margin: -7rpx 0 0 -7rpx;
+  background: var(--accent1);
+}
+
+/* 主色块面上的选中标记：米白底 + 主色内点 */
+.mentor-item.active .radio {
+  background: var(--accent1);
+}
+
+.mentor-item.active .radio.on {
+  background: var(--accent1);
+}
+
+.mentor-item.active .radio.on::after {
+  background: var(--primary);
+}
+
+/* ============ 全校大类提示 + 自定义填写输入框 ============ */
+.field-tip {
+  margin-top: 12rpx;
+  font-size: 21rpx;
+  line-height: 1.6;
+  color: #97919A;
+  letter-spacing: 0.5rpx;
+}
+
+.field-input {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: var(--r-block);
+  background: var(--accent1);
+  font-size: 29rpx;
+  color: var(--ink);
+}
+
+/* 自定义输入：左侧橙色实块，提示这是「自己填写」的字段（第四色点睛） */
+.custom-input {
+  margin-top: 16rpx;
+  border-left: 10rpx solid var(--accent3);
+}
+
+/* 学长列表里的「在线」标记 */
+.mentor-online {
+  margin-left: 12rpx;
+  padding: 2rpx 12rpx;
+  background: #DFF1E8;
+  color: #1E7A54;
+  font-size: 19rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}

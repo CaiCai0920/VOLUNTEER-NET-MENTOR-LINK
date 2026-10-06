@@ -1,0 +1,297 @@
+/* 首页局部微调（通用样式见 app.wxss） */
+.list-name {
+  flex-wrap: wrap;
+}
+
+/* ============ 身份切换控件：选中即整块换色 ============ */
+.id-bar {
+  display: flex;
+  margin: 28rpx 36rpx 0;
+}
+
+.id-opt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 22rpx 20rpx;
+  background: #FFFFFF;
+  transition: background 0.16s, color 0.16s;
+}
+
+.id-opt:first-child {
+  margin-right: 8rpx;
+}
+
+/* 选中：新生 → 藏蓝，学长 → 荔园红（与全局主题同源） */
+.id-opt.on-asker {
+  background: #28314E;
+}
+
+.id-opt.on-mentor {
+  background: #AA283A;
+}
+
+.id-swatch {
+  width: 18rpx;
+  height: 44rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.sw-asker {
+  background: #28314E;
+}
+
+.sw-mentor {
+  background: #AA283A;
+}
+
+.id-opt.on-asker .sw-asker,
+.id-opt.on-mentor .sw-mentor {
+  background: #F1E6D8;
+  opacity: 0.9;
+}
+
+.id-txt {
+  min-width: 0;
+}
+
+.id-name {
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  color: #14171F;
+}
+
+.id-sub {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(20, 23, 31, 0.5);
+}
+
+.id-opt.on .id-name {
+  color: #F1E6D8;
+}
+
+.id-opt.on .id-sub {
+  color: rgba(241, 230, 216, 0.72);
+}
+
+.id-hint {
+  margin: 14rpx 36rpx 0;
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(20, 23, 31, 0.42);
+}
+
+/* ============================================================
+ * 在线答疑：当前在线的学长学姐（白色块面横滑卡片）
+ * 几何语言沿用全局：直角块面、无描边、顶部三色拼接条、方角标签
+ * ============================================================ */
+.online-strip {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.online-track {
+  display: inline-flex;
+  align-items: stretch;
+  padding: 6rpx 24rpx 4rpx;
+}
+
+.online-card {
+  position: relative;
+  width: 320rpx;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  padding: 30rpx 24rpx 24rpx;
+  background: var(--paper);
+  white-space: normal;
+  overflow: hidden;
+}
+
+/* 顶部拼接条：主色 62% + 橙 22% + 辅色2 16%（呼应全局 6:3:1 语言） */
+.online-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8rpx;
+  background: linear-gradient(
+    90deg,
+    var(--primary) 0 62%,
+    var(--accent3) 62% 84%,
+    var(--accent2) 84% 100%
+  );
+}
+
+.online-card:active {
+  background: var(--accent1-soft);
+}
+
+.online-top {
+  display: flex;
+  align-items: center;
+}
+
+.online-flag {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.online-dot {
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 8rpx;
+  border-radius: 50%;
+  background: #1E7A54;
+}
+
+.online-flag-tx {
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+  color: #1E7A54;
+}
+
+.online-name {
+  margin-top: 16rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  color: var(--ink);
+}
+
+.online-grade {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  line-height: 1.5;
+  color: #8A8494;
+}
+
+.online-topics {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14rpx;
+}
+
+.online-topic {
+  margin: 0 8rpx 8rpx 0;
+  padding: 4rpx 12rpx;
+  background: var(--accent1);
+  color: #6B625A;
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+}
+
+.online-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+}
+
+.online-seen {
+  font-size: 19rpx;
+  color: #97919A;
+}
+
+.online-btn {
+  padding: 9rpx 22rpx;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-size: 21rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.online-card:active .online-btn {
+  background: var(--primary-deep);
+}
+
+.online-empty {
+  width: 600rpx;
+  padding: 40rpx 0;
+  white-space: normal;
+}
+
+/* ============================================================
+ * 列表底部：我发的最后一条的已读 / 未读标记
+ * ============================================================ */
+.foot-right {
+  display: flex;
+  align-items: center;
+}
+
+.read-chip {
+  margin-right: 14rpx;
+  padding: 3rpx 12rpx;
+  font-size: 19rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.read-chip.ok {
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+.read-chip.no {
+  background: var(--accent2);
+  color: #FFFFFF;
+}
+
+/* ============================================================
+ * 头顶拼贴：头像标志（V 形标）+ SZU 字标
+ * 手法：米白方块 + 出血色块 + 单点，与右侧几何元件咬合，形成拼贴层次
+ * ============================================================ */
+.hall-mark {
+  position: absolute;
+  right: 30rpx;
+  bottom: 152rpx;
+  width: 128rpx;
+  height: 128rpx;
+  background: var(--accent1);
+  overflow: hidden;
+}
+
+.hall-mark-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 单点：唯一第四色出现处，只做点睛，缀在标志块左上角 */
+.hall-dot {
+  position: absolute;
+  right: 166rpx;
+  bottom: 262rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+/* SZU 大字标：与标志块同组，压着红圆下缘形成拼贴咬合 */
+.hall-szu {
+  position: absolute;
+  right: 172rpx;
+  bottom: 196rpx;
+  font-size: 44rpx;
+  font-weight: 900;
+  letter-spacing: 6rpx;
+  line-height: 1;
+  color: rgba(241, 230, 216, 0.95);
+}
+
+/* 「深圳大学」小字：缀在标志块正下方，像拼贴的标签 */
+.hall-cn {
+  position: absolute;
+  right: 36rpx;
+  bottom: 122rpx;
+  font-size: 22rpx;
+  letter-spacing: 6rpx;
+  line-height: 1;
+  color: rgba(241, 230, 216, 0.68);
+}
