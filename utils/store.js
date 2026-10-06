@@ -1300,6 +1300,261 @@ function hitFaq(id) {
     })
 }
 
+// ---------------------------------------------------------------- 身份核验申请单
+// ----------------------------------------------------------------
+// 表：vm_verifications（新增，建表脚本见工程同级的「建表脚本.sql」）
+//
+// 为什么要单独建一张表？
+//   原来认证信息是直接写在用户档案 vm_users 上的，只保存「当前状态」：
+//   —— 被驳回过几次、每次为什么驳回、是谁审核的，全都查不到；
+//   —— 用户重新提交会把上一次的材料直接盖掉，审核员无从比对。
+//   新表把每一次提交都留成一张「申请单」，可追溯、能写驳回理由、能查审核人。
+//
+// 【兼容设计 · 重要】
+//   这张表目前还没在云端建出来（要等有权限的人执行脚本）。
+//   所以下面每个函数都会先探测一次：表不存在就自动退回读 vm_users 的老逻辑，
+//   页面不会报错、不会白屏。表一旦建好，下次启动自动切到新表。
+//   => 前端现在就可以开始调用，不用等建表，也不用改代码。
+// ----------------------------------------------------------------
+
+// 核验状态取值，页面和后端统一用这四个，别自己造词
+const VERIFY_STATUS = {
+  NONE: 'none',       // 还没提交过
+  PENDING: 'pending', // 已提交，等人工审核
+  APPROVED: 'approved', // 审核通过
+  REJECTED: 'rejected'  // 被驳回，可以改完重新提交
+}
+
+// 探测结果缓存：0 还没探 / 1 表可用 / 2 表不存在
+let verifyTableState = 0
+let verifyTableProbe = null
+
+// 只探测一次，结果缓存起来，之后所有函数共用
+function verifyTableReady() {
+  if (verifyTableState === 1) return Promise.resolve(true)
+  if (verifyTableState === 2) return Promise.resolve(false)
+  if (verifyTableProbe) return verifyTableProbe
+  verifyTableProbe = db()
+    .from('vm_verifications')
+    .select('id')
+    .limit(1)
+    .then(function () {
+      verifyTableState = 1
+      return true
+    })
+    .catch(function () {
+      // 表还没建 —— 这是预期内的情况，不弹错误提示，静默降级
+      verifyTableState = 2
+      return false
+    })
+    .then(function (ok) {
+      verifyTableProbe = null
+      return ok
+    })
+  return verifyTableProbe
+}
+
+// 云端行 -> 页面用的驼峰结构
+function mapVerification(r) {
+  if (!r) return null
+  return {
+    id: r.id,
+    userId: r.user_id || '',
+    userName: r.user_name || '',
+    role: r.role || 'asker',
+    realName: r.real_name || '',
+    studentId: r.student_id || '',
+    phone: r.phone || '',
+    idPhoto: r.id_photo || '',
+    status: r.status || VERIFY_STATUS.NONE,
+    reason: r.reason || '',              // 驳回理由（审核员填的）
+    reviewerId: r.reviewer_id || '',
+    reviewerName: r.reviewer_name || '',
+    reviewedAt: Number(r.reviewed_at) || 0,
+    createdAt: Number(r.created_at) || 0
+  }
+}
+
+// 提交一份核验申请。profile 至少要有 userId / realName / studentId / idPhoto。
+// 同时会把 vm_users.verify_status 置成 pending（老页面靠这个字段显示"审核中"）。
+// 成功返回申请单，失败返回 null。
+function submitVerification(profile) {
+  const now = Date.now()
+  return verifyTableReady().then(function (ready) {
+    if (!ready) {
+      // 降级：老办法，直接把材料写到用户档案上
+      return db()
+        .from('vm_users')
+        .update({
+          real_name: profile.realName || '',
+          student_id: profile.studentId || '',
+          phone: profile.phone || '',
+          id_photo: profile.idPhoto || '',
+          verify_status: VERIFY_STATUS.PENDING,
+          reviewed_at: 0
+        })
+        .eq('id', profile.userId)
+        .then(function () {
+          return {
+            id: '',
+            userId: profile.userId || '',
+            status: VERIFY_STATUS.PENDING,
+            createdAt: now,
+            legacy: true // 标记：走的是老逻辑，没有申请单 id
+          }
+        })
+    }
+    return db()
+      .from('vm_verifications')
+      .insert({
+        user_id: profile.userId || '',
+        user_name: profile.userName || '',
+        role: profile.role === 'mentor' ? 'mentor' : 'asker',
+        real_name: profile.realName || '',
+        student_id: profile.studentId || '',
+        phone: profile.phone || '',
+        id_photo: profile.idPhoto || '',
+        status: VERIFY_STATUS.PENDING,
+        created_at: now
+      })
+      .then(unwrap)
+      .then(function (rows) {
+        const created = rows && rows[0] ? mapVerification(rows[0]) : null
+        // 同步用户档案上的状态快照，让现有页面立刻显示"审核中"
+        return db()
+          .from('vm_users')
+          .update({
+            real_name: profile.realName || '',
+            student_id: profile.studentId || '',
+            phone: profile.phone || '',
+            id_photo: profile.idPhoto || '',
+            verify_status: VERIFY_STATUS.PENDING,
+            reviewed_at: 0
+          })
+          .eq('id', profile.userId)
+          .then(function () {
+            return created || { id: '', userId: profile.userId || '', status: VERIFY_STATUS.PENDING, createdAt: now }
+          })
+      })
+  })
+    .catch(function (e) {
+      return fail(e, null)
+    })
+}
+
+// 我的申请历史（新的在前）。表没建时返回空数组，不报错。
+function myVerifications(userId) {
+  if (!userId) return Promise.resolve([])
+  return verifyTableReady()
+    .then(function (ready) {
+      if (!ready) return []
+      return db()
+        .from('vm_verifications')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(50)
+        .then(unwrap)
+        .then(function (rows) {
+          return (rows || []).map(mapVerification)
+        })
+    })
+    .catch(function (e) {
+      return fail(e, [])
+    })
+}
+
+// 我最新的一份申请（用于展示"审核中 / 已通过 / 被驳回 + 驳回理由"）
+function latestVerificationOf(userId) {
+  return myVerifications(userId).then(function (list) {
+    return list.length ? list[0] : null
+  })
+}
+
+// 审核台：待审核名单。
+// 新表可用时返回申请单列表；表没建时退回老逻辑（读 vm_users）。
+function listPendingVerifications() {
+  return verifyTableReady()
+    .then(function (ready) {
+      if (!ready) return listPendingReviews()
+      return db()
+        .from('vm_verifications')
+        .select('*')
+        .eq('status', VERIFY_STATUS.PENDING)
+        .order('created_at', { ascending: true })
+        .limit(100)
+        .then(unwrap)
+        .then(function (rows) {
+          return (rows || []).map(mapVerification)
+        })
+    })
+    .catch(function (e) {
+      return fail(e, [])
+    })
+}
+
+// 审核结论：approved 通过 / rejected 驳回。
+// reason 是驳回理由（通过时可不填），reviewer 是审核人档案。
+// 会同时把结论同步到 vm_users.verify_status，现有页面无需改动。
+function reviewVerification(verifyId, status, reason, reviewer) {
+  const value = status === VERIFY_STATUS.APPROVED ? VERIFY_STATUS.APPROVED : VERIFY_STATUS.REJECTED
+  const now = Date.now()
+  const reviewerId = (reviewer && reviewer.id) || ''
+  const reviewerName = (reviewer && reviewer.name) || ''
+
+  return verifyTableReady()
+    .then(function (ready) {
+      if (!ready) {
+        // 降级：老办法只改用户档案（此时 verifyId 实际上就是 userId）
+        return db()
+          .from('vm_users')
+          .update({ verify_status: value, reviewed_at: now })
+          .eq('id', verifyId)
+          .then(function () {
+            return true
+          })
+      }
+      // 先取申请单，拿到申请人 id
+      return db()
+        .from('vm_verifications')
+        .select('*')
+        .eq('id', verifyId)
+        .limit(1)
+        .then(unwrap)
+        .then(function (rows) {
+          const one = rows && rows[0] ? mapVerification(rows[0]) : null
+          if (!one) throw new Error('申请单不存在：' + verifyId)
+          // 防并发：只有仍处于待审核的单子才能被审，避免两个人重复审同一条
+          if (one.status !== VERIFY_STATUS.PENDING) throw new Error('这份申请已经审核过了')
+          return db()
+            .from('vm_verifications')
+            .update({
+              status: value,
+              reason: reason || '',
+              reviewer_id: reviewerId,
+              reviewer_name: reviewerName,
+              reviewed_at: now
+            })
+            .eq('id', verifyId)
+            .eq('status', VERIFY_STATUS.PENDING) // 条件更新，并发时只有一个会成功
+            .then(unwrap)
+            .then(function () {
+              // 结论回写到用户档案
+              return db()
+                .from('vm_users')
+                .update({ verify_status: value, reviewed_at: now })
+                .eq('id', one.userId)
+                .then(function () {
+                  return true
+                })
+            })
+        })
+    })
+    .catch(function (e) {
+      return fail(e, null)
+    })
+}
+
 // 清空演示数据：删除云端全部会话 / 消息 / 已读记录和非示例用户，
 // 学长库恢复成默认示例（mine 页有二次确认弹窗后才调用）
 function resetDemo() {
@@ -1353,6 +1608,12 @@ module.exports = {
   listPendingReviews: listPendingReviews,
   setReviewStatus: setReviewStatus,
   isReviewer: isReviewer,
+  VERIFY_STATUS: VERIFY_STATUS,
+  submitVerification: submitVerification,
+  myVerifications: myVerifications,
+  latestVerificationOf: latestVerificationOf,
+  listPendingVerifications: listPendingVerifications,
+  reviewVerification: reviewVerification,
   getMe: getMe,
   saveMe: saveMe,
   clearMe: clearMe,
