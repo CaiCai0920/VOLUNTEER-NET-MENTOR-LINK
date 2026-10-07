@@ -1,14 +1,19 @@
 /* ============================================================
- * 志愿人脉 · 全局设计系统
- * 视觉语言：经典包豪斯海报式（Bauhaus Poster）
- *   —— 几何色块拼接 · 无描边无线条 · 大留白 · 点线面 0.3 : 0.5 : 9.2
- * 配色（主：辅1：辅2 = 6：3：1，第四色橙仅作点睛，面积小于三主色）
- *   新生端：主色 藏蓝 #28314E（60%）
- *           辅色1 米白 #F1E6D8（30%）
- *           辅色2 红   #AA283A（10%）
- *   老生端：蓝红对调 —— 主色 红 #AA283A，辅色2 藏蓝 #28314E
- *   第四色：橙 #F29344（点睛，kicker / 局部几何 / 快捷操作）
- * 科技感：深色块面上保留「透视六边形渐变纹路」（.hero-grid）
+ * 志愿人脉 · UI 实验副本 —— 全局设计系统 v3「米白底 HUD」
+ * ------------------------------------------------------------------
+ * 配色：与原版完全一致，一字不改 ——
+ *   新生端：主色 藏蓝 #28314E（大面积，hero 整块换色）
+ *           底色 米白 #F1E6D8（最大面积）
+ *           强调 红   #AA283A
+ *           点睛 橙   #F29344
+ *   老生端：蓝红对调（大面积切换保留）
+ * 点线面规划（参考：构成主义拼贴 + 科幻海报 + 莱茵生命 PV 动效）：
+ *   · 面：米白大底 + hero 整块主色（藏蓝/红，双端大面积切换）
+ *   · 线：发丝线画在米白与主色块上 —— 同心圆轨 / 十字准星 /
+ *         蓝图网格 / 虚线轨道 / 刻度条（米白块上用藏蓝线，色块上用米白线）
+ *   · 点：橙 / 红小实块 + 等宽注释小字 + 面板对角括弧角标
+ * 动效：hero 扫描线缓扫 / 圆轨慢旋 / 标记呼吸闪烁
+ * 本文件保留 v1 全部类名，页面文件零改动换肤。
  * ============================================================ */
 
 page {
@@ -19,27 +24,26 @@ page {
   --primary-rgb: 40, 49, 78;
   --primary-tint: #E2E6F0;
 
-  /* ---- 辅色1：米白（30% 面积，页面底）---- */
+  /* ---- 底色：米白（最大面积）---- */
   --accent1: #F1E6D8;
   --accent1-soft: #F7EFE3;
 
-  /* ---- 辅色2：红（10% 强调）---- */
+  /* ---- 强调：红 ---- */
   --accent2: #AA283A;
   --accent2-rgb: 170, 40, 58;
   --accent2-tint: #F3E3E6;
   --accent2-soft: #C23A4E;
   --accent2-deep: #8E1F30;
 
-  /* ---- 第四色：橙（点睛，面积小于任一主色）---- */
+  /* ---- 点睛：橙 ---- */
   --accent3: #F29344;
   --accent3-tint: #FBE9D8;
 
-  /* ---- 中性 ---- */
+  /* ---- 中性：与 v1 一致 ---- */
   --ink: #14171F;
   --paper: #FFFFFF;
-  --r-block: 0rpx;              /* 包豪斯：纯直角块面 */
+  --r-block: 0rpx;              /* 全直角：HUD 不做圆角 */
 
-  /* 页面底：纯净米白，不加底纹 */
   background: var(--accent1);
   color: var(--ink);
   font-size: 28rpx;
@@ -47,7 +51,7 @@ page {
   line-height: 1.55;
 }
 
-/* ---- 老生端：蓝红对调（主色红，辅色2藏蓝），辅色1不变 ---- */
+/* ---- 老生端：蓝红对调（大面积切换保留）---- */
 .theme-mentor {
   --primary: #AA283A;
   --primary-deep: #6E1723;
@@ -71,30 +75,26 @@ button {
 }
 
 /* ============================================================
- * 一、几何元件（包豪斯海报构成：圆 / 半圆 / 方 / 条 / 点阵）
- *    构成原则：全部元件收束为右上角一个紧凑组合体，
- *    相互咬合重叠、共用轴对齐、粗条向右出血被裁切，
- *    杜绝元件各自游离散布。
+ * 一、点线面元件（hero 主色块上的米白 HUD 线条组）
  * ============================================================ */
 
-/* 透视六边形渐变纹路：叠于深色块面之上，营造科技风 */
+/* 蓝图网格：铺在 hero 主色块右上，坐标纸质感 */
 .hero-grid {
   position: absolute;
-  top: -70rpx;
-  right: -110rpx;
-  width: 520rpx;
-  height: 380rpx;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSI0OSIgdmlld0JveD0iMCAwIDI4IDQ5Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjI4IiB5Mj0iNDkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGMUU2RDgiIHN0b3Atb3BhY2l0eT0iMSIvPjxzdG9wIG9mZnNldD0iMC40NSIgc3RvcC1jb2xvcj0iI0YxRTZEOCIgc3RvcC1vcGFjaXR5PSIwLjQyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjFFNkQ4IiBzdG9wLW9wYWNpdHk9IjAuMDYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cGF0aCBmaWxsPSJ1cmwoI2cpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy45OSA5LjI1bDEzIDcuNXYxNWwtMTMgNy41TDEgMzEuNzV2LTE1bDEyLjk5LTcuNXpNMyAxNy45djEyLjdsMTAuOTkgNi4zNCAxMS02LjM1VjE3LjlsLTExLTYuMzRMMyAxNy45ek0wIDE1bDEyLjk4LTcuNVYwaC0ydjYuMzVMMCAxMi42OXYyLjN6bTAgMTguNUwxMi45OCA0MXY4aC0ydi02Ljg1TDAgMzUuODF2LTIuM3pNMTUgMHY3LjVMMjcuOTkgMTVIMjh2LTIuMzFoLS4wMUwxNyA2LjM1VjBoLTJ6bTAgNDl2LThsMTIuOTktNy41SDI4djIuMzFoLS4wMUwxNyA0Mi4xNVY0OWgtMnoiLz48L3N2Zz4=");
-  background-size: 96rpx 168rpx;
-  transform: perspective(620rpx) rotateX(58deg) rotateZ(-16deg);
-  transform-origin: 100% 0%;
-  opacity: 0.34;
+  top: 0;
+  right: 0;
+  width: 560rpx;
+  height: 420rpx;
+  background-image:
+    linear-gradient(rgba(241, 230, 216, 0.09) 1rpx, transparent 1rpx),
+    linear-gradient(90deg, rgba(241, 230, 216, 0.09) 1rpx, transparent 1rpx);
+  background-size: 40rpx 40rpx;
+  -webkit-mask-image: linear-gradient(115deg, transparent 8%, #000 70%);
+  mask-image: linear-gradient(115deg, transparent 8%, #000 70%);
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(102deg, rgba(0, 0, 0, 0) 10%, #000 66%);
-  mask-image: linear-gradient(102deg, rgba(0, 0, 0, 0) 10%, #000 66%);
 }
 
-/* 几何装饰层容器 */
+/* 几何装饰层容器（沿用 v1 挂载点） */
 .hero-deco {
   position: absolute;
   left: 0;
@@ -106,33 +106,44 @@ button {
 }
 
 /*
- * 右上角几何组合体（自后向前叠放，坐标互为咬合基准）：
- *   粗条（右出血）→ 米白方块 → 大红圆（压住条与方块角）
- *   → 橙半圆（咬合圆左下沿）→ 点阵（贴圆右下、与圆左缘对齐）
- * 五件元件共用右上象限，最大跨度约 300rpx，构成一个整体。
+ * 右上角 HUD 组合体（沿用 v1 五件套挂载点，重绘为点线面构成）：
+ *   橙实条 → 米白描边方块 → 同心圆轨（双环 + 红点）
+ *   → 橙实半圆 → 点阵 → 慢旋虚线外轨
  */
 
-/* 粗色条：自右缘向左插入组合体，右端出血被 hero 裁切 */
+/* 实条：橙，右端出血（点睛实块） */
 .hd-bar {
   position: absolute;
   right: 0;
   top: 118rpx;
   width: 250rpx;
-  height: 12rpx;
-  background: rgba(241, 230, 216, 0.92);
+  height: 6rpx;
+  background: var(--accent3);
 }
 
-/* 实心方块（米白）：被大圆压住右下角，仅露左上部分 */
+/* 方块：米白描边空心，内嵌橙色微标 */
 .hd-square {
   position: absolute;
   right: 168rpx;
   top: 42rpx;
   width: 52rpx;
   height: 52rpx;
-  background: rgba(241, 230, 216, 0.85);
+  border: 2rpx solid rgba(241, 230, 216, 0.75);
+  background: transparent;
 }
 
-/* 大实心圆（红）：组合体主体，压住条与方块 */
+.hd-square::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12rpx;
+  height: 12rpx;
+  margin: -6rpx 0 0 -6rpx;
+  background: var(--accent3);
+}
+
+/* 同心圆轨：外环米白实线 + 内环细线 + 红点（参考图 1 的轨道圆） */
 .hd-circle {
   position: absolute;
   right: 52rpx;
@@ -140,10 +151,33 @@ button {
   width: 156rpx;
   height: 156rpx;
   border-radius: 50%;
+  border: 2rpx solid rgba(241, 230, 216, 0.65);
+  background: transparent;
+}
+
+.hd-circle::before {
+  content: '';
+  position: absolute;
+  left: 24rpx;
+  top: 24rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 1rpx solid rgba(241, 230, 216, 0.3);
+}
+
+.hd-circle::after {
+  content: '';
+  position: absolute;
+  right: 6rpx;
+  top: 30rpx;
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
   background: var(--accent2);
 }
 
-/* 半圆（橙，点睛）：拱形贴靠大圆左下沿，圆心与圆重叠咬合 */
+/* 半圆：橙（点元素，撞色锚点） */
 .hd-semi {
   position: absolute;
   right: 138rpx;
@@ -154,18 +188,18 @@ button {
   background: var(--accent3);
 }
 
-/* 点阵（3×3 圆点）：紧贴大圆右下方，与圆底缘对齐收束 */
+/* 点阵：3×3 米白圆点（数据点群） */
 .hd-dots {
   position: absolute;
   right: 48rpx;
   top: 234rpx;
   width: 86rpx;
   height: 60rpx;
-  background-image: radial-gradient(rgba(241, 230, 216, 0.85) 4rpx, transparent 5rpx);
+  background-image: radial-gradient(rgba(241, 230, 216, 0.8) 3rpx, transparent 4rpx);
   background-size: 30rpx 30rpx;
 }
 
-/* 细环：上缘越出 hero 顶边被裁切，形成「图形突破块面边界」的张力 */
+/* 外轨：慢旋虚线大圆（轨道动效） */
 .hd-arc {
   position: absolute;
   right: 196rpx;
@@ -173,11 +207,17 @@ button {
   width: 112rpx;
   height: 112rpx;
   border-radius: 50%;
-  border: 6rpx solid rgba(241, 230, 216, 0.55);
+  border: 1rpx dashed rgba(241, 230, 216, 0.45);
   background: transparent;
+  animation: hud-spin 26s linear infinite;
 }
 
-/* 阶梯天际线：深圳大学图书馆 / 科技楼的阶梯体量抽象，三级退台向右升起 */
+@keyframes hud-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 数据条组：三根竖条（信号强度计：米白 / 红 / 橙） */
 .hd-sky {
   position: absolute;
   right: 0;
@@ -185,23 +225,24 @@ button {
   width: 320rpx;
   height: 60rpx;
   background-image:
-    linear-gradient(rgba(241, 230, 216, 0.16), rgba(241, 230, 216, 0.16)),
-    linear-gradient(rgba(241, 230, 216, 0.28), rgba(241, 230, 216, 0.28)),
-    linear-gradient(rgba(241, 230, 216, 0.44), rgba(241, 230, 216, 0.44));
-  background-size: 320rpx 20rpx, 220rpx 38rpx, 128rpx 60rpx;
-  background-position: right bottom, right bottom, right bottom;
+    linear-gradient(rgba(241, 230, 216, 0.3), rgba(241, 230, 216, 0.3)),
+    linear-gradient(var(--accent2), var(--accent2)),
+    linear-gradient(var(--accent3), var(--accent3));
+  background-size: 3rpx 46rpx, 3rpx 60rpx, 3rpx 30rpx;
+  background-position: 296rpx bottom, 306rpx bottom, 316rpx bottom;
   background-repeat: no-repeat;
 }
 
-/* 小型编号系统：天际线脚下的坐标标注 */
+/* 坐标标注：等宽小字（HUD 注释，位于主色块上，用米白） */
 .hd-no {
   position: absolute;
   right: 26rpx;
   bottom: 14rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
   font-size: 18rpx;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 4rpx;
-  color: rgba(241, 230, 216, 0.78);
+  color: rgba(241, 230, 216, 0.65);
 }
 
 /* ============================================================
@@ -211,7 +252,7 @@ button {
   padding-bottom: 60rpx;
 }
 
-/* ---------------- 顶部横幅（色块拼接构图） ---------------- */
+/* ---------------- 顶部横幅（主色大块，双端大面积切换） ---------------- */
 .hero {
   position: relative;
   overflow: hidden;
@@ -219,37 +260,56 @@ button {
   background: linear-gradient(118deg, var(--primary-soft) 0%, var(--primary) 46%, var(--primary-deep) 100%);
 }
 
-/* hero 内的文字层级需压住装饰层 */
+/* 扫描线：米白细光带周期性纵扫 */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -20%;
+  height: 14rpx;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(241, 230, 216, 0.06) 40%,
+    rgba(241, 230, 216, 0.22) 50%,
+    rgba(241, 230, 216, 0.06) 60%,
+    transparent 100%
+  );
+  animation: hud-scan 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hud-scan {
+  0%   { transform: translateY(0); opacity: 0; }
+  12%  { opacity: 1; }
+  55%  { transform: translateY(560rpx); opacity: 1; }
+  70%  { opacity: 0; }
+  100% { transform: translateY(560rpx); opacity: 0; }
+}
+
 .hero-title,
 .hero-desc,
 .hero-chip,
-.hero-kicker,
 .hero-rule {
   position: relative;
   z-index: 2;
 }
 
-/* 包豪斯式栏目标记：橙色实块（第四色点睛） */
-.hero-kicker {
-  display: inline-block;
-  margin-bottom: 18rpx;
-  padding: 7rpx 18rpx;
-  background: var(--accent3);
-  color: #FFFFFF;
-  font-size: 20rpx;
-  font-weight: 700;
-  letter-spacing: 4rpx;
+@keyframes hud-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 .hero-title {
   font-size: 52rpx;
   font-weight: 800;
   color: #FFFFFF;
-  letter-spacing: 1rpx;
+  letter-spacing: 2rpx;
   line-height: 1.2;
 }
 
-/* 标题下短条组：橙条 + 米白条 + 红点 */
+/* 标题下短线组：橙条 + 米白发丝 + 红点 */
 .hero-rule {
   display: flex;
   align-items: center;
@@ -258,20 +318,20 @@ button {
 
 .hero-rule .rule-a {
   width: 78rpx;
-  height: 12rpx;
+  height: 6rpx;
   background: var(--accent3);
 }
 
 .hero-rule .rule-b {
   width: 30rpx;
-  height: 12rpx;
+  height: 2rpx;
   margin-left: 10rpx;
-  background: rgba(241, 230, 216, 0.65);
+  background: rgba(241, 230, 216, 0.6);
 }
 
 .hero-rule .rule-c {
-  width: 14rpx;
-  height: 14rpx;
+  width: 12rpx;
+  height: 12rpx;
   margin-left: 10rpx;
   border-radius: 50%;
   background: var(--accent2);
@@ -288,25 +348,51 @@ button {
   display: inline-block;
   margin-top: 26rpx;
   margin-right: 14rpx;
-  padding: 10rpx 22rpx;
-  background: rgba(241, 230, 216, 0.16);
-  font-size: 23rpx;
+  padding: 8rpx 20rpx;
+  background: rgba(241, 230, 216, 0.14);
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 22rpx;
   color: #F1E6D8;
   letter-spacing: 1rpx;
 }
 
 /* ============================================================
- * 三、块面组件（无描边、无投影，纯色块 + 留白）
+ * 三、块面组件（白面板 + 藏蓝发丝边 + 对角括弧角标）
  * ============================================================ */
 .card {
   position: relative;
   background: var(--paper);
+  border: 1rpx solid rgba(40, 49, 78, 0.14);
   border-radius: var(--r-block);
   padding: 32rpx 30rpx;
   margin: 24rpx;
 }
 
-/* 区块标题：小方块引导（点元素） */
+/* 左上橙 / 右下红：HUD 角标括弧 */
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 22rpx;
+  height: 22rpx;
+  pointer-events: none;
+}
+
+.card::before {
+  left: -1rpx;
+  top: -1rpx;
+  border-left: 4rpx solid var(--accent3);
+  border-top: 4rpx solid var(--accent3);
+}
+
+.card::after {
+  right: -1rpx;
+  bottom: -1rpx;
+  border-right: 4rpx solid var(--accent2);
+  border-bottom: 4rpx solid var(--accent2);
+}
+
+/* 区块标题：橙色小方块引导 */
 .sec-title {
   display: flex;
   align-items: center;
@@ -323,7 +409,7 @@ button {
   width: 16rpx;
   height: 16rpx;
   margin-right: 14rpx;
-  background: var(--primary);
+  background: var(--accent3);
   flex-shrink: 0;
 }
 
@@ -335,7 +421,7 @@ button {
 }
 
 /* ============================================================
- * 四、按钮（实色块，无描边无投影）
+ * 四、按钮（实色块，无圆角）
  * ============================================================ */
 .btn-primary {
   margin: 36rpx 26rpx 0;
@@ -347,6 +433,7 @@ button {
   font-size: 31rpx;
   font-weight: 800;
   letter-spacing: 4rpx;
+  box-shadow: 0 8rpx 24rpx rgba(var(--primary-rgb), 0.28);
 }
 
 .btn-primary::after {
@@ -360,6 +447,7 @@ button {
 .btn-primary[disabled] {
   background: var(--primary-tint);
   color: #9AA0B4;
+  box-shadow: none;
 }
 
 .btn-ghost {
@@ -368,6 +456,7 @@ button {
   line-height: 88rpx;
   border-radius: var(--r-block);
   background: var(--paper);
+  border: 1rpx solid rgba(40, 49, 78, 0.28);
   color: var(--primary);
   font-size: 28rpx;
   font-weight: 700;
@@ -395,12 +484,13 @@ button {
 }
 
 .btn-mini.plain {
-  background: var(--primary-tint);
+  background: transparent;
+  border: 1rpx solid var(--primary);
   color: var(--primary);
 }
 
 /* ============================================================
- * 五、标签（实色小块）/ 头像（实色圆）
+ * 五、标签 / 头像（实色块 + 描边环）
  * ============================================================ */
 .tag {
   display: inline-block;
@@ -418,7 +508,7 @@ button {
   color: #FFFFFF;
 }
 
-/* 「已解决」保留独立语义色，面积极小，不占用配色配比 */
+/* 「已解决」：独立语义色，面积极小 */
 .tag.green {
   background: #DFF1E8;
   color: #1E7A54;
@@ -429,7 +519,6 @@ button {
   color: #7A8095;
 }
 
-/* 橙色标签：第四色点睛（用于快捷 / 高亮场景） */
 .tag.orange {
   background: var(--accent3);
   color: #FFFFFF;
@@ -447,6 +536,7 @@ button {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 0 0 3rpx rgba(40, 49, 78, 0.18);
 }
 
 .avatar.small {
@@ -455,17 +545,18 @@ button {
   font-size: 26rpx;
 }
 
-/* 对方头像用辅色2，与自己的主色头像形成区分 */
+/* 头像统一藏蓝：新生端看学长不再一片红，红只留给主题色块与强调 */
 .avatar.warm {
-  background: var(--accent2);
+  background: #28314E;
 }
 
 /* ============================================================
- * 六、列表项（纯白块面，靠留白分隔，无线条）
+ * 六、列表项（白面板 + 藏蓝发丝边）
  * ============================================================ */
 .list-item {
   position: relative;
   background: var(--paper);
+  border: 1rpx solid rgba(40, 49, 78, 0.14);
   border-radius: var(--r-block);
   padding: 28rpx;
   margin: 18rpx 24rpx;
@@ -512,12 +603,12 @@ button {
 .action-arrow {
   font-size: 36rpx;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--accent3);
   line-height: 1;
 }
 
 /* ============================================================
- * 七、空状态（几何色块构成：圆 + 三角 + 方）
+ * 七、空状态（准星圆环 + 十字线，藏蓝线画在米白上）
  * ============================================================ */
 .empty {
   margin: 56rpx 48rpx;
@@ -530,32 +621,39 @@ button {
   height: 140rpx;
   margin: 0 auto 26rpx;
   border-radius: 50%;
-  background: var(--primary-tint);
+  background: transparent;
+  border: 2rpx solid rgba(40, 49, 78, 0.4);
 }
 
+/* 圆心：橙色实点 */
 .empty-icon::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 48rpx;
-  height: 48rpx;
-  margin: -24rpx 0 0 -24rpx;
-  background: var(--primary);
+  width: 20rpx;
+  height: 20rpx;
+  margin: -10rpx 0 0 -10rpx;
+  background: var(--accent3);
   border-radius: 50%;
 }
 
+/* 十字准星线：横线穿圆而过 */
 .empty-icon::before {
   content: '';
   position: absolute;
-  left: 50%;
-  top: 18rpx;
-  width: 0;
-  height: 0;
-  margin-left: -15rpx;
-  border-left: 15rpx solid transparent;
-  border-right: 15rpx solid transparent;
-  border-bottom: 26rpx solid var(--accent3);
+  left: -16rpx;
+  top: 50%;
+  width: 172rpx;
+  height: 2rpx;
+  margin-top: -1rpx;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(40, 49, 78, 0.45) 18%,
+    rgba(40, 49, 78, 0.45) 82%,
+    transparent 100%
+  );
 }
 
 .empty-text {
@@ -571,7 +669,7 @@ button {
   position: relative;
   margin: 26rpx 24rpx 0;
   padding: 24rpx 26rpx 24rpx 30rpx;
-  border-left: 10rpx solid var(--accent3);
+  border-left: 8rpx solid var(--accent3);
   background: var(--accent3-tint);
   font-size: 23rpx;
   color: #B05F14;
@@ -617,7 +715,7 @@ button {
 }
 
 /* ============================================================
- * 十、在线咨询入口（白色块面 + 几何徽标，无描边）
+ * 十、在线咨询入口
  * ============================================================ */
 .help-entry {
   position: relative;
@@ -626,6 +724,7 @@ button {
   margin: 24rpx;
   padding: 28rpx;
   background: var(--paper);
+  border: 1rpx solid rgba(40, 49, 78, 0.14);
   border-radius: var(--r-block);
   overflow: hidden;
 }
@@ -634,7 +733,6 @@ button {
   background: var(--accent1-soft);
 }
 
-/* 左侧几何徽标：主色方块 + 橙圆 + 米白三角（第四色点睛） */
 .help-badge {
   position: relative;
   width: 84rpx;
@@ -685,7 +783,6 @@ button {
   color: #8A8494;
 }
 
-/* 入口右侧几何色块组（点元素） */
 .help-entry-strip {
   display: flex;
   align-items: center;
@@ -695,8 +792,8 @@ button {
 .help-entry-strip .st-a,
 .help-entry-strip .st-b,
 .help-entry-strip .st-c {
-  width: 14rpx;
-  height: 14rpx;
+  width: 12rpx;
+  height: 12rpx;
   margin-left: 8rpx;
   border-radius: 50%;
   background: var(--primary);
@@ -708,4 +805,118 @@ button {
 
 .help-entry-strip .st-c {
   background: var(--accent2);
+}
+
+/* ============================================================
+ * 十一、顶部分区条（米白底 + 橙色指示条）
+ * ============================================================ */
+.top-tabs {
+  display: flex;
+  align-items: stretch;
+  background: var(--accent1-soft);
+  border-bottom: 1rpx solid rgba(40, 49, 78, 0.14);
+  padding: 0 24rpx;
+  height: 88rpx;
+}
+
+.top-tab {
+  position: relative;
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: rgba(40, 49, 78, 0.45);
+  letter-spacing: 2rpx;
+}
+
+.top-tab.on {
+  color: var(--ink);
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.top-tab.on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6rpx;
+  width: 40rpx;
+  height: 6rpx;
+  margin-left: -20rpx;
+  background: var(--accent3);
+}
+
+/* ============================================================
+ * 十二、HUD 通用元件（米白区用藏蓝线；hero 主色块上覆写为米白线）
+ * ============================================================ */
+
+/* 等宽注释小字：米白区默认藏蓝 */
+.hud-label {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  color: rgba(40, 49, 78, 0.55);
+  text-transform: uppercase;
+}
+
+/* hero 主色块内：覆写为米白（index/mine 的标注挂在 hero-deco 里） */
+.hero .hud-label {
+  color: rgba(241, 230, 216, 0.6);
+}
+
+/* 十字准星：+ 形（米白区藏蓝线） */
+.hud-cross {
+  position: relative;
+  width: 28rpx;
+  height: 28rpx;
+  pointer-events: none;
+}
+
+.hud-cross::before,
+.hud-cross::after {
+  content: '';
+  position: absolute;
+  background: rgba(40, 49, 78, 0.55);
+}
+
+.hud-cross::before {
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2rpx;
+  margin-top: -1rpx;
+}
+
+.hud-cross::after {
+  left: 50%;
+  top: 0;
+  width: 2rpx;
+  height: 100%;
+  margin-left: -1rpx;
+}
+
+.hero .hud-cross::before,
+.hero .hud-cross::after {
+  background: rgba(241, 230, 216, 0.6);
+}
+
+/* 藏蓝细描边小方块 */
+.hud-cell {
+  width: 14rpx;
+  height: 14rpx;
+  border: 2rpx solid rgba(40, 49, 78, 0.6);
+}
+
+/* 红 / 橙撞色小实块 */
+.hud-blip-red {
+  width: 14rpx;
+  height: 14rpx;
+  background: var(--accent2);
+}
+
+.hud-blip-orange {
+  width: 14rpx;
+  height: 14rpx;
+  background: var(--accent3);
 }

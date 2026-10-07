@@ -975,7 +975,18 @@ function stats(meId) {
     })
 }
 
-// ---------------------------------------------------------------- 社区帖子
+// ---------------------------------------------------------------- 社区帖子 【已废弃】
+//
+// ⚠️ 页面请一律改用 require('../utils/community')，不要再用下面这些函数。
+//    社区帖子的唯一数据层是 utils/community.js —— 字段更全，还支持
+//    图片/视频上传（uploadMedias）与云存储签名链接（signedUrlsOf）。
+//    本区块与之功能重复，且已核实**没有任何页面调用**，保留只为兼容历史引用，
+//    后续可整体删除。
+//
+//    两者的差别（容易踩坑）：
+//      · store.listPosts(话题)   —— 按话题筛选
+//        community.listPosts(条数) —— 按条数限制，不筛话题
+//      · community.js 的 media 是 [{type,path}]，本区块按纯路径数组处理
 // vm_posts 是组长那边已经在线的表（2026-10-06 导出的数据里有 4 条真实记录）。
 // 下面所有字段严格按照线上真实数据来写，不靠猜：
 //   id / user_id / user_name / user_role / content / media / topic
@@ -1646,6 +1657,8 @@ module.exports = {
   disableFaq: disableFaq,
   removeFaq: removeFaq,
   hitFaq: hitFaq,
+  // POST_ALL / listPosts / getPost / createPost / claimPost / removePost / postsOf /
+  // listPostTopics —— 【已废弃】请改用 utils/community.js（见文件内说明）
   POST_ALL: POST_ALL,
   listPosts: listPosts,
   getPost: getPost,

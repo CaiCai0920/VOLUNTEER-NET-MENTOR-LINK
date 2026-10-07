@@ -37,10 +37,6 @@ Page({
           backgroundColor: theme.bg,
           fail: function () {}
         })
-        wx.setTabBarStyle({
-          selectedColor: theme.tab,
-          fail: function () {}
-        })
         return store.stats(me.id).then(function (stats) {
           // 审核台只给「第一个注册的真实用户」（即创始人）用
           return store.isReviewer(me).then(function (isReviewer) {
@@ -79,6 +75,19 @@ Page({
     wx.navigateTo({ url: '/pages/help/help' })
   },
 
+  // 顶部分区条：答疑 / 社区 / 消息 / 个人（无底部导航，分区条是唯一分区入口）
+  onTopTab(e) {
+    const map = {
+      ask: '/pages/index/index',
+      community: '/pages/community/community',
+      messages: '/pages/messages/messages',
+      mine: '/pages/mine/mine'
+    }
+    const url = map[e.currentTarget.dataset.tab]
+    // redirectTo 替换当前页：分区之间切换不堆积页面层级
+    if (url) wx.redirectTo({ url: url })
+  },
+
   // 演示用：不用两台手机，切换身份就能自己演完双方
   onSwitch() {
     const self = this
@@ -106,9 +115,9 @@ Page({
                 if (!picked) return null
                 getApp().globalData.me = picked
                 wx.showToast({ title: '已切换为' + picked.name, icon: 'success' })
-                // 回到大厅，用新身份看列表
+                // 回到大厅，用新身份看列表（底部导航已移除，用 reLaunch 重置页面栈）
                 setTimeout(function () {
-                  wx.switchTab({ url: '/pages/index/index' })
+                  wx.reLaunch({ url: '/pages/index/index' })
                 }, 500)
                 return null
               })

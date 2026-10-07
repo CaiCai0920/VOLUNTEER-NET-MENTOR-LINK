@@ -1,4 +1,5 @@
 const store = require('./utils/store')
+const community = require('./utils/community')
 
 App({
   globalData: {
@@ -24,5 +25,8 @@ App({
     })
     // 首次启动（云端用户表为空）时写入示例学长库，保证学长生源不是空的
     store.seedIfEmpty()
+    // 首次启动（云端帖子表为空）时写入几条演示帖，社区瀑布流不至于空着
+    community.seedIfEmpty()
+    community.seedQAIfMissing()
   }
 })

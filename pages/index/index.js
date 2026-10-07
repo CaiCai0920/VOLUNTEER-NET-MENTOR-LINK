@@ -18,10 +18,6 @@ function applyTheme(role) {
     backgroundColor: theme.bg,
     fail: function () {}
   })
-  wx.setTabBarStyle({
-    selectedColor: theme.tab,
-    fail: function () {}
-  })
 }
 
 Page({
@@ -231,6 +227,19 @@ Page({
 
   goHelp() {
     wx.navigateTo({ url: '/pages/help/help' })
+  },
+
+  // 顶部分区条：答疑 / 社区 / 消息 / 个人（无底部导航，分区条是唯一分区入口）
+  onTopTab(e) {
+    const map = {
+      ask: '/pages/index/index',
+      community: '/pages/community/community',
+      messages: '/pages/messages/messages',
+      mine: '/pages/mine/mine'
+    }
+    const url = map[e.currentTarget.dataset.tab]
+    // redirectTo 替换当前页：分区之间切换不堆积页面层级
+    if (url) wx.redirectTo({ url: url })
   },
 
   goChat(e) {

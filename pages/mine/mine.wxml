@@ -1,4 +1,12 @@
 <view class="page-wrap {{themeClass}}">
+  <!-- 微博式顶部分区条：答疑 / 社区 / 消息 / 个人（并列分区，「我的」即「个人」） -->
+  <view class="top-tabs">
+    <view class="top-tab" data-tab="ask" bindtap="onTopTab">答疑</view>
+    <view class="top-tab" data-tab="community" bindtap="onTopTab">社区</view>
+    <view class="top-tab" data-tab="messages" bindtap="onTopTab">消息</view>
+    <view class="top-tab on" data-tab="mine" bindtap="onTopTab">个人</view>
+  </view>
+
   <view class="hero profile-hero">
     <view class="hero-grid"></view>
     <view class="hero-deco">
@@ -9,7 +17,9 @@
       <view class="hd-dots"></view>
       <view class="hd-arc"></view>
       <view class="hd-sky"></view>
-      <view class="hd-no">SZU·2026</view>
+      <view class="hd-no">SZU-2026 // GRID.07</view>
+      <view class="hud-cross" style="position:absolute; left:36rpx; bottom:26rpx;"></view>
+      <view class="hud-label" style="position:absolute; left:78rpx; bottom:31rpx;">PROFILE — ID CARD</view>
     </view>
     <view class="avatar big">{{meInitial}}</view>
     <view class="profile-name">{{me.name}}</view>

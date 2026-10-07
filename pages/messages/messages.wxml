@@ -1,0 +1,36 @@
+<view class="page-wrap">
+  <!-- 微博式顶部分区条：答疑 / 社区 / 消息 / 个人 -->
+  <view class="top-tabs">
+    <view class="top-tab" data-tab="ask" bindtap="onTopTab">答疑</view>
+    <view class="top-tab" data-tab="community" bindtap="onTopTab">社区</view>
+    <view class="top-tab on" data-tab="messages" bindtap="onTopTab">消息</view>
+    <view class="top-tab" data-tab="mine" bindtap="onTopTab">个人</view>
+  </view>
+
+  <!-- 会话列表 -->
+  <view
+    class="msg-item"
+    wx:for="{{items}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="goChat"
+  >
+    <view class="avatar {{item.warm ? 'warm' : ''}}">{{item.otherInitial}}</view>
+    <view class="msg-main">
+      <view class="msg-top">
+        <view class="msg-name">{{item.otherName}}</view>
+        <view class="msg-time">{{item.timeText}}</view>
+      </view>
+      <view class="msg-preview">{{item.lastText}}</view>
+    </view>
+    <view class="unread-badge" wx:if="{{item.unread > 0}}">{{item.unread > 99 ? '99+' : item.unread}}</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{ready && !items.length}}">
+    <view class="empty-icon"></view>
+    <view class="empty-text">还没有消息，去答疑大厅认识学长学姐吧</view>
+  </view>
+
+  <view class="footer-tip" wx:if="{{ready}}">点会话进入聊天 · 未读数在右侧红块里</view>
+</view>

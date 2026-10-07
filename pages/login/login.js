@@ -355,7 +355,8 @@ Page({
           icon: 'none'
         })
         setTimeout(function () {
-          wx.switchTab({ url: '/pages/index/index' })
+          // 底部导航已移除，首页不再是 tab 页，改用 reLaunch 重置页面栈进入
+          wx.reLaunch({ url: '/pages/index/index' })
         }, 700)
         return null
       })

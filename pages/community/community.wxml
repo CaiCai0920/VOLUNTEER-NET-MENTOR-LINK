@@ -1,0 +1,120 @@
+<view class="page-wrap">
+  <!-- 微博式顶部分区条：答疑 / 社区 / 消息 / 个人 -->
+  <view class="top-tabs">
+    <view class="top-tab" data-tab="ask" bindtap="onTopTab">答疑</view>
+    <view class="top-tab on" data-tab="community" bindtap="onTopTab">社区</view>
+    <view class="top-tab" data-tab="messages" bindtap="onTopTab">消息</view>
+    <view class="top-tab" data-tab="mine" bindtap="onTopTab">个人</view>
+  </view>
+
+  <!-- 朋友圈式封面横幅：小体量背景，不喧宾夺主，主功能仍是答疑 -->
+  <view class="cover">
+    <image class="cover-img" src="/images/community-cover.jpg" mode="aspectFill"></image>
+    <view class="cover-veil"></view>
+    <view class="cover-caption">
+      <view class="cover-title">社区广场</view>
+      <view class="cover-sub">COMMUNITY SQUARE · 生活讨论区</view>
+    </view>
+    <view class="cover-no">SZU-2026 // SQ.02</view>
+    <!-- 发布入口：符号型按键（虚线圆轨 + 朱红加号 + 橙点），挂在封面右上角 -->
+    <view class="cover-add" bindtap="goPost">
+      <view class="cover-add-ring"></view>
+      <view class="cover-add-plus">+</view>
+      <view class="cover-add-dot"></view>
+      <view class="cover-add-tx">POST / NEW</view>
+    </view>
+  </view>
+
+  <!-- 小红书式双列瀑布流 -->
+  <view class="feed" wx:if="{{colA.length || colB.length}}">
+    <view class="feed-col">
+      <view
+        class="post-card {{item.isQA ? 'qa' : ''}}"
+        wx:for="{{colA}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <image
+          wx:if="{{item.coverType === 'image' && item.coverUrl}}"
+          class="post-cover"
+          src="{{item.coverUrl}}"
+          mode="aspectFill"
+          data-url="{{item.coverUrl}}"
+          data-urls="{{item.previewUrls}}"
+          catchtap="onPreview"
+        ></image>
+        <video
+          wx:if="{{item.coverType === 'video' && item.coverUrl}}"
+          class="post-cover"
+          src="{{item.coverUrl}}"
+          object-fit="cover"
+          controls="{{false}}"
+          show-center-play-btn="{{true}}"
+        ></video>
+        <view class="post-body">
+          <view class="post-topic {{item.isQA ? 'qa' : ''}}"># {{item.topic}}</view>
+          <view class="post-text">{{item.content}}</view>
+          <view class="post-foot">
+            <view class="avatar small">{{item.initial}}</view>
+            <view class="post-name">{{item.userName}}</view>
+            <view class="post-time">{{item.timeText}}</view>
+          </view>
+          <!-- 答疑帖：认领按键（认领后写会话，学长工作台「我接的」可见） -->
+          <view class="claim-bar" wx:if="{{item.isQA}}" catchtap="onClaim" data-id="{{item.id}}" data-claimed="{{item.claimed}}">
+            <view class="claim-tx">{{item.claimed ? '已被认领 · 答疑中' : '求助帖 · 等一位学长学姐'}}</view>
+            <view class="claim-btn {{item.claimed ? 'done' : ''}}">{{item.claimed ? '已认领' : '认领'}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="feed-col">
+      <view
+        class="post-card {{item.isQA ? 'qa' : ''}}"
+        wx:for="{{colB}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <image
+          wx:if="{{item.coverType === 'image' && item.coverUrl}}"
+          class="post-cover"
+          src="{{item.coverUrl}}"
+          mode="aspectFill"
+          data-url="{{item.coverUrl}}"
+          data-urls="{{item.previewUrls}}"
+          catchtap="onPreview"
+        ></image>
+        <video
+          wx:if="{{item.coverType === 'video' && item.coverUrl}}"
+          class="post-cover"
+          src="{{item.coverUrl}}"
+          object-fit="cover"
+          controls="{{false}}"
+          show-center-play-btn="{{true}}"
+        ></video>
+        <view class="post-body">
+          <view class="post-topic {{item.isQA ? 'qa' : ''}}"># {{item.topic}}</view>
+          <view class="post-text">{{item.content}}</view>
+          <view class="post-foot">
+            <view class="avatar small">{{item.initial}}</view>
+            <view class="post-name">{{item.userName}}</view>
+            <view class="post-time">{{item.timeText}}</view>
+          </view>
+          <view class="claim-bar" wx:if="{{item.isQA}}" catchtap="onClaim" data-id="{{item.id}}" data-claimed="{{item.claimed}}">
+            <view class="claim-tx">{{item.claimed ? '已被认领 · 答疑中' : '求助帖 · 等一位学长学姐'}}</view>
+            <view class="claim-btn {{item.claimed ? 'done' : ''}}">{{item.claimed ? '已认领' : '认领'}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{ready && !colA.length && !colB.length}}">
+    <view class="empty-icon"></view>
+    <view class="empty-text">社区还没有帖子，来发第一帖吧</view>
+  </view>
+
+  <view class="footer-tip" wx:if="{{ready}}">下拉可刷新 · 生活讨论区，图片视频都能发</view>
+</view>
