@@ -1,0 +1,1166 @@
+/* ============================================================
+ * 社区页：微博式分区条 + 小红书式双列瀑布流 + 悬浮发布按钮
+ * ============================================================ */
+
+.page-wrap {
+  padding-bottom: 240rpx;
+}
+
+/* ---- 双列瀑布流 ---- */
+.feed {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 20rpx 0;
+}
+
+.feed-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-col:first-child {
+  margin-right: 20rpx;
+}
+
+/* ---- 帖子卡（纯白块面，无描边无投影）---- */
+.post-card {
+  position: relative;
+  background: var(--paper);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.post-cover {
+  display: block;
+  width: 100%;
+  height: 320rpx;
+  background: var(--primary-tint);
+}
+
+.post-body {
+  padding: 20rpx 22rpx 24rpx;
+}
+
+/* 话题行：橙色小方块引导 + 主色话题字 */
+.post-topic {
+  display: flex;
+  align-items: center;
+  font-size: 23rpx;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.5rpx;
+}
+
+.post-topic::before {
+  content: '';
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 12rpx;
+  background: var(--accent3);
+  flex-shrink: 0;
+}
+
+.post-text {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  color: var(--ink);
+  line-height: 1.55;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+.post-foot {
+  display: flex;
+  align-items: center;
+  margin-top: 18rpx;
+}
+
+.post-foot .avatar.small {
+  width: 44rpx;
+  height: 44rpx;
+  font-size: 20rpx;
+}
+
+.post-name {
+  flex: 1;
+  min-width: 0;
+  margin-left: 12rpx;
+  font-size: 23rpx;
+  color: #3A4152;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-time {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #97919A;
+}
+
+/* ============================================================
+ * v12：发布入口改为封面右上角「符号型按键」
+ * （虚线圆轨慢旋 + 朱红加号 + 橙点 + 等宽注释，不再用实块 FAB）
+ * ============================================================ */
+
+.cover-add {
+  position: absolute;
+  right: 28rpx;
+  top: 24rpx;
+  width: 104rpx;
+  height: 104rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.cover-add:active {
+  opacity: 0.6;
+}
+
+/* 慢旋虚线外轨：与首页 hud-arc 同语言 */
+.cover-add-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  border: 2rpx dashed rgba(40, 49, 78, 0.55);
+  animation: cover-add-spin 26s linear infinite;
+}
+
+@keyframes cover-add-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* 朱红加号本体：符号即按键 */
+.cover-add-plus {
+  font-size: 60rpx;
+  font-weight: 300;
+  line-height: 1;
+  margin-top: -8rpx;
+  color: #AA283A;
+  text-shadow: 0 2rpx 8rpx rgba(241, 230, 216, 0.65);
+}
+
+/* 橙点：右上角点睛，沿用旧 FAB 的橙点记忆 */
+.cover-add-dot {
+  position: absolute;
+  right: 14rpx;
+  top: 12rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+}
+
+/* 等宽小注释：按键身份说明 */
+.cover-add-tx {
+  position: absolute;
+  left: 50%;
+  bottom: -22rpx;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.62);
+}
+
+/* ============================================================
+ * v10：朋友圈式封面横幅（小体量，不喧宾夺主）+ 答疑帖高亮 + 认领栏
+ * ============================================================ */
+
+/* 封面横幅：微信朋友圈式，全宽、固定小高度 */
+.cover {
+  position: relative;
+  height: 300rpx;
+  overflow: hidden;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 压暗纱：标题可读，同时不抢正文视觉 */
+.cover-veil {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(23, 29, 46, 0.42) 0%, rgba(23, 29, 46, 0.12) 55%, rgba(23, 29, 46, 0) 100%);
+}
+
+.cover-caption {
+  position: absolute;
+  left: 36rpx;
+  bottom: 24rpx;
+  color: #F1E6D8;
+}
+
+.cover-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+  line-height: 1.1;
+}
+
+.cover-sub {
+  margin-top: 8rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  opacity: 0.72;
+}
+
+.cover-no {
+  position: absolute;
+  right: 24rpx;
+  bottom: 20rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 17rpx;
+  letter-spacing: 2rpx;
+  color: rgba(241, 230, 216, 0.6);
+}
+
+/* 答疑帖高亮：朱红描边 + 左侧红条，和普通生活帖一眼区分 */
+.post-card.qa {
+  border: 3rpx solid rgba(170, 40, 58, 0.55);
+  box-shadow: 6rpx 6rpx 0 rgba(170, 40, 58, 0.14);
+}
+
+.post-card.qa::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8rpx;
+  background: #AA283A;
+}
+
+/* 话题标签：答疑 = 红实块白字，其余维持藏蓝描边 */
+.post-topic.qa {
+  background: #AA283A;
+  color: #FFFFFF;
+  padding: 4rpx 14rpx;
+  border: none;
+}
+
+/* 认领栏：米白底 + 发丝线，虚位以待 */
+.claim-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding: 12rpx 16rpx;
+  background: rgba(170, 40, 58, 0.06);
+  border: 2rpx solid rgba(170, 40, 58, 0.28);
+}
+
+.claim-tx {
+  font-size: 20rpx;
+  letter-spacing: 1rpx;
+  color: rgba(170, 40, 58, 0.85);
+}
+
+.claim-btn {
+  padding: 8rpx 26rpx;
+  background: #AA283A;
+  color: #FFFFFF;
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+
+.claim-btn.done {
+  background: #FFFFFF;
+  color: rgba(40, 49, 78, 0.5);
+  border: 2rpx solid rgba(40, 49, 78, 0.25);
+}
+
+/* ============================================================
+ * v13：四个符号型按键（关注 / 推荐 / 信息广场 / 发布）+ 三个子视图
+ * ============================================================ */
+
+.nav-row {
+  display: flex;
+  padding: 20rpx 20rpx 0;
+}
+
+.nav-key {
+  position: relative;
+  flex: 1;
+  height: 152rpx;
+  margin-right: 12rpx;
+  background: var(--paper);
+  border: 2rpx solid rgba(40, 49, 78, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-key:last-child {
+  margin-right: 0;
+}
+
+.nav-key:active {
+  opacity: 0.65;
+}
+
+/* 选中：整块藏蓝，符号与文字反白 */
+.nav-key.on {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.nav-key.on .key-tx,
+.nav-key.on .key-en {
+  color: #F1E6D8;
+}
+
+.nav-key.on .sym-follow-ring,
+.nav-key.on .sym-node {
+  border-color: #F1E6D8;
+}
+
+.nav-key.on .bar,
+.nav-key.on .sym-link {
+  background: #F1E6D8;
+}
+
+.key-sym {
+  position: relative;
+  width: 44rpx;
+  height: 44rpx;
+  margin-bottom: 12rpx;
+}
+
+/* 关注：同心圆环 + 朱红实心点 */
+.sym-follow-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--primary);
+}
+
+.sym-follow-dot {
+  position: absolute;
+  left: 15rpx;
+  top: 15rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: var(--accent2);
+}
+
+/* 推荐：递减横线（分区感）+ 橙点 */
+.sym-bars {
+  position: absolute;
+  left: 0;
+  top: 5rpx;
+  width: 44rpx;
+  height: 34rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bar {
+  height: 4rpx;
+  background: var(--primary);
+}
+
+.b1 { width: 44rpx; }
+.b2 { width: 32rpx; }
+.b3 { width: 22rpx; }
+
+.sym-bars-dot {
+  position: absolute;
+  right: -2rpx;
+  bottom: 0;
+  width: 10rpx;
+  height: 10rpx;
+  background: var(--accent3);
+}
+
+/* 信息广场：两个节点 + 斜向连线 */
+.sym-node {
+  position: absolute;
+  width: 14rpx;
+  height: 14rpx;
+  border: 3rpx solid var(--primary);
+}
+
+.sym-node.n1 { left: 0; top: 2rpx; }
+.sym-node.n2 { right: 0; bottom: 2rpx; }
+
+.sym-link {
+  position: absolute;
+  left: 10rpx;
+  top: 22rpx;
+  width: 30rpx;
+  height: 3rpx;
+  background: var(--primary);
+  transform: rotate(-34deg);
+  transform-origin: left center;
+}
+
+/* 发布：朱红加号（与封面右上角按键同语言） */
+.sym-plus-h,
+.sym-plus-v {
+  position: absolute;
+  background: #AA283A;
+}
+
+.sym-plus-h { left: 2rpx; top: 20rpx; width: 40rpx; height: 4rpx; }
+.sym-plus-v { left: 20rpx; top: 2rpx; width: 4rpx; height: 40rpx; }
+
+.key-tx {
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.key-en {
+  margin-top: 6rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 15rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.5);
+}
+
+/* ============================================================
+ * 视图一：关注
+ * ============================================================ */
+
+.follow-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 30rpx 24rpx 12rpx;
+}
+
+.fh-tx {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1rpx;
+}
+
+.fh-en {
+  margin-top: 6rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.55);
+}
+
+.fh-no {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 20rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.35);
+}
+
+.follow-strip {
+  white-space: nowrap;
+}
+
+.strip-inner {
+  display: inline-flex;
+  padding: 8rpx 20rpx 16rpx;
+}
+
+.strip-item {
+  width: 152rpx;
+  text-align: center;
+}
+
+.avatar.mid {
+  width: 96rpx;
+  height: 96rpx;
+  font-size: 34rpx;
+  margin: 0 auto;
+}
+
+.strip-name {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.strip-role {
+  margin-top: 2rpx;
+  font-size: 18rpx;
+  color: rgba(40, 49, 78, 0.5);
+}
+
+.feed-list {
+  padding: 0 20rpx;
+}
+
+/* ============================================================
+ * 视图二：推荐（分区 + 精选横滑卡）
+ * ============================================================ */
+
+.post-topic-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-heat {
+  flex-shrink: 0;
+  margin-left: 10rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 1rpx;
+  color: var(--accent3);
+}
+
+.zone {
+  margin-top: 34rpx;
+}
+
+.zone-head {
+  display: flex;
+  align-items: baseline;
+  padding: 0 20rpx;
+}
+
+.zh-no {
+  margin-right: 12rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 20rpx;
+  color: rgba(40, 49, 78, 0.4);
+}
+
+.zh-name {
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  color: var(--primary);
+}
+
+.zh-name.hot {
+  color: #AA283A;
+}
+
+.zh-en {
+  flex: 1;
+  min-width: 0;
+  margin-left: 14rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.5);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.zh-count {
+  flex-shrink: 0;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  color: rgba(40, 49, 78, 0.45);
+}
+
+.zh-rule {
+  height: 2rpx;
+  margin: 12rpx 20rpx 0;
+  background: rgba(40, 49, 78, 0.25);
+}
+
+.zone-scroll {
+  margin-top: 18rpx;
+  white-space: nowrap;
+}
+
+.zone-inner {
+  display: inline-flex;
+  padding: 4rpx 20rpx 10rpx;
+}
+
+.hot-card {
+  width: 404rpx;
+  margin-right: 18rpx;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.hot-card.qa {
+  border: 3rpx solid rgba(170, 40, 58, 0.55);
+}
+
+.hot-card:active {
+  opacity: 0.8;
+}
+
+.hot-cover {
+  display: block;
+  width: 100%;
+  height: 220rpx;
+  background: var(--primary-tint);
+}
+
+.hot-body {
+  padding: 16rpx 18rpx 18rpx;
+}
+
+.hot-text {
+  margin-top: 12rpx;
+  height: 78rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+  color: var(--ink);
+  word-break: break-all;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.zone-empty {
+  padding: 20rpx;
+  font-size: 22rpx;
+  color: rgba(40, 49, 78, 0.45);
+}
+
+.all-head {
+  display: flex;
+  align-items: baseline;
+  margin: 46rpx 20rpx 0;
+  padding-top: 24rpx;
+  border-top: 2rpx solid rgba(40, 49, 78, 0.2);
+}
+
+.ah-tx {
+  font-size: 28rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  color: var(--primary);
+}
+
+.ah-en {
+  margin-left: 14rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.5);
+}
+
+/* ============================================================
+ * 视图三：信息广场（思维导图：绝对定位节点 + 肘形折线）
+ * ============================================================ */
+
+.map-head {
+  display: flex;
+  align-items: flex-end;
+  padding: 30rpx 24rpx 0;
+}
+
+.mh-l {
+  flex: 1;
+  min-width: 0;
+}
+
+.mh-tx {
+  font-size: 30rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  color: var(--primary);
+}
+
+.mh-en {
+  margin-top: 6rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 2rpx;
+  color: rgba(40, 49, 78, 0.55);
+}
+
+.mh-r {
+  margin-left: 26rpx;
+  text-align: right;
+}
+
+.mh-num {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 38rpx;
+  font-weight: 800;
+  line-height: 1;
+  color: #AA283A;
+}
+
+.mh-cap {
+  margin-top: 6rpx;
+  font-size: 18rpx;
+  color: rgba(40, 49, 78, 0.55);
+}
+
+.map-tip {
+  margin: 16rpx 24rpx 0;
+  font-size: 20rpx;
+  line-height: 1.5;
+  color: rgba(40, 49, 78, 0.55);
+}
+
+/* ============================================================
+ * 视图三：信息广场（进化树折叠行：主干 → 话题分支 → 整合条目）
+ * ============================================================ */
+
+.evo-wrap {
+  margin: 24rpx 20rpx 0;
+}
+
+.evo-trunk {
+  position: relative;
+  padding-left: 28rpx;
+}
+
+/* 竖向主干线：上实下渐隐 */
+.evo-trunk::before {
+  content: '';
+  position: absolute;
+  left: 8rpx;
+  top: 18rpx;
+  bottom: 44rpx;
+  width: 4rpx;
+  background: linear-gradient(180deg, rgba(40, 49, 78, 0.55) 0%, rgba(40, 49, 78, 0.28) 70%, rgba(40, 49, 78, 0) 100%);
+}
+
+.evo-root {
+  display: flex;
+  align-items: center;
+  margin: 0 0 8rpx -28rpx;
+  padding-left: 28rpx;
+}
+
+.evo-root-mark {
+  width: 0;
+  height: 0;
+  border-left: 14rpx solid var(--primary);
+  border-top: 10rpx solid transparent;
+  border-bottom: 10rpx solid transparent;
+  margin-right: 14rpx;
+}
+
+.evo-root-tx {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.evo-root-line {
+  flex: 1;
+  height: 2rpx;
+  margin-left: 16rpx;
+  background: rgba(40, 49, 78, 0.18);
+}
+
+/* 话题分支（可折叠块） */
+.evo-branch {
+  position: relative;
+  margin-bottom: 4rpx;
+}
+
+/* 肘形支线：从主干叉出到话题行 */
+.evo-branch::before {
+  content: '';
+  position: absolute;
+  left: -20rpx;
+  top: 38rpx;
+  width: 20rpx;
+  height: 4rpx;
+  background: rgba(40, 49, 78, 0.4);
+}
+
+/* 展开时沿分支向下延伸的枝干 */
+.evo-branch.open::after {
+  content: '';
+  position: absolute;
+  left: -20rpx;
+  top: 38rpx;
+  bottom: 42rpx;
+  width: 4rpx;
+  background: rgba(40, 49, 78, 0.3);
+}
+
+.evo-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 18rpx 18rpx 18rpx 16rpx;
+  background: #FFFFFF;
+  border: 2rpx solid rgba(40, 49, 78, 0.2);
+  transition: background 0.16s, border-color 0.16s;
+}
+
+.evo-branch.open > .evo-row {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.evo-dot {
+  position: relative;
+  z-index: 2;
+  width: 18rpx;
+  height: 18rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  border: 4rpx solid #AA283A;
+  background: #FFFDF8;
+  box-sizing: border-box;
+}
+
+.evo-branch.open > .evo-row .evo-dot {
+  border-color: #F29344;
+  background: #F29344;
+}
+
+.evo-no {
+  margin-right: 14rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 17rpx;
+  letter-spacing: 1rpx;
+  color: rgba(40, 49, 78, 0.45);
+  flex-shrink: 0;
+}
+
+.evo-branch.open > .evo-row .evo-no {
+  color: rgba(241, 230, 216, 0.6);
+}
+
+.evo-tx {
+  flex: 1;
+  min-width: 0;
+  font-size: 25rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  color: var(--ink);
+}
+
+.evo-branch.open > .evo-row .evo-tx {
+  color: #F1E6D8;
+}
+
+.evo-count {
+  margin-right: 16rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  color: rgba(40, 49, 78, 0.5);
+  flex-shrink: 0;
+}
+
+.evo-branch.open > .evo-row .evo-count {
+  color: rgba(241, 230, 216, 0.72);
+}
+
+.evo-heat {
+  margin-right: 16rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  font-weight: 700;
+  color: #AA283A;
+  flex-shrink: 0;
+}
+
+.evo-branch.open > .evo-row .evo-heat {
+  color: #F29344;
+}
+
+.evo-caret {
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+  border-left: 10rpx solid rgba(40, 49, 78, 0.5);
+  border-top: 8rpx solid transparent;
+  border-bottom: 8rpx solid transparent;
+  transition: transform 0.2s;
+}
+
+.evo-branch.open > .evo-row .evo-caret {
+  border-left-color: #F1E6D8;
+  transform: rotate(90deg);
+}
+
+/* 子条目容器：max-height 折叠动画 */
+.evo-kids {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.28s ease;
+}
+
+.evo-branch.open > .evo-kids {
+  max-height: 840rpx;
+}
+
+/* 整合条目：细枝 + 圆点 */
+.evo-kid {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 18rpx 14rpx 40rpx;
+}
+
+.evo-kid + .evo-kid {
+  border-top: 2rpx dashed rgba(40, 49, 78, 0.12);
+}
+
+.evo-kid::before {
+  content: '';
+  position: absolute;
+  left: 16rpx;
+  top: 32rpx;
+  width: 18rpx;
+  height: 4rpx;
+  background: rgba(40, 49, 78, 0.32);
+}
+
+.evo-kid-dot {
+  position: absolute;
+  left: 30rpx;
+  top: 26rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3rpx solid rgba(40, 49, 78, 0.5);
+  box-sizing: border-box;
+}
+
+.evo-kid-dot.hot {
+  background: #F29344;
+  border-color: #F29344;
+}
+
+.evo-kid-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.evo-kid-tx {
+  font-size: 23rpx;
+  line-height: 1.42;
+  color: var(--ink);
+}
+
+.evo-kid-meta {
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+}
+
+.evo-kid-heat {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  color: var(--accent3);
+}
+
+.evo-kid-link {
+  margin-left: 16rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 16rpx;
+  letter-spacing: 1rpx;
+  color: rgba(40, 49, 78, 0.42);
+}
+
+.map-legend {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 24rpx 0;
+}
+
+.lg-item {
+  display: flex;
+  align-items: center;
+  margin-right: 26rpx;
+  font-size: 20rpx;
+  color: rgba(40, 49, 78, 0.65);
+}
+
+.lg-dot {
+  width: 16rpx;
+  height: 16rpx;
+  margin-right: 8rpx;
+}
+
+.lg-dot.root {
+  width: 0;
+  height: 0;
+  border-left: 14rpx solid var(--primary);
+  border-top: 10rpx solid transparent;
+  border-bottom: 10rpx solid transparent;
+  margin-right: 12rpx;
+}
+
+.lg-dot.topic {
+  border-radius: 50%;
+  background: #AA283A;
+}
+
+.lg-dot.leaf {
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3rpx solid rgba(40, 49, 78, 0.5);
+}
+
+/* ============================================================
+ * 精选标题下的目录条（斜切标签，点选锚点定位到对应分区）
+ * ============================================================ */
+
+.topic-rail {
+  margin: 14rpx 20rpx 0;
+  white-space: nowrap;
+}
+
+.rail-inner {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 0 8rpx;
+}
+
+/* 斜切标签：去底色去描边，只留斜切字块与几何标示（选中态仍以藏蓝块面区分） */
+.tp-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 16rpx;
+  padding: 14rpx 24rpx;
+  background: transparent;
+  border: none;
+  transform: skewX(-12deg);
+}
+
+.tp-tab:active {
+  opacity: 0.7;
+}
+
+/* 内层内容反向斜切回正 */
+.tp-in {
+  display: flex;
+  align-items: center;
+  transform: skewX(12deg);
+}
+
+/* 实心几何标示：未选中藏蓝小方块，选中换橙点点睛 */
+.tp-sq {
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 12rpx;
+  background: var(--primary);
+}
+
+.tp-no {
+  margin-right: 10rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 17rpx;
+  letter-spacing: 1rpx;
+  color: rgba(40, 49, 78, 0.5);
+}
+
+.tp-name {
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  color: var(--ink);
+}
+
+/* 选中：整块藏蓝反白 + 右上橙点 */
+.tp-tab.on {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 6rpx 16rpx rgba(23, 29, 46, 0.22);
+}
+
+.tp-tab.on .tp-sq {
+  background: var(--accent3);
+}
+
+.tp-tab.on .tp-no {
+  color: rgba(241, 230, 216, 0.6);
+}
+
+.tp-tab.on .tp-name {
+  color: #F1E6D8;
+}
+
+.tp-dot {
+  position: absolute;
+  right: 8rpx;
+  top: 8rpx;
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: var(--accent3);
+  opacity: 0;
+}
+
+.tp-tab.on .tp-dot {
+  opacity: 1;
+}
+
+/* 横滑垫片（防 scroll-x 吃掉右内边距，最后一张卡能完整滑入） */
+.scroll-tail {
+  width: 20rpx;
+  flex-shrink: 0;
+}
+
+/* 信息流嵌入式广告卡：底图即广告 · 橙色系与正文卡拉开区分 */
+.post-card.ad-card {
+  border: 2rpx dashed rgba(242, 147, 68, 0.6);
+}
+
+.ad-cover {
+  position: relative;
+  height: 360rpx;
+  overflow: hidden;
+}
+
+.ad-img {
+  width: 100%;
+  height: 100%;
+}
+
+.ad-badge {
+  position: absolute;
+  left: 16rpx;
+  top: 16rpx;
+  padding: 4rpx 14rpx;
+  background: #F29344;
+  color: #14171F;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 20rpx;
+  font-weight: 800;
+  letter-spacing: 3rpx;
+}
+
+.post-topic.ad-topic {
+  color: #F29344;
+}
+
+.avatar.ad-ava {
+  background: #F29344;
+  color: #14171F;
+  box-shadow: none;
+}

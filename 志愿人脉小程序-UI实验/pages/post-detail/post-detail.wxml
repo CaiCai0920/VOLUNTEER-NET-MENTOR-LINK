@@ -1,0 +1,97 @@
+<view class="page-wrap">
+  <!-- 顶部返回条 -->
+  <view class="detail-top">
+    <view class="back-btn" bindtap="goBack">‹ 返回</view>
+    <view class="detail-top-tx">帖子详情</view>
+    <view class="detail-top-no">POST // DETAIL</view>
+  </view>
+
+  <block wx:if="{{ready && post}}">
+    <!-- 媒体区：图片轮播 / 视频 -->
+    <swiper class="media-swiper" wx:if="{{media.length}}" indicator-dots circular>
+      <swiper-item wx:for="{{media}}" wx:key="path">
+        <image
+          wx:if="{{item.type === 'image' && item.url}}"
+          class="media-img"
+          src="{{item.url}}"
+          mode="aspectFill"
+          data-url="{{item.url}}"
+          bindtap="onPreview"
+        ></image>
+        <video wx:if="{{item.type === 'video' && item.url}}" class="media-video" src="{{item.url}}" object-fit="contain"></video>
+        <view class="media-fallback" wx:if="{{!item.url}}">
+          <text>{{item.type === 'video' ? '视频加载中…' : '图片加载中…'}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+
+    <!-- 正文卡 -->
+    <view class="detail-card {{isQA ? 'qa' : ''}}">
+      <view class="detail-author">
+        <view class="avatar {{post.userRole === 'mentor' ? 'role-mentor' : ''}}">{{post.initial}}</view>
+        <view class="author-main">
+          <view class="author-name">{{post.userName}}</view>
+          <view class="author-sub">{{post.roleText}} · {{post.timeText}}</view>
+        </view>
+        <view class="topic-tag {{isQA ? 'qa' : ''}}"># {{post.topic}}</view>
+      </view>
+
+      <view class="detail-content">{{post.content}}</view>
+
+      <!-- 答疑帖：认领栏 -->
+      <view class="claim-bar" wx:if="{{isQA}}" bindtap="onClaim">
+        <view class="claim-tx">{{claimed ? '已被认领 · 答疑进行中' : '求助帖 · 等一位学长学姐认领'}}</view>
+        <view class="claim-btn {{claimed ? 'done' : ''}}">{{claimed ? '已认领' : '认领答疑'}}</view>
+      </view>
+      <view class="claim-note" wx:if="{{isQA}}">认领后进入答疑会话，可在「答疑工作台 · 我接的答疑」中继续跟进</view>
+    </view>
+
+    <!-- 评论区：整层评论流（头像按角色着色：新生蓝 / 学长红） -->
+    <view class="comment-zone">
+      <view class="cmz-head">
+        <view class="cmz-title">评论<text class="cmz-count" wx:if="{{comments.length}}">{{comments.length}}</text></view>
+        <view class="cmz-en">COMMENTS</view>
+      </view>
+
+      <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+        <!-- 点评论者头像 → 进该帖的答疑聊天框 -->
+        <view class="avatar small {{item.roleClass}}" catchtap="onAvatar" data-uid="{{item.userId}}" data-name="{{item.userName}}">{{item.initial}}</view>
+        <view class="comment-main">
+          <view class="comment-top">
+            <view class="comment-name">{{item.userName}}</view>
+            <view class="comment-role" wx:if="{{item.userRole === 'mentor'}}">学长/学姐</view>
+          </view>
+          <view class="comment-text">{{item.content}}</view>
+          <view class="comment-time">{{item.timeText}}</view>
+        </view>
+      </view>
+
+      <view class="comment-empty" wx:if="{{!comments.length}}">
+        <view class="comment-empty-tx">还没有评论，来说第一句吧</view>
+      </view>
+    </view>
+
+    <view class="footer-tip">社区内容为用户发布 · 请遵守社区公约</view>
+  </block>
+
+  <!-- 底部评论输入条：固定悬浮，避让安全区 -->
+  <view class="comment-bar" wx:if="{{ready && post}}">
+    <input
+      class="comment-input"
+      value="{{draft}}"
+      placeholder="写下你的评论…"
+      placeholder-class="comment-ph"
+      confirm-type="send"
+      confirm-hold
+      adjust-position="{{true}}"
+      bindinput="onCommentInput"
+      bindconfirm="onCommentSend"
+    />
+    <view class="comment-send {{draft ? 'ok' : ''}} {{sending ? 'busy' : ''}}" bindtap="onCommentSend">发送</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="empty" wx:if="{{loading}}">
+    <view class="empty-text">加载中…</view>
+  </view>
+</view>

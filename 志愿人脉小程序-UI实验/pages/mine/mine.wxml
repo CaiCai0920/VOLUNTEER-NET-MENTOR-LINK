@@ -1,0 +1,68 @@
+<view class="page-wrap mine-split-page {{themeClass}}">
+  <!-- 左右分割：左人像拼贴背景 + 纯色圆姓氏头像；右数据与操作（scroll-view 滚动） -->
+  <view class="profile-split">
+    <view class="ps-left">
+      <image class="ps-img" src="/images/profile-collage.jpg" mode="aspectFill"></image>
+      <view class="ps-left-veil"></view>
+      <view class="ps-deco">
+        <text class="ps-no">SZU-2026 // GRID.07</text>
+        <text class="ps-hud">PROFILE — ID CARD</text>
+      </view>
+      <view class="ps-id">
+        <view class="avatar-solid">{{meInitial}}</view>
+        <view class="ps-name">{{me.name}}</view>
+        <view class="ps-sub">{{roleText}} · {{me.major}}</view>
+        <view class="ps-chip" wx:if="{{me.verifyStatus === 'approved'}}">身份核验已通过</view>
+        <view class="ps-chip" wx:elif="{{me.verifyStatus === 'pending'}}">身份核验审核中</view>
+        <view class="ps-chip" wx:elif="{{me.verifyStatus === 'rejected'}}">核验未通过 · 请重新提交</view>
+        <view class="ps-chip" wx:if="{{me.topics}}">擅长：{{me.topics}}</view>
+      </view>
+    </view>
+    <scroll-view scroll-y class="ps-right">
+      <view class="back-bar" bindtap="goHome">
+        <text class="back-arrow">‹</text>
+        <text class="back-text">返回首页</text>
+      </view>
+      <view class="ps-stats">
+        <view class="ps-stat">
+          <view class="ps-num">{{stats.askCount}}</view>
+          <view class="ps-label">我的提问</view>
+        </view>
+        <view class="ps-stat">
+          <view class="ps-num">{{stats.answerThreads}}</view>
+          <view class="ps-label">我接的答疑</view>
+        </view>
+        <view class="ps-stat">
+          <view class="ps-num">{{stats.messageCount}}</view>
+          <view class="ps-label">发出的消息</view>
+        </view>
+      </view>
+      <view class="card action-card">
+        <view class="action-item" bindtap="goHelp">
+          <text class="action-text">常见问题</text>
+          <text class="action-arrow">›</text>
+        </view>
+        <view class="action-item" bindtap="goEdit">
+          <text class="action-text">修改我的资料</text>
+          <text class="action-arrow">›</text>
+        </view>
+        <view class="action-item" wx:if="{{isReviewer}}" bindtap="goReview">
+          <text class="action-text">身份核验审核台<text class="review-badge" wx:if="{{pendingCount}}">{{pendingCount}}</text></text>
+          <text class="action-arrow">›</text>
+        </view>
+        <view class="action-item" bindtap="onSwitch">
+          <text class="action-text">切换身份（演示用）</text>
+          <text class="action-arrow">›</text>
+        </view>
+        <view class="action-item" bindtap="onReset">
+          <text class="action-text">清空演示数据</text>
+          <text class="action-arrow">›</text>
+        </view>
+      </view>
+      <view class="notice">
+        本平台内容为学长学姐个人经验分享，不代表学校官方意见。你填写的昵称、专业和问题仅用于匹配答疑，不会被公开。
+      </view>
+      <view class="footer-tip">志愿人脉 · 新生提问与对口学长答疑</view>
+    </scroll-view>
+  </view>
+</view>

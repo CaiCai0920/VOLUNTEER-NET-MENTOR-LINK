@@ -1,0 +1,72 @@
+<view class="page-wrap">
+  <!-- 文字输入 -->
+  <view class="card compose-card">
+    <textarea
+      class="compose-input"
+      value="{{content}}"
+      maxlength="1000"
+      placeholder="分享你的生活日常、校园见闻…"
+      placeholder-class="compose-ph"
+      bindinput="onInput"
+    ></textarea>
+    <view class="compose-count">{{content.length}}/1000</view>
+  </view>
+
+  <!-- 媒体九宫格：预览 + 删除 + 添加 -->
+  <view class="media-grid">
+    <view class="media-cell" wx:for="{{files}}" wx:key="tempFilePath">
+      <video
+        wx:if="{{item.fileType === 'video'}}"
+        class="media-thumb"
+        src="{{item.tempFilePath}}"
+        object-fit="cover"
+        controls="{{false}}"
+      ></video>
+      <image wx:else class="media-thumb" src="{{item.tempFilePath}}" mode="aspectFill"></image>
+      <view class="media-tag" wx:if="{{item.fileType === 'video'}}">视频</view>
+      <view class="media-del" data-index="{{index}}" bindtap="onRemove">×</view>
+    </view>
+    <view class="media-cell media-add" wx:if="{{files.length < 9}}" bindtap="onChoose">
+      <view class="media-add-plus">+</view>
+      <view class="media-add-txt">图片/视频</view>
+    </view>
+  </view>
+
+  <!-- 话题分区：单选色块（勾选认领帖时整块降为可选、自动归入答疑） -->
+  <view class="sec-title">话题分区 <text class="sec-sub">{{isClaim ? '认领帖固定归入「答疑」' : '选一个最贴的'}}</text></view>
+  <view class="topic-wrap {{isClaim ? 'dim' : ''}}">
+    <view
+      class="topic-chip {{topic === item ? 'on' : ''}}"
+      wx:for="{{topicList}}"
+      wx:key="*this"
+      data-topic="{{item}}"
+      bindtap="onTopic"
+    >{{item}}</view>
+  </view>
+
+  <!-- 独立选项：勾选后帖子变为认领帖（朱红高亮 + 学长学姐可认领） -->
+  <view class="claim-opt {{isClaim ? 'on' : ''}}" bindtap="onToggleClaim">
+    <view class="claim-box">{{isClaim ? '✓' : ''}}</view>
+    <view class="claim-opt-main">
+      <view class="claim-opt-title">认领帖 <text class="claim-opt-en">CLAIM / ON</text></view>
+      <view class="claim-opt-sub">勾选后帖子带朱红高亮，学长学姐可在广场认领并转入答疑</view>
+    </view>
+  </view>
+
+  <!-- 自定义分区：不选预设色块时，可自己写一个话题（≤8 字） -->
+  <view class="custom-topic">
+    <text class="custom-topic-hash">#</text>
+    <input
+      class="custom-topic-input"
+      value="{{customTopic}}"
+      maxlength="8"
+      placeholder="自定义话题（留空则用上面选的）"
+      placeholder-class="compose-ph"
+      bindinput="onCustomTopic"
+    />
+    <view class="custom-topic-len" wx:if="{{customTopic.length}}">{{customTopic.length}}/8</view>
+  </view>
+
+  <button class="btn-primary" disabled="{{submitting}}" bindtap="onSubmit">发布</button>
+  <view class="footer-tip">发布后社区里所有人可见 · 请遵守社区公约，不发布违规内容</view>
+</view>

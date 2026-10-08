@@ -1,0 +1,277 @@
+<!-- 帖子卡：关注流 / 推荐分区共用（模板化，避免多视图重复标记） -->
+<template name="tpl-post">
+  <!-- 信息流嵌入式广告卡：底图即广告（虚线橙框与正文卡拉开区分） -->
+  <view class="post-card ad-card" wx:if="{{isAd}}" bindtap="onAd">
+    <view class="ad-cover">
+      <image class="ad-img" src="/images/ad-banner.jpg" mode="aspectFill"></image>
+      <view class="ad-badge">AD</view>
+    </view>
+    <view class="post-body">
+      <view class="post-topic-bar">
+        <view class="post-topic ad-topic">广告 · 招租</view>
+      </view>
+      <view class="post-text">广告即是背景大图 —— 本页底图即广告位，全站首屏曝光，招租中</view>
+      <view class="post-foot">
+        <view class="avatar small ad-ava">AD</view>
+        <view class="post-name">广告招租</view>
+        <view class="post-time">推广</view>
+      </view>
+    </view>
+  </view>
+  <view class="post-card {{isQA ? 'qa' : ''}}" wx:else data-id="{{id}}" bindtap="goDetail">
+    <image
+      wx:if="{{coverType === 'image' && coverUrl}}"
+      class="post-cover"
+      src="{{coverUrl}}"
+      mode="aspectFill"
+      data-url="{{coverUrl}}"
+      data-urls="{{previewUrls}}"
+      catchtap="onPreview"
+    ></image>
+    <video
+      wx:if="{{coverType === 'video' && coverUrl}}"
+      class="post-cover"
+      src="{{coverUrl}}"
+      object-fit="cover"
+      controls="{{false}}"
+      show-center-play-btn="{{true}}"
+    ></video>
+    <view class="post-body">
+      <view class="post-topic-bar">
+        <view class="post-topic {{isQA ? 'qa' : ''}}"># {{topic}}</view>
+        <view class="post-heat" wx:if="{{heat}}">H {{heat}}</view>
+      </view>
+      <view class="post-text">{{content}}</view>
+      <view class="post-foot">
+        <!-- 点头像直接进答疑聊天框（catchtap 阻断冒泡，不触发整卡进详情） -->
+        <view class="avatar small {{roleClass}}" catchtap="onAvatar" data-id="{{id}}" data-claimed="{{claimed}}">{{initial}}</view>
+        <view class="post-name">{{userName}}</view>
+        <view class="post-time">{{timeText}}</view>
+      </view>
+      <view
+        class="claim-bar"
+        wx:if="{{isQA}}"
+        catchtap="onClaim"
+        data-id="{{id}}"
+        data-claimed="{{claimed}}"
+      >
+        <view class="claim-tx">{{claimed ? '已被认领 · 答疑中' : '求助帖 · 等一位学长学姐'}}</view>
+        <view class="claim-btn {{claimed ? 'done' : ''}}">{{claimed ? '已认领' : '认领'}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<view class="page-wrap">
+
+  <!-- 朋友圈式封面横幅：社区统一门面，发布入口也在右上角 -->
+  <view class="cover">
+    <image class="cover-img" src="/images/community-cover.jpg" mode="aspectFill"></image>
+    <view class="cover-veil"></view>
+    <view class="cover-caption">
+      <view class="cover-title">社区广场</view>
+      <view class="cover-sub">COMMUNITY SQUARE · 讨论 · 竞赛 · 升学 · 信息</view>
+    </view>
+    <!-- 封面右上角符号型发布入口：虚线圆轨+朱红加号+橙点（v12：替代实块 FAB） -->
+    <view class="cover-add" bindtap="goPost">
+      <view class="cover-add-ring"></view>
+      <view class="cover-add-plus">+</view>
+      <view class="cover-add-dot"></view>
+      <view class="cover-add-tx">POST / NEW</view>
+    </view>
+    <view class="cover-no">SZU-2026 // SQ.03</view>
+  </view>
+
+  <!-- ============ 四个符号型按键：关注 / 推荐 / 信息广场 / 发布 ============ -->
+  <view class="nav-row">
+    <view class="nav-key {{view === 'follow' ? 'on' : ''}}" data-view="follow" bindtap="onView">
+      <view class="key-sym">
+        <view class="sym-follow-ring"></view>
+        <view class="sym-follow-dot"></view>
+      </view>
+      <view class="key-tx">关注</view>
+      <view class="key-en">FOLLOW</view>
+    </view>
+
+    <view class="nav-key {{view === 'reco' ? 'on' : ''}}" data-view="reco" bindtap="onView">
+      <view class="key-sym">
+        <view class="sym-bars"><view class="bar b1"></view><view class="bar b2"></view><view class="bar b3"></view></view>
+        <view class="sym-bars-dot"></view>
+      </view>
+      <view class="key-tx">推荐</view>
+      <view class="key-en">SELECT</view>
+    </view>
+
+    <view class="nav-key {{view === 'map' ? 'on' : ''}}" data-view="map" bindtap="onView">
+      <view class="key-sym">
+        <view class="sym-node n1"></view>
+        <view class="sym-link"></view>
+        <view class="sym-node n2"></view>
+      </view>
+      <view class="key-tx">信息广场</view>
+      <view class="key-en">INFO MAP</view>
+    </view>
+
+    <view class="nav-key key-post" bindtap="goPost">
+      <view class="key-sym">
+        <view class="sym-plus-h"></view>
+        <view class="sym-plus-v"></view>
+      </view>
+      <view class="key-tx">发布</view>
+      <view class="key-en">POST</view>
+    </view>
+  </view>
+
+  <!-- ==================== 视图一：关注 ==================== -->
+  <block wx:if="{{view === 'follow'}}">
+    <view class="follow-head">
+      <view class="fh-l">
+        <view class="fh-tx">我关注的 {{following.length}} 位同路人</view>
+        <view class="fh-en">FOLLOWING · 只看他们的动态</view>
+      </view>
+      <view class="fh-no">F.01</view>
+    </view>
+
+    <scroll-view class="follow-strip" scroll-x wx:if="{{following.length}}">
+      <view class="strip-inner">
+        <view class="strip-item" wx:for="{{following}}" wx:key="followeeId">
+          <view class="avatar mid {{item.role === 'mentor' ? 'role-mentor' : ''}}">{{item.initial}}</view>
+          <view class="strip-name">{{item.name}}</view>
+          <view class="strip-role">{{item.role === 'mentor' ? '学长/学姐' : '新生'}}</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="feed-list" wx:if="{{followPosts.length}}">
+      <template is="tpl-post" wx:for="{{followPosts}}" wx:key="id" data="{{...item}}" />
+    </view>
+
+    <view class="empty" wx:if="{{readyFollow && !following.length}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">还没有关注的人 · 去「推荐」里点开学长的资料关注 TA</view>
+    </view>
+
+    <view class="empty" wx:if="{{readyFollow && following.length && !followPosts.length}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">关注的人还没发帖，稍后再来看看</view>
+    </view>
+  </block>
+
+  <!-- ==================== 视图二：推荐（目录条：01 精选 + 各话题，点谁下方就是谁的图文帖） ==================== -->
+  <block wx:elif="{{view === 'reco'}}">
+    <scroll-view class="topic-rail" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="rail-inner">
+        <view
+          class="tp-tab {{activeZone === item.key ? 'on' : ''}}"
+          wx:for="{{topicZones}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onZone"
+        >
+          <view class="tp-in">
+            <view class="tp-sq"></view>
+            <text class="tp-no">{{item.no}}</text>
+            <text class="tp-name">{{item.name}}</text>
+          </view>
+          <view class="tp-dot"></view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 图文帖流：精选 = 全站帖子混排；话题 = 只看该话题（双列瀑布，无横滑精简卡） -->
+    <view class="feed" wx:if="{{colA.length || colB.length}}">
+      <view class="feed-col">
+        <template is="tpl-post" wx:for="{{colA}}" wx:key="id" data="{{...item}}" />
+      </view>
+      <view class="feed-col">
+        <template is="tpl-post" wx:for="{{colB}}" wx:key="id" data="{{...item}}" />
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{ready && !colA.length && !colB.length}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">这个栏目还没有帖子，去发布页发第一帖吧</view>
+    </view>
+  </block>
+
+  <!-- ==================== 视图三：信息广场（进化树折叠行） ==================== -->
+  <block wx:else>
+    <view class="map-head">
+      <view class="mh-l">
+        <view class="mh-tx">信息广场 · 知识树</view>
+        <view class="mh-en">INFO PLAZA · {{graph.batch || 'B01'}} 期</view>
+      </view>
+      <view class="mh-r">
+        <view class="mh-num">{{graph.branches.length}}</view>
+        <view class="mh-cap">话题分支</view>
+      </view>
+      <view class="mh-r">
+        <view class="mh-num">{{graph.total}}</view>
+        <view class="mh-cap">整合条目</view>
+      </view>
+    </view>
+    <view class="map-tip">按话题分叉的折叠行 · 点一行展开该话题的整合条目，再点收起</view>
+
+    <view class="evo-wrap">
+      <view class="evo-trunk">
+        <view class="evo-root">
+          <view class="evo-root-mark"></view>
+          <view class="evo-root-tx">INFO PLAZA / KNOWLEDGE TREE</view>
+          <view class="evo-root-line"></view>
+        </view>
+
+        <view
+          wx:for="{{treeBranches}}"
+          wx:key="nodeId"
+          wx:for-index="bIndex"
+          class="evo-branch {{item.open ? 'open' : ''}}"
+        >
+          <view class="evo-row" data-index="{{bIndex}}" bindtap="onToggleBranch">
+            <view class="evo-dot"></view>
+            <view class="evo-no">{{item.no}}</view>
+            <view class="evo-tx">{{item.label}}</view>
+            <view class="evo-count">{{item.count}} 条</view>
+            <view class="evo-heat">{{item.weight}}</view>
+            <view class="evo-caret"></view>
+          </view>
+          <view class="evo-kids">
+            <view
+              wx:for="{{item.leaves}}"
+              wx:for-item="kid"
+              wx:key="nodeId"
+              class="evo-kid"
+              data-post="{{kid.postId}}"
+              data-topic="{{kid.topic}}"
+              bindtap="onKid"
+            >
+              <view class="evo-kid-dot {{kid.hot ? 'hot' : ''}}"></view>
+              <view class="evo-kid-body">
+                <view class="evo-kid-tx">{{kid.label}}</view>
+                <view class="evo-kid-meta">
+                  <text class="evo-kid-heat">热度 {{kid.weight}}</text>
+                  <text class="evo-kid-link" wx:if="{{kid.postId}}">查看原帖</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+
+    <view class="map-legend">
+      <view class="lg-item"><view class="lg-dot root"></view>主干</view>
+      <view class="lg-item"><view class="lg-dot topic"></view>话题分支</view>
+      <view class="lg-item"><view class="lg-dot leaf"></view>整合条目</view>
+    </view>
+  </block>
+
+  <view class="footer-tip" wx:if="{{ready}}">下拉可刷新 · 讨论、竞赛、升学、信息，一站式查</view>
+  <!-- 底部导航条：固定底部 · 滚动时隐藏，停止后浮现 -->
+  <view class="top-tabs {{tabsHide ? 'hide' : ''}}">
+  <view class="top-tab" data-tab="home" bindtap="onTopTab">首页</view>
+  <view class="top-tab" data-tab="ask" bindtap="onTopTab">答疑</view>
+  <view class="top-tab on" data-tab="community" bindtap="onTopTab">社区</view>
+  <view class="top-tab" data-tab="messages" bindtap="onTopTab">消息</view>
+  </view>
+</view>

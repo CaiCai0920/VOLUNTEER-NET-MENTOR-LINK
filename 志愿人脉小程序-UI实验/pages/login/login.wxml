@@ -1,0 +1,229 @@
+<view class="lg-page {{form.role === 'mentor' ? 'theme-mentor' : 'theme-asker'}}">
+  <!-- ================= 顶部海报（满幅、自定义导航） ================= -->
+  <view class="lg-wrap">
+    <view class="lg-status"></view>
+    <view class="lg-poster">
+      <view class="hero-grid"></view>
+      <view class="lg-band"></view>
+      <view class="lg-mark-back">SZU</view>
+      <view class="lg-mark">SZU</view>
+      <view class="lg-wedge"></view>
+      <view class="lg-steps"></view>
+      <view class="lg-colon">1983 — 2026</view>
+    </view>
+
+    <!-- 破界元件：脱离裁剪层，骑压海报下边界 -->
+    <view class="lg-circle"><view class="lg-lychee"></view></view>
+    <view class="lg-ring"></view>
+    <view class="lg-semi"></view>
+    <view class="lg-coord"></view>
+    <view class="lg-dot d1"></view>
+    <view class="lg-dot d2"></view>
+    <view class="lg-dot d3"></view>
+    <view class="lg-arrow"></view>
+
+    <view class="lg-back" wx:if="{{canBack}}" bindtap="onBack">‹ 返回</view>
+    <view class="lg-brand">
+      <view class="lg-brand-sq"></view>
+      <text class="lg-brand-tx">深圳大学 · 志愿人脉</text>
+    </view>
+    <view class="lg-brand-sub">SZU · VOLUNTEER MENTOR</view>
+  </view>
+
+  <!-- ================= 登记表单（海报版式分节） ================= -->
+  <view class="lg-sheet">
+    <view class="lg-chip" wx:if="{{me}}">当前身份：{{me.name}} · {{roleText}}</view>
+
+    <view class="lg-sec">
+      <text class="lg-sec-no">01</text>
+      <text class="lg-sec-tx">身份登记</text>
+      <view class="lg-sec-line"></view>
+    </view>
+
+    <view class="card">
+      <view class="field">
+        <view class="field-label">你的昵称</view>
+        <input
+          class="field-input"
+          placeholder="例如：张三"
+          placeholder-class="ph"
+          value="{{form.name}}"
+          maxlength="12"
+          bindinput="onNameInput"
+        />
+      </view>
+
+      <view class="field">
+        <view class="field-label">你的身份</view>
+        <view class="role-row">
+          <view
+            class="role-card {{form.role === 'asker' ? 'active' : ''}}"
+            data-role="asker"
+            bindtap="onRoleTap"
+          >
+            <view class="role-swatch sw-asker"></view>
+            <view class="role-name">新生</view>
+            <view class="role-desc">我有问题，想找对口学长</view>
+          </view>
+          <view
+            class="role-card {{form.role === 'mentor' ? 'active' : ''}}"
+            data-role="mentor"
+            bindtap="onRoleTap"
+          >
+            <view class="role-swatch sw-mentor"></view>
+            <view class="role-name">学长学姐</view>
+            <view class="role-desc">我愿答疑，一周回几条</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">专业方向</view>
+        <picker mode="selector" range="{{majors}}" value="{{majorIndex}}" bindchange="onMajorChange">
+          <view class="field-picker">
+            <text class="picker-value">{{form.major}}</text>
+            <text class="picker-arrow">选择</text>
+          </view>
+        </picker>
+        <view class="field-tip">按全校学院 / 学部（招生大类）选，不涉及细分小专业</view>
+        <input
+          class="field-input custom-input"
+          wx:if="{{isCustom}}"
+          placeholder="手动填写你的学院 / 学部，如：计算机与软件学院"
+          placeholder-class="ph"
+          value="{{customMajor}}"
+          maxlength="24"
+          bindinput="onCustomMajorInput"
+        />
+      </view>
+
+      <view class="field" wx:if="{{form.role === 'mentor'}}">
+        <view class="field-label">擅长话题（可多选）</view>
+        <view class="chip-wrap">
+          <view
+            class="chip {{item.on ? 'on' : ''}}"
+            wx:for="{{topicChips}}"
+            wx:key="name"
+            data-name="{{item.name}}"
+            bindtap="onTopicTap"
+          >{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="lg-sec">
+      <text class="lg-sec-no">02</text>
+      <text class="lg-sec-tx">实名认证</text>
+      <view class="lg-sec-line"></view>
+    </view>
+
+    <view class="card">
+      <view class="field">
+        <view class="field-label">真实姓名</view>
+        <input
+          class="field-input"
+          placeholder="与学籍信息一致，2-15个字"
+          placeholder-class="ph"
+          value="{{form.realName}}"
+          maxlength="15"
+          bindinput="onRealNameInput"
+        />
+      </view>
+      <view class="field">
+        <view class="field-label">学号</view>
+        <input
+          class="field-input"
+          placeholder="例如：2026010001（6-12位数字）"
+          placeholder-class="ph"
+          type="idcard"
+          value="{{form.studentId}}"
+          maxlength="12"
+          bindinput="onStudentIdInput"
+        />
+      </view>
+      <view class="verify-tip">认证信息仅用于核验校内身份，不会展示给其他用户，也不会出现在聊天内容中。</view>
+    </view>
+
+    <view class="lg-sec">
+      <text class="lg-sec-no">03</text>
+      <text class="lg-sec-tx">身份核验</text>
+      <view class="lg-sec-line"></view>
+    </view>
+
+    <view class="card">
+      <block wx:if="{{needVerify || needSession}}">
+        <view class="field">
+          <view class="field-label">手机号</view>
+          <view class="phone-row">
+            <input
+              class="field-input phone-input"
+              placeholder="11 位手机号"
+              placeholder-class="ph"
+              type="number"
+              value="{{phone}}"
+              maxlength="11"
+              bindinput="onPhoneInput"
+            />
+            <view class="code-btn {{canSendCode ? '' : 'off'}}" bindtap="onSendCode">
+              {{countdown > 0 ? countdown + 's 后重发' : '获取验证码'}}
+            </view>
+          </view>
+        </view>
+        <view class="field">
+          <view class="field-label">短信验证码</view>
+          <input
+            class="field-input"
+            placeholder="输入收到的验证码"
+            placeholder-class="ph"
+            type="number"
+            value="{{smsCode}}"
+            maxlength="6"
+            bindinput="onSmsInput"
+          />
+          <view class="field-tip" wx:if="{{codeSent}}">验证码已发送至 {{phone}}，注意查收短信</view>
+        </view>
+        <view class="field" wx:if="{{!(needSession && verifyApproved)}}">
+          <view class="field-label">学生证正面照片</view>
+          <view class="photo-row">
+            <view class="photo-box" bindtap="onChoosePhoto">
+              <image wx:if="{{photoTemp}}" class="photo-img" src="{{photoTemp}}" mode="aspectFill"></image>
+              <view wx:else class="photo-empty">
+                <view class="photo-empty-icon">＋</view>
+                <view class="photo-empty-tx">拍摄 / 选择照片</view>
+              </view>
+            </view>
+            <view class="photo-tip">拍摄或上传学生证正面照，用于与姓名学号比对核验；仅审核员可见，核验后不对外展示。</view>
+          </view>
+        </view>
+        <view class="verify-tip" wx:if="{{needSession && verifyApproved}}">身份核验已通过，这里只需短信确认一次身份，用于开启图片发送；无需重复上传学生证。</view>
+        <view class="verify-tip" wx:else>提交后将进入人工审核；审核通过前功能不受影响，通过后昵称旁会亮起认证标识。</view>
+      </block>
+      <block wx:else>
+        <view class="verify-status ok" wx:if="{{me.verifyStatus === 'approved'}}">
+          身份核验已通过{{me.phone ? ' · ' + me.phone : ''}}
+        </view>
+        <view class="verify-status wait" wx:elif="{{me.verifyStatus === 'pending'}}">
+          核验审核中，通过后会在这里显示结果
+        </view>
+        <view class="verify-status bad" wx:else>
+          上次核验未通过，请重新提交手机号与学生证照片
+        </view>
+      </block>
+    </view>
+
+    <view class="notice">
+      你填的昵称、专业和问题，仅用于匹配答疑；联系方式不会公开展示。
+    </view>
+
+    <view class="agree" bindtap="onAgreeTap">
+      <view class="checkbox {{agreed ? 'checked' : ''}}"></view>
+      <text class="agree-text">我已阅读并同意上述说明</text>
+    </view>
+
+    <button class="btn-primary" bindtap="onSubmit">{{me ? '保存并进入' : '进入答疑大厅'}}</button>
+
+    <view class="footer-tip">
+      本平台内容为学长学姐个人经验分享，不代表学校官方意见。
+    </view>
+  </view>
+</view>

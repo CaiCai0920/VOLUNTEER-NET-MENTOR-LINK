@@ -1,0 +1,74 @@
+<view class="sp" bindtap="onSkip">
+  <!-- 大透视空间背景：AI 生成的构成主义几何场景（红斜面 + 藏蓝/白体块 + 米白天空） -->
+  <image class="sp-bg" src="/images/splash-persp.jpg" mode="aspectFill"></image>
+
+  <!-- 顶部字标：SZU（深圳大学元素，海报式字母标 + 建校年份坐标） -->
+  <view class="sp-head">
+    <view class="sp-logo">
+      <view class="sp-logo-sq"></view>
+      <text class="sp-logo-tx">SZU</text>
+    </view>
+    <view class="sp-head-meta">1983 — 2026</view>
+  </view>
+
+  <!-- 背景图已含几何构成，原右上纯几何组合体移除 -->
+
+  <!-- 文字排版区 -->
+  <view class="sp-body">
+    <view class="sp-kicker">
+      <view class="sp-kicker-sq"></view>
+      <text>深圳大学 · 志愿人脉</text>
+    </view>
+    <view class="sp-title">志愿人脉</view>
+    <view class="sp-rule">
+      <view class="r1"></view>
+      <view class="r2"></view>
+      <view class="r3"></view>
+    </view>
+    <view class="sp-motto">自立 · 自律 · 自强</view>
+    <view class="sp-caption">PERSPECTIVE SPACE — SZU VOLUNTEER NET</view>
+
+    <view class="sp-index">
+      <view class="sp-index-head">
+        <text class="sp-index-tt">社区服务</text>
+        <text class="sp-index-en">COMMUNITY SERVICE / 04</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-blue"></view>
+        <text class="sp-no">01</text>
+        <text class="sp-tx">答疑大厅 — 新生实名提问，学长在线认领</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-red"></view>
+        <text class="sp-no">02</text>
+        <text class="sp-tx">社区广场 — 图文视频分享，生活讨论不设限</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-orange"></view>
+        <text class="sp-no">03</text>
+        <text class="sp-tx">消息中心 — 会话实时互通，已读回执不遗漏</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-navy"></view>
+        <text class="sp-no">04</text>
+        <text class="sp-tx">个人档案 — 志愿时长沉淀，答疑记录可回溯</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部主色横带：SZU 字标 + 加载 -->
+  <view class="sp-navy">
+    <view class="sp-navy-mark">
+      <text class="sp-navy-szu">SZU</text>
+      <view class="sp-navy-meta">
+        <text class="sp-navy-tx">深圳大学 · 校园志愿答疑</text>
+        <text class="sp-navy-sub">VOLUNTEER MENTOR</text>
+      </view>
+    </view>
+    <view class="sp-load">
+      <view class="sp-load-fill"></view>
+    </view>
+    <view class="sp-load-tip">正在进入{{targetName}}</view>
+  </view>
+</view>
+

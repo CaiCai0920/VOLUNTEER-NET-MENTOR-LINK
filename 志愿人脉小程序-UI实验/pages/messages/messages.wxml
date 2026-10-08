@@ -1,0 +1,82 @@
+<view class="page-wrap">
+
+  <!-- 页头：消息中心（归档已处理答疑与收到的消息） -->
+  <view class="msg-head">
+    <view class="msg-head-main">
+      <view class="msg-head-title">消息</view>
+      <view class="msg-head-no">MESSAGES // ARCHIVE</view>
+    </view>
+    <view class="msg-head-sub">收到的对话与已归档答疑</view>
+  </view>
+
+  <!-- 双栏切换：进行中 / 已归档 -->
+  <view class="msg-tabs">
+    <view class="msg-tab {{pane === 'active' ? 'on' : ''}}" data-pane="active" bindtap="onPane">
+      进行中<text class="msg-tab-n" wx:if="{{activeItems.length}}">{{activeItems.length}}</text>
+    </view>
+    <view class="msg-tab {{pane === 'archived' ? 'on' : ''}}" data-pane="archived" bindtap="onPane">
+      已归档<text class="msg-tab-n" wx:if="{{archivedItems.length}}">{{archivedItems.length}}</text>
+    </view>
+  </view>
+
+  <!-- 进行中：有来有往的对话 -->
+  <block wx:if="{{pane === 'active'}}">
+    <view
+      class="msg-item"
+      wx:for="{{activeItems}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goChat"
+    >
+      <view class="avatar {{item.roleClass}}">{{item.otherInitial}}</view>
+      <view class="msg-main">
+        <view class="msg-top">
+          <view class="msg-name">{{item.otherName}}</view>
+          <view class="msg-time">{{item.timeText}}</view>
+        </view>
+        <view class="msg-preview">{{item.lastText}}</view>
+        <view class="msg-tag" wx:if="{{item.statusText}}">{{item.statusText}}</view>
+      </view>
+      <view class="unread-badge" wx:if="{{item.unread > 0}}">{{item.unread > 99 ? '99+' : item.unread}}</view>
+    </view>
+    <view class="empty" wx:if="{{ready && !activeItems.length}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">还没有进行中的对话</view>
+    </view>
+  </block>
+
+  <!-- 已归档：已处理的答疑 + 已结束的对话（只读存档，仍可点回看） -->
+  <block wx:else>
+    <view
+      class="msg-item archived"
+      wx:for="{{archivedItems}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goChat"
+    >
+      <view class="avatar {{item.roleClass}}">{{item.otherInitial}}</view>
+      <view class="msg-main">
+        <view class="msg-top">
+          <view class="msg-name">{{item.otherName}}</view>
+          <view class="msg-time">{{item.timeText}}</view>
+        </view>
+        <view class="msg-preview">{{item.lastText}}</view>
+        <view class="msg-arch"><text class="arch-chip">{{item.statusText}}</text><text class="arch-q">{{item.question}}</text></view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{ready && !archivedItems.length}}">
+      <view class="empty-icon"></view>
+      <view class="empty-text">还没有归档记录，处理完的答疑会自动收进这里</view>
+    </view>
+  </block>
+
+  <view class="footer-tip" wx:if="{{ready}}">点任意一条即可回到对应聊天 · 已归档记录随时可回看</view>
+
+  <!-- 底部导航条：固定底部 · 滚动时隐藏，停止后浮现 -->
+  <view class="top-tabs {{tabsHide ? 'hide' : ''}}">
+  <view class="top-tab" data-tab="home" bindtap="onTopTab">首页</view>
+  <view class="top-tab" data-tab="ask" bindtap="onTopTab">答疑</view>
+  <view class="top-tab" data-tab="community" bindtap="onTopTab">社区</view>
+  <view class="top-tab on" data-tab="messages" bindtap="onTopTab">消息</view>
+  </view>
+</view>
