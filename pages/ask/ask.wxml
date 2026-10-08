@@ -75,7 +75,7 @@
       data-id="{{item.id}}"
       bindtap="onSelect"
     >
-      <view class="avatar small warm">{{item.initial}}</view>
+      <view class="avatar small role-mentor">{{item.initial}}</view>
       <view class="mentor-main">
         <view class="list-name">{{item.name}}<text class="mentor-grade">{{item.grade}}</text><text class="mentor-online" wx:if="{{item.online}}">在线</text></view>
         <view class="mentor-sub">{{item.major}}</view>

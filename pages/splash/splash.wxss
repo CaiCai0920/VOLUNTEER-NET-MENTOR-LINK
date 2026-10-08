@@ -175,13 +175,13 @@ page {
 
 /* 编号索引：色块方点 + 序号 + 文字（对应海报三行目录） */
 .sp-index {
-  margin-top: 84rpx;
+  margin-top: 44rpx;
 }
 
 .sp-row {
   display: flex;
   align-items: center;
-  padding: 20rpx 0;
+  padding: 15rpx 0;
   border-bottom: 2rpx solid rgba(20, 23, 31, 0.1);
 }
 
@@ -195,6 +195,30 @@ page {
 .sq-red { background: var(--accent2); }
 .sq-blue { background: var(--primary); }
 .sq-orange { background: var(--accent3); }
+.sq-navy { background: var(--ink); }
+
+/* 服务列表小标题：等宽注释 + 红色小方块，与全局 HUD 语言一致 */
+.sp-index-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 6rpx;
+  border-bottom: 4rpx solid var(--ink);
+}
+
+.sp-index-tt {
+  font-size: 28rpx;
+  font-weight: 900;
+  letter-spacing: 4rpx;
+  color: var(--ink);
+}
+
+.sp-index-en {
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 2rpx;
+  color: var(--accent2);
+}
 
 .sp-no {
   width: 66rpx;
@@ -280,4 +304,40 @@ page {
   font-size: 20rpx;
   letter-spacing: 3rpx;
   color: rgba(241, 230, 216, 0.62);
+}
+
+/* ============================================================
+ * v3 追加：大透视空间背景图（AI 生成）+ 文字区米白纱 + HUD 注释
+ * ============================================================ */
+
+/* 背景图：铺满全屏，位于所有内容层之下 */
+.sp-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* 文字区垫米白渐变纱：保证标题在复杂背景上可读，同时维持米白最大面积 */
+.sp-body {
+  background: linear-gradient(
+    180deg,
+    rgba(241, 230, 216, 0) 0%,
+    rgba(241, 230, 216, 0.72) 22%,
+    rgba(241, 230, 216, 0.9) 60%,
+    rgba(241, 230, 216, 0.96) 100%
+  );
+  padding-bottom: 40rpx;
+}
+
+/* 等宽注释小字：坐标标注 */
+.sp-caption {
+  margin-top: 22rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  color: rgba(40, 49, 78, 0.55);
+  text-transform: uppercase;
 }

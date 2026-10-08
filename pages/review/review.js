@@ -26,6 +26,10 @@ Page({
         return Promise.all(
           list.map(function (u) {
             if (!u.idPhoto) return Promise.resolve('')
+            // 内联图（data:）不需要签名，直接原样用；
+            // 只有云存储路径才去问云端要签名 URL，否则缺会话时整体 401，
+            // 连内联的证件照也一起显示不出来。
+            if (u.idPhoto.indexOf('data:') === 0) return Promise.resolve(u.idPhoto)
             return cloud.storage
               .createSignedUrl(u.idPhoto, 1800)
               .then(function (r) {

@@ -1,5 +1,6 @@
 const store = require('./utils/store')
 const community = require('./utils/community')
+const { ensureCloudSignIn } = require('./utils/cloud')
 
 App({
   globalData: {
@@ -27,6 +28,20 @@ App({
     store.seedIfEmpty()
     // 首次启动（云端帖子表为空）时写入几条演示帖，社区瀑布流不至于空着
     community.seedIfEmpty()
-    community.seedQAIfMissing()
+    // 老库升级：补种新增的演示帖（逐条判断，已存在的不动）
+    community.seedDemoPosts()
+    // 信息广场首期知识节点（表为空时写入）
+    community.seedInfoIfEmpty()
+    // 演示评论补种（表为空时写入，详情页评论区开箱有内容）
+    community.seedCommentsIfEmpty()
+    // 云端静默登录（wx.login 换正式会话）：存储网关已收紧为强制凭证，
+    // 不登录的话发帖带图上传会报 401 MISSING_CREDENTIALS。失败静默降级。
+    ensureCloudSignIn().then(function (ok) {
+      // 登录没成功（服务端未授权该小程序 / 无网络）：发帖带图会被网关拒，
+      // 给一次明确提示，避免用户在发布页反复撞「发布失败」。
+      if (ok === false) {
+        console.warn('[cloud] 静默登录未成功，图片上传将在发布时再次尝试')
+      }
+    })
   }
 })

@@ -3,7 +3,7 @@
  * ============================================================ */
 
 .page-wrap {
-  padding-bottom: 60rpx;
+  padding-bottom: 240rpx;
 }
 
 .msg-item {
@@ -50,6 +50,118 @@
   margin-top: 8rpx;
   font-size: 25rpx;
   color: #7A8095;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+ * 消息中心：页头 + 双栏（进行中 / 已归档）
+ * ============================================================ */
+
+.msg-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 18rpx;
+  border-bottom: 2rpx solid rgba(40, 49, 78, 0.12);
+}
+
+.msg-head-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+  color: var(--ink);
+}
+
+.msg-head-no {
+  margin-top: 6rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 18rpx;
+  letter-spacing: 3rpx;
+  color: rgba(40, 49, 78, 0.45);
+}
+
+.msg-head-sub {
+  font-size: 21rpx;
+  color: rgba(20, 23, 31, 0.5);
+}
+
+/* 双栏切换：左对齐等宽，选中态藏蓝反白 */
+.msg-tabs {
+  display: flex;
+  margin: 20rpx 24rpx 4rpx;
+}
+
+.msg-tab {
+  flex: 1;
+  padding: 16rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2rpx solid rgba(40, 49, 78, 0.18);
+}
+
+.msg-tab + .msg-tab {
+  border-left: none;
+}
+
+.msg-tab.on {
+  background: #28314E;
+  border-color: #28314E;
+  color: #FFFFFF;
+}
+
+.msg-tab-n {
+  margin-left: 8rpx;
+  font-family: "DIN Alternate", "Consolas", "Menlo", monospace;
+  font-size: 22rpx;
+}
+
+/* 状态签：进行中显示「答疑中 / 待认领」 */
+.msg-tag {
+  display: inline-block;
+  margin-top: 10rpx;
+  padding: 2rpx 12rpx;
+  background: rgba(170, 40, 58, 0.08);
+  border: 1rpx solid rgba(170, 40, 58, 0.35);
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+  color: #AA283A;
+}
+
+/* 归档条：已处理记录为只读存档，右侧显朱红「已处理」签 + 原提问摘要 */
+.msg-item.archived {
+  background: rgba(241, 230, 216, 0.6);
+}
+
+.msg-item.archived .msg-name {
+  color: rgba(20, 23, 31, 0.72);
+}
+
+.msg-arch {
+  display: flex;
+  align-items: center;
+  margin-top: 10rpx;
+}
+
+.arch-chip {
+  flex-shrink: 0;
+  padding: 2rpx 12rpx;
+  background: rgba(40, 49, 78, 0.1);
+  border: 1rpx solid rgba(40, 49, 78, 0.3);
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+  color: rgba(40, 49, 78, 0.75);
+}
+
+.arch-q {
+  margin-left: 12rpx;
+  font-size: 20rpx;
+  color: rgba(20, 23, 31, 0.45);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

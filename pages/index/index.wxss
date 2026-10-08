@@ -36,29 +36,29 @@
   box-shadow: 0 8rpx 20rpx rgba(20, 23, 31, 0.28);
 }
 
-/* 前置标示框：白色细框（非色块、非实心），选中时描边转米白 */
+/* 前置标示框：备选(未选中)=实心几何（新生藏蓝/学长朱红），选中=透明+米白描边 */
 .id-swatch {
   width: 30rpx;
   height: 46rpx;
   margin-right: 18rpx;
   flex-shrink: 0;
-  background: transparent;
-  border: 2rpx solid rgba(40, 49, 78, 0.45);
+  background: #28314E;
+  border: none;
   box-sizing: border-box;
 }
 
 .sw-asker {
-  border-color: rgba(40, 49, 78, 0.32);
+  background: #28314E;
 }
 
 .sw-mentor {
-  border-color: rgba(170, 40, 58, 0.38);
+  background: #AA283A;
 }
 
 .id-opt.on-asker .sw-asker,
 .id-opt.on-mentor .sw-mentor {
   background: transparent;
-  border-color: #F1E6D8;
+  border: 2rpx solid #F1E6D8;
 }
 
 .id-txt {
@@ -176,6 +176,13 @@
   font-weight: 800;
   letter-spacing: 1rpx;
   color: var(--ink);
+}
+
+.online-sub {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: rgba(40, 49, 78, 0.55);
+  letter-spacing: 0.5rpx;
 }
 
 .online-grade {
@@ -395,3 +402,39 @@
 .hero .hud-cross::after {
   background: rgba(241, 230, 216, 0.55);
 }
+
+/* ---- 首页功能入口卡：消息 + 个人（从底栏收进首页） ---- */
+
+/* ================= 首页：杂志封面刊（个人 / 消息 / 产品介绍，底图即广告位） ================= */
+.cover-mode { padding-bottom: 0; }
+.cover-home { position: relative; min-height: 100vh; overflow: hidden; background: #14171F; }
+.cm-bg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.cm-veil { position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(20,23,31,.72) 0%, rgba(20,23,31,.32) 34%, rgba(20,23,31,.52) 60%, rgba(20,23,31,.94) 100%); }
+.cm-grain { position: absolute; left: 0; top: 0; right: 0; bottom: 0; opacity: .05;
+  background-image: radial-gradient(rgba(255,255,255,.55) 1.5rpx, transparent 1.5rpx); background-size: 6rpx 6rpx; }
+.cm-body { position: relative; z-index: 2; padding: 36rpx 10rpx 56rpx; color: #F1E6D8; }
+.cm-kicker { text-align: center; font-family: "DIN Alternate", Consolas, Menlo, monospace; font-size: 18rpx; letter-spacing: 7rpx; color: rgba(241,230,216,.86); }
+.cm-mast { text-align: center; margin-top: 12rpx; font-family: Georgia, "Times New Roman", serif;
+  font-size: 148rpx; line-height: .86; font-weight: 700; letter-spacing: -5rpx; color: #F1E6D8;
+  text-shadow: 0 16rpx 52rpx rgba(0,0,0,.4); }
+.cm-dot { color: #F29344; }
+.cm-rule { height: 2rpx; margin: 24rpx 0 20rpx; background: linear-gradient(90deg, transparent, rgba(241,230,216,.6) 18% 82%, transparent); }
+.cm-sub { text-align: center; font-family: "DIN Alternate", Consolas, Menlo, monospace; font-size: 17rpx; letter-spacing: 8rpx; color: rgba(241,230,216,.8); }
+.cm-panels { margin-top: 32rpx; display: flex; flex-direction: column; gap: 24rpx; }
+.cm-panel { display: flex; gap: 20rpx; align-items: flex-start; padding-top: 22rpx; border-top: 2rpx solid rgba(241,230,216,.32); }
+.cm-bar { width: 6rpx; align-self: stretch; flex-shrink: 0; background: #AA283A; }
+.cm-bar.alt { background: #F29344; }
+.cm-tx { flex: 1; min-width: 0; }
+.cm-t { font-family: "Arial Black", Arial, "Microsoft YaHei", sans-serif; font-size: 30rpx; line-height: 1.12; letter-spacing: 1rpx; font-weight: 900; }
+.cm-badge { display: inline-block; margin-left: 10rpx; min-width: 28rpx; padding: 0 8rpx; border-radius: 16rpx;
+  background: #AA283A; color: #F1E6D8; font-size: 18rpx; font-weight: 700; text-align: center; vertical-align: 2rpx; }
+.cm-p { margin-top: 10rpx; font-size: 18rpx; line-height: 1.62; color: rgba(241,230,216,.72); }
+.cm-arw { flex-shrink: 0; align-self: center; font-size: 44rpx; color: rgba(241,230,216,.5); }
+/* 广告招租位：虚线框示意「本页底图即广告」（位于封面下部，刻意下沉避开视觉中心） */
+.cm-ad { margin-top: 56rpx; padding: 24rpx 28rpx; border: 2rpx dashed rgba(241,230,216,.45); background: rgba(20,23,31,.35); }
+.ad-k { font-family: "DIN Alternate", Consolas, Menlo, monospace; font-size: 15rpx; letter-spacing: 6rpx; color: #F29344; }
+.ad-t { margin-top: 10rpx; font-size: 34rpx; font-weight: 900; letter-spacing: 3rpx; color: #F1E6D8; }
+.ad-s { margin-top: 8rpx; font-size: 19rpx; letter-spacing: 1rpx; color: rgba(241,230,216,.62); }
+.cm-foot { margin-top: 24rpx; text-align: center; font-family: "DIN Alternate", Consolas, Menlo, monospace;
+  font-size: 14rpx; letter-spacing: 5rpx; color: rgba(241,230,216,.45); }

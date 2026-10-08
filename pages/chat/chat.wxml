@@ -1,6 +1,6 @@
 <view class="chat-page {{themeClass}}">
   <view class="chat-head">
-    <view class="avatar small {{isAsker ? 'warm' : ''}}">{{otherInitial}}</view>
+    <view class="avatar small {{isAsker ? 'role-mentor' : ''}}">{{otherInitial}}</view>
     <view class="chat-head-main">
       <view class="chat-head-name">{{otherName}}</view>
       <view class="chat-head-sub">{{thread.major}} · {{statusText}}</view>
@@ -32,7 +32,7 @@
     <block wx:for="{{messages}}" wx:key="id">
       <view class="time-divider" wx:if="{{item.showTime}}">{{item.timeText}}</view>
       <view class="msg-row {{item.mine ? 'mine' : ''}}" id="msg-{{item.id}}">
-        <view class="avatar small {{item.mine ? '' : 'warm'}}">{{item.initial}}</view>
+        <view class="avatar small {{item.mine ? (isAsker ? '' : 'role-mentor') : (isAsker ? 'role-mentor' : '')}}">{{item.initial}}</view>
         <view class="msg-col">
           <view class="msg-name" wx:if="{{!item.mine}}">{{item.senderName}}</view>
           <view class="bubble">{{item.body}}</view>

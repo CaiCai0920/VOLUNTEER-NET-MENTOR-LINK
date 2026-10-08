@@ -1,5 +1,6 @@
 const store = require('../../utils/store')
 const community = require('../../utils/community')
+const { ensureCloudSignIn } = require('../../utils/cloud')
 
 Page({
   data: {
@@ -89,7 +90,10 @@ Page({
     return custom || this.data.topic
   },
 
-  // 发布：媒体传云存储 -> 帖子行写云数据库 -> 返回社区页
+  // 发布：媒体 -> 帖子行 -> 返回社区页
+  // 媒体通道由 community.uploadMedias 内部按「有没有云端会话」自动选：
+  // 有会话走云存储，无会话把图片压缩后内联进帖子。所以这里不再需要
+  // 拦截「没登录就不能发图」—— 图片在两种状态下都能发出去。
   onSubmit() {
     const self = this
     if (this.data.submitting) return
@@ -98,6 +102,11 @@ Page({
       wx.showToast({ title: '写点什么或选张图吧', icon: 'none' })
       return
     }
+    // 后台尽力拿一次会话（拿到就能走云存储，拿不到也不影响发图）；
+    // 不阻塞、不弹窗，失败静默降级成内联图片。
+    ensureCloudSignIn().catch(function () {
+      return false
+    })
     store
       .getMe()
       .then(function (me) {
@@ -105,10 +114,12 @@ Page({
           wx.redirectTo({ url: '/pages/login/login' })
           return null
         }
+        const files = self.data.files
+        if (!files.length && !content) return null
         self.setData({ submitting: true })
-        wx.showLoading({ title: self.data.files.length ? '发布中…' : '发送中…' })
+        wx.showLoading({ title: files.length ? '发布中…' : '发送中…' })
         return community
-          .uploadMedias(me.id, self.data.files)
+          .uploadMedias(me.id, files)
           .then(function (media) {
             return community.createPost(me, {
               content: content,
@@ -128,11 +139,14 @@ Page({
       .catch(function (e) {
         wx.hideLoading()
         self.setData({ submitting: false })
+        const raw = String((e && e.message) || '未知错误')
         wx.showToast({
-          title: ('发布失败：' + ((e && e.message) || '未知错误')).slice(0, 40),
+          title: ('发布失败：' + raw).slice(0, 60),
           icon: 'none',
-          duration: 3000
+          duration: 4000
         })
+        // 同时把完整错误打到控制台，真机调试时能直接看到原因
+        console.error('[post] 发布失败:', raw)
       })
   }
 })

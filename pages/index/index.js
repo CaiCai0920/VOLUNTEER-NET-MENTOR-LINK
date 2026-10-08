@@ -21,7 +21,22 @@ function applyTheme(role) {
 }
 
 Page({
+  onLoad(options) {
+    // 支持其他分区页带参直达：index?tab=ask 落到答疑大厅，默认落到封面刊首页
+    if (options && options.tab === 'ask') this.setData({ tab: 'ask' })
+  },
+
+  // 底部导航：页面滚动时隐藏，停止 1.2s 后浮现（停留底部看消息时不被弹条打扰）
+  onPageScroll() {
+    if (this._tabTimer) clearTimeout(this._tabTimer)
+    if (!this.data.tabsHide) this.setData({ tabsHide: true })
+    this._tabTimer = setTimeout(() => {
+      this.setData({ tabsHide: false })
+    }, 1200)
+  },
+
   data: {
+    tab: 'home',
     me: { name: '', major: '', role: 'asker' },
     roleText: '',
     isAsker: true,
@@ -177,7 +192,10 @@ Page({
             }),
             mentorThreads: board.mentorThreads.map(function (d) {
               return self.decorate(d, me, false)
-            })
+            }),
+            unreadTotal: board.myThreads.reduce(function (n, d) {
+              return n + (d.unread || 0)
+            }, 0)
           })
           getApp().globalData.me = me
           return null
@@ -229,17 +247,28 @@ Page({
     wx.navigateTo({ url: '/pages/help/help' })
   },
 
-  // 顶部分区条：答疑 / 社区 / 消息 / 个人（无底部导航，分区条是唯一分区入口）
+  // 底部分区条：首页 / 答疑 同页切换（封面刊 ↔ 答疑大厅），社区跳社区页
   onTopTab(e) {
-    const map = {
-      ask: '/pages/index/index',
-      community: '/pages/community/community',
-      messages: '/pages/messages/messages',
-      mine: '/pages/mine/mine'
+    const tab = e.currentTarget.dataset.tab
+    if (tab === 'community') {
+      wx.redirectTo({ url: '/pages/community/community' })
+      return
     }
-    const url = map[e.currentTarget.dataset.tab]
-    // redirectTo 替换当前页：分区之间切换不堆积页面层级
-    if (url) wx.redirectTo({ url: url })
+    if (tab === 'messages') {
+      wx.redirectTo({ url: '/pages/messages/messages' })
+      return
+    }
+    this.setData({ tab: tab === 'ask' ? 'ask' : 'home' })
+  },
+
+  // 封面刊「信息」入口：点击直接进答疑工作台（新生端同视图为答疑大厅），不再绕道消息列表
+  goMessages() {
+    this.setData({ tab: 'ask' })
+  },
+
+  // 首页入口：个人中心
+  goMine() {
+    wx.navigateTo({ url: '/pages/mine/mine' })
   },
 
   goChat(e) {

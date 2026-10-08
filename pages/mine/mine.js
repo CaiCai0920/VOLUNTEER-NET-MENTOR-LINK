@@ -10,6 +10,15 @@ const THEME = {
 }
 
 Page({
+  // 底部导航：页面滚动时隐藏，停止 1.2s 后浮现（停留底部看消息时不被弹条打扰）
+  onPageScroll() {
+    if (this._tabTimer) clearTimeout(this._tabTimer)
+    if (!this.data.tabsHide) this.setData({ tabsHide: true })
+    this._tabTimer = setTimeout(() => {
+      this.setData({ tabsHide: false })
+    }, 1200)
+  },
+
   data: {
     me: { name: '', major: '', role: 'asker', topics: '' },
     meInitial: '',
@@ -75,13 +84,17 @@ Page({
     wx.navigateTo({ url: '/pages/help/help' })
   },
 
+  // 返回首页
+  goHome() {
+    wx.redirectTo({ url: '/pages/index/index' })
+  },
+
   // 顶部分区条：答疑 / 社区 / 消息 / 个人（无底部导航，分区条是唯一分区入口）
   onTopTab(e) {
     const map = {
-      ask: '/pages/index/index',
-      community: '/pages/community/community',
-      messages: '/pages/messages/messages',
-      mine: '/pages/mine/mine'
+      home: '/pages/index/index',
+      ask: '/pages/index/index?tab=ask',
+      community: '/pages/community/community'
     }
     const url = map[e.currentTarget.dataset.tab]
     // redirectTo 替换当前页：分区之间切换不堆积页面层级

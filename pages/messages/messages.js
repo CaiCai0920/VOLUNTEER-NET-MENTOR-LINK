@@ -1,10 +1,25 @@
 const store = require('../../utils/store')
 const util = require('../../utils/util')
 
+// 消息中心：归档「已处理的答疑」与「收到的对话」
+// ------------------------------------------------------------------
+// 进行中 —— 已认领 / 有来有往的会话（status = open | claimed）
+// 已归档 —— 已处理的答疑与已结束的对话（status = closed），只读存档，仍可点回看
 Page({
+  // 底部导航：页面滚动时隐藏，停止 1.2s 后浮现（停留底部看消息时不被弹条打扰）
+  onPageScroll() {
+    if (this._tabTimer) clearTimeout(this._tabTimer)
+    if (!this.data.tabsHide) this.setData({ tabsHide: true })
+    this._tabTimer = setTimeout(() => {
+      this.setData({ tabsHide: false })
+    }, 1200)
+  },
+
   data: {
     ready: false,
-    items: []
+    pane: 'active',
+    activeItems: [],
+    archivedItems: []
   },
 
   onShow() {
@@ -16,7 +31,11 @@ Page({
     wx.stopPullDownRefresh()
   },
 
-  // 会话列表：数据由 store.loadBoard 一次拉齐（含最后一条消息与未读数）
+  // 双栏切换
+  onPane(e) {
+    this.setData({ pane: e.currentTarget.dataset.pane === 'archived' ? 'archived' : 'active' })
+  },
+
   refresh() {
     const self = this
     store
@@ -32,11 +51,17 @@ Page({
           const mine = board.decorated.filter(function (d) {
             return d.thread.askerId === me.id || d.thread.mentorId === me.id
           })
+          const active = []
+          const archived = []
+          mine.forEach(function (d) {
+            const row = self.decorate(d, me, isAsker)
+            if (d.thread.status === 'closed') archived.push(row)
+            else active.push(row)
+          })
           self.setData({
             ready: true,
-            items: mine.map(function (d) {
-              return self.decorate(d, me, isAsker)
-            })
+            activeItems: active,
+            archivedItems: archived
           })
           return null
         })
@@ -58,28 +83,32 @@ Page({
     } else if (thread.question) {
       lastText = '提问：' + util.truncate(thread.question, 40)
     }
+    const closed = thread.status === 'closed'
     return {
       id: thread.id,
-      question: util.truncate(thread.question, 30),
+      question: util.truncate(thread.question, 24),
       otherName: otherName,
       otherInitial: util.initial(otherName),
-      // 新生端头像用主色、学长端用辅色2（与聊天页同一套约定）
-      warm: !isAsker,
+      // 头像按对方角色着色：我是新生 → 对方是学长（红）；我是学长 → 对方是新生（蓝）
+      roleClass: isAsker ? 'role-mentor' : '',
       timeText: last ? util.fromNow(last.createdAt) : util.fromNow(thread.updatedAt),
       lastText: lastText,
-      unread: d.unread
+      unread: d.unread,
+      // 状态签：归档栏显示「已处理」，进行中栏显示「答疑中 / 待认领」
+      statusText: closed ? '已处理' : (thread.status === 'claimed' ? '答疑中' : '待认领')
     }
   },
 
-  // 顶部分区条：答疑 / 社区 / 消息 / 个人（无底部导航，分区条是唯一分区入口）
+  // 底部分区条：首页 / 答疑 / 社区 / 消息
   onTopTab(e) {
     const map = {
-      ask: '/pages/index/index',
-      community: '/pages/community/community',
-      messages: '/pages/messages/messages',
-      mine: '/pages/mine/mine'
+      home: '/pages/index/index',
+      ask: '/pages/index/index?tab=ask',
+      community: '/pages/community/community'
     }
-    const url = map[e.currentTarget.dataset.tab]
+    const tab = e.currentTarget.dataset.tab
+    if (tab === 'messages') return
+    const url = map[tab]
     // redirectTo 替换当前页：分区之间切换不堆积页面层级
     if (url) wx.redirectTo({ url: url })
   },

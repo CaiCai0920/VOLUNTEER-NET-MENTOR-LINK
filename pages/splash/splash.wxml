@@ -1,4 +1,7 @@
 <view class="sp" bindtap="onSkip">
+  <!-- 大透视空间背景：AI 生成的构成主义几何场景（红斜面 + 藏蓝/白体块 + 米白天空） -->
+  <image class="sp-bg" src="/images/splash-persp.jpg" mode="aspectFill"></image>
+
   <!-- 顶部字标：SZU（深圳大学元素，海报式字母标 + 建校年份坐标） -->
   <view class="sp-head">
     <view class="sp-logo">
@@ -8,14 +11,7 @@
     <view class="sp-head-meta">1983 — 2026</view>
   </view>
 
-  <!-- 纯几何构成：全部收束于右上，圆 + 四分圆 + 点 + 细线 -->
-  <view class="sp-geo">
-    <view class="sp-g-red"></view>
-    <view class="sp-g-quarter"></view>
-    <view class="sp-g-dot"></view>
-    <view class="sp-g-line"></view>
-    <view class="sp-g-bar"></view>
-  </view>
+  <!-- 背景图已含几何构成，原右上纯几何组合体移除 -->
 
   <!-- 文字排版区 -->
   <view class="sp-body">
@@ -30,22 +26,32 @@
       <view class="r3"></view>
     </view>
     <view class="sp-motto">自立 · 自律 · 自强</view>
+    <view class="sp-caption">PERSPECTIVE SPACE — SZU VOLUNTEER NET</view>
 
     <view class="sp-index">
-      <view class="sp-row">
-        <view class="sp-row-sq sq-red"></view>
-        <text class="sp-no">01</text>
-        <text class="sp-tx">答疑大厅 · 新生实名提问</text>
+      <view class="sp-index-head">
+        <text class="sp-index-tt">社区服务</text>
+        <text class="sp-index-en">COMMUNITY SERVICE / 04</text>
       </view>
       <view class="sp-row">
         <view class="sp-row-sq sq-blue"></view>
+        <text class="sp-no">01</text>
+        <text class="sp-tx">答疑大厅 — 新生实名提问，学长在线认领</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-red"></view>
         <text class="sp-no">02</text>
-        <text class="sp-tx">在线答疑 · 对口学长认领</text>
+        <text class="sp-tx">社区广场 — 图文视频分享，生活讨论不设限</text>
       </view>
       <view class="sp-row">
         <view class="sp-row-sq sq-orange"></view>
         <text class="sp-no">03</text>
-        <text class="sp-tx">逐条已读回执 · 双端身份切换</text>
+        <text class="sp-tx">消息中心 — 会话实时互通，已读回执不遗漏</text>
+      </view>
+      <view class="sp-row">
+        <view class="sp-row-sq sq-navy"></view>
+        <text class="sp-no">04</text>
+        <text class="sp-tx">个人档案 — 志愿时长沉淀，答疑记录可回溯</text>
       </view>
     </view>
   </view>

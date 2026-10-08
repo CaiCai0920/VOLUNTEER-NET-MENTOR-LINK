@@ -151,7 +151,7 @@
     </view>
 
     <view class="card">
-      <block wx:if="{{needVerify}}">
+      <block wx:if="{{needVerify || needSession}}">
         <view class="field">
           <view class="field-label">手机号</view>
           <view class="phone-row">
@@ -182,7 +182,7 @@
           />
           <view class="field-tip" wx:if="{{codeSent}}">验证码已发送至 {{phone}}，注意查收短信</view>
         </view>
-        <view class="field">
+        <view class="field" wx:if="{{!(needSession && verifyApproved)}}">
           <view class="field-label">学生证正面照片</view>
           <view class="photo-row">
             <view class="photo-box" bindtap="onChoosePhoto">
@@ -195,7 +195,8 @@
             <view class="photo-tip">拍摄或上传学生证正面照，用于与姓名学号比对核验；仅审核员可见，核验后不对外展示。</view>
           </view>
         </view>
-        <view class="verify-tip">提交后将进入人工审核；审核通过前功能不受影响，通过后昵称旁会亮起认证标识。</view>
+        <view class="verify-tip" wx:if="{{needSession && verifyApproved}}">身份核验已通过，这里只需短信确认一次身份，用于开启图片发送；无需重复上传学生证。</view>
+        <view class="verify-tip" wx:else>提交后将进入人工审核；审核通过前功能不受影响，通过后昵称旁会亮起认证标识。</view>
       </block>
       <block wx:else>
         <view class="verify-status ok" wx:if="{{me.verifyStatus === 'approved'}}">

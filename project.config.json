@@ -2,8 +2,8 @@
   "miniprogramRoot": "./",
   "compileType": "miniprogram",
   "appid": "wx72e9e3f4cc3c11c8",
-  "projectname": "volunteer-mentor",
-  "description": "志愿人脉 - 新生提问与对口学长答疑小程序",
+  "projectname": "volunteer-mentor-ui-lab",
+  "description": "志愿人脉 UI 实验副本 - HUD 科技风（不影响原项目）",
   "libVersion": "3.5.0",
   "setting": {
     "urlCheck": false,
@@ -36,7 +36,24 @@
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": ".backup-images-original"
+      },
+      {
+        "type": "folder",
+        "value": "docs"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
+      }
+    ],
     "include": []
   },
   "editorSetting": {}
